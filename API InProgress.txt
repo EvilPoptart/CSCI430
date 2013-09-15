@@ -1,0 +1,39 @@
+API:
+
+Engine
+	Physics
+		gravityCalc(bool onGround)	//so the char can fall, will contain collision detection code (i think)
+		directionCalc()				//for deceleration when button is not pressed
+		addSpeedX()					//horizontal
+		addSpeedY()					//vertical
+		
+	graphics
+		reDrawScreen()				//android thingy, for screen update
+		character
+			placementOnScreen(int x, int y, bool direction)
+		map
+			mapPositionScroll(int x)		// move map right x pixels
+			
+	sound
+		background()				//constant background music, maybe tied to map position?
+		land()
+		jump()
+		die()
+		otherAsNeeded()
+		
+		
+Public vars
+	Engine
+		character
+			bool direction			//true for looking left, false for right
+			bool onGround
+			int positionX
+			int positionY
+			int speedX
+			int speedY
+			int health?
+			bool[] upgrades?
+			int score?
+		map
+			positionX
+			platforms (not sure the data type atm)			//Y position of the ground at a point
