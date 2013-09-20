@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">An Android Game</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="Jump">Jump</string>
+    <string name="Left">Left</string>
+    <string name="Right">Right</string>
 
 </resources>

@@ -13,7 +13,7 @@
         android:layout_height="120dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Jump" />
+        android:text="@string/Jump" />
 
     <Button
         android:id="@+id/buttonLeft"
@@ -22,7 +22,7 @@
         android:layout_height="120dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="Left" />
+        android:text="@string/Left" />
 
     <Button
         android:id="@+id/buttonJump2"
@@ -31,7 +31,7 @@
         android:layout_height="120dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="Jump" />
+        android:text="@string/Jump" />
 
     <Button
         android:id="@+id/buttonRight"
@@ -40,6 +40,6 @@
         android:layout_height="120dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="Right" />
+        android:text="@string/Right" />
 
 </RelativeLayout>
