@@ -1,0 +1,14 @@
+to add git repo project in windows:
+
+
+1. add new project (menu->add new->project...)
+2. in wizard go to android->Android Project from Existing Code
+3. in Root Directory put the path to your local git folder (please use the AnAndroidGame folder)
+
+
+DO NOT USE THIS FOLDER FOR YOUR WORKSPACE!!!!!!!!
+
+the workspace for ADT has a folder that is computer specific.
+
+
+for linux/mac good luck (i dont know)
