@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>    
+    
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="#0099cc"
+  	android:foregroundGravity="right" >
+		
+    <Button
+        android:id="@+id/buttonJump1"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Jump" />
+
+    <Button
+        android:id="@+id/buttonLeft"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Left" />
+
+    <Button
+        android:id="@+id/buttonJump2"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="Jump" />
+
+    <Button
+        android:id="@+id/buttonRight"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Right" />
+
+</RelativeLayout>
