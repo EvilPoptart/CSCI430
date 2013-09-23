@@ -53,22 +53,26 @@ public class FullscreenActivity extends Activity {
 			{
 				//if on ground
 				playerYspeed = playerYspeed + JUMP_SPEED;
-            }
+			}
         });
 		
 		buttonRight.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
-				//if not at max
-				playerXspeed = playerXspeed + RUN_SPEED;
-            }
+				if(playerXspeed <= MAX_SPEED)
+					playerXspeed = playerXspeed + RUN_SPEED;
+				if(playerXspeed > MAX_SPEED)
+					playerXspeed = MAX_SPEED;
+			}
         });
 		
 		buttonLeft.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{	
-				//if not at max
-				playerXspeed = playerXspeed - RUN_SPEED;
+				if(playerXspeed >= MAX_SPEED)
+					playerXspeed = playerXspeed - RUN_SPEED;
+				if(playerXspeed > MAX_SPEED)
+					playerXspeed = (MAX_SPEED * -1);
             }
         });
 		
