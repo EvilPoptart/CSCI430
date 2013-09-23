@@ -12,14 +12,20 @@ public class FullscreenActivity extends Activity {
 
 	public final double RUN_SPEED = 10.00;			//run speed modifier
     public final double JUMP_SPEED = 5.00;			//jump speed
-	//private int playerXpos;
-    //private int playerYpos;
+	public final double MAX_SPEED = 15;
+	public final double GRAVITY = 3;				//falling acceleration
+	public final double SLIP = 5;					//horiz slow when button not pressed
+	
+	private int playerXpos;
+    private int playerYpos;
     private double playerXspeed;
     private double playerYspeed;
+    private double FLOOR = 10;						//TODO: replace with floor function for map
     public Button buttonJump1;
 	public Button buttonJump2;
 	public Button buttonLeft;
 	public Button buttonRight;
+	
 	
 	
     @Override
@@ -81,15 +87,15 @@ public class FullscreenActivity extends Activity {
     	this.runOnUiThread(Timer_Tick);
     }
     private Runnable Timer_Tick = new Runnable() {
-		public void run() 
-		{
-		/*
-			update position
-				X based on speed
-				Reduce Y unless collision with ground
-			update speeds
+    	public void run() {
+			playerXpos = playerXpos + (int)playerXspeed;		//update postion on screen
+			if((playerYpos + (int)playerYspeed) <= FLOOR) {
+				playerYpos = 10;
+				playerYspeed = 0;
+			}
 			
-		*/
+			playerYspeed -= GRAVITY;							//update speeds for next cycle
+			playerXspeed -= SLIP;
 		}
 	};
 }
