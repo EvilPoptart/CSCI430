@@ -107,7 +107,23 @@ public class FullscreenActivity extends Activity {
 			}
 			
 			playerYspeed -= GRAVITY;							//update speeds for next cycle
-			playerXspeed -= SLIP;
-		}
+			
+			if(playerYspeed < -15)				//MAX fall speed
+			{
+				if(playerYspeed < -15)
+					playerYspeed = -15;
+			}	
+			
+			if(playerXspeed > 0){				//X speed correction 
+				playerXspeed -= SLIP;
+				if(playerXspeed < 0)
+					playerXspeed = 0;
+			}
+			else {
+				playerXspeed += SLIP;
+				if(playerXspeed > 0)
+					playerXspeed = 0;
+			}
+    	}
 	};
 }
