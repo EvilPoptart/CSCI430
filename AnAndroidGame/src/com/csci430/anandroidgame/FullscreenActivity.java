@@ -15,6 +15,9 @@ public class FullscreenActivity extends Activity {
 	public final double MAX_SPEED = 15;
 	public final double GRAVITY = 3;				//falling acceleration
 	public final double SLIP = 5;					//horiz slow when button not pressed
+	public final int CANVAS_X_MAX = 80;				//max size of play area X
+	public final int CANVAS_Y_MAX = 30;				//max size of play area Y
+	
 	
 	private int playerXpos;
     private int playerYpos;
@@ -43,16 +46,20 @@ public class FullscreenActivity extends Activity {
 		buttonJump1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
-				//if on ground
-				playerYspeed = playerYspeed + JUMP_SPEED;
-            }
+				if(playerYpos == FLOOR) {
+					playerYspeed = playerYspeed + JUMP_SPEED;
+					//TODO: PLAY SOUND HERE (Jump)
+				}
+			}
         });
 		
 		buttonJump2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
-				//if on ground
-				playerYspeed = playerYspeed + JUMP_SPEED;
+            	if(playerYpos == FLOOR) {
+					playerYspeed = playerYspeed + JUMP_SPEED;
+					//TODO: PLAY SOUND HERE (Jump)
+				}
 			}
         });
 		
@@ -96,6 +103,7 @@ public class FullscreenActivity extends Activity {
 			if((playerYpos + (int)playerYspeed) <= FLOOR) {
 				playerYpos = 10;
 				playerYspeed = 0;
+				//TODO: play sound here (land)
 			}
 			
 			playerYspeed -= GRAVITY;							//update speeds for next cycle
