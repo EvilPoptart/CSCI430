@@ -15,8 +15,7 @@ public class FullscreenActivity extends Activity {
 	public final double MAX_SPEED = 15;
 	public final double GRAVITY = 3;				//falling acceleration
 	public final double SLIP = 5;					//horiz slow when button not pressed
-	public final int CANVAS_X_MAX = 80;				//max size of play area X
-	public final int CANVAS_Y_MAX = 30;				//max size of play area Y
+
 	
 	
 	private int playerXpos;
