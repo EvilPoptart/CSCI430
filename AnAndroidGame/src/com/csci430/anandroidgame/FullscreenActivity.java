@@ -19,8 +19,8 @@ public class FullscreenActivity extends Activity {
 	
 	
 	private int playerXpos;
-    private int playerYpos;
-    private double playerXspeed;
+	private int playerYpos;
+	private double playerXspeed;
     private double playerYspeed;
     private double FLOOR = 10;						//TODO: replace with floor function for map
     public Button buttonJump1;
@@ -32,16 +32,21 @@ public class FullscreenActivity extends Activity {
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	// ?
     	super.onCreate(savedInstanceState);
+    	// Sets application dimensions to cover the device's entire screen.
         setContentView(R.layout.activity_fullscreen);
         
+        // Define our buttons
 		buttonJump1 = (Button) findViewById(R.id.buttonJump1);
 		buttonJump2 = (Button) findViewById(R.id.buttonJump2);
 		buttonRight = (Button) findViewById(R.id.buttonRight);
-		buttonLeft = (Button) findViewById(R.id.buttonLeft);
+		buttonLeft  = (Button) findViewById(R.id.buttonLeft);
 		Timer updateCycle = new Timer();
 		
-		
+		/*
+		 * Handles player jumping (upper left)
+		 */
 		buttonJump1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
@@ -51,7 +56,10 @@ public class FullscreenActivity extends Activity {
 				}
 			}
         });
-		
+
+		/*
+		 * Handles player jumping (upper right)
+		 */
 		buttonJump2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
@@ -62,6 +70,9 @@ public class FullscreenActivity extends Activity {
 			}
         });
 		
+		/*
+		 * Increases player's rightward movement speed up to the MAX_SPEED.
+		 */
 		buttonRight.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
@@ -72,6 +83,9 @@ public class FullscreenActivity extends Activity {
 			}
         });
 		
+		/*
+		 * Increases player's leftward movement speed up to the MAX_SPEED.
+		 */
 		buttonLeft.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{	
@@ -82,6 +96,9 @@ public class FullscreenActivity extends Activity {
             }
         });
 		
+		/*
+		 * Handles the main draw loop. Refreshes the screen at a fixed rate.
+		 */
 		updateCycle.scheduleAtFixedRate(new TimerTask() {
         	@Override
         	public void run()
