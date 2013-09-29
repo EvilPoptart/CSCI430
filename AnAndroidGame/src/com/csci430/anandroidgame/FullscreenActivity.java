@@ -2,11 +2,13 @@ package com.csci430.anandroidgame;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.view.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.csci430.anandroidgame.GameView;
 
 public class FullscreenActivity extends Activity {
 
@@ -16,8 +18,6 @@ public class FullscreenActivity extends Activity {
 	public final double GRAVITY = 3;				//falling acceleration
 	public final double SLIP = 5;					//horiz slow when button not pressed
 
-	
-	
 	private int playerXpos;
 	private int playerYpos;
 	private double playerXspeed;
@@ -28,13 +28,20 @@ public class FullscreenActivity extends Activity {
 	public Button buttonLeft;
 	public Button buttonRight;
 	
-	
-	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	// ?
     	super.onCreate(savedInstanceState);
-    	// Sets application dimensions to cover the device's entire screen.
+    	
+    	// Hide title. Must be called before setContentView()
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+    	
+        // Hide status bar. Must be called before setContentView()
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //GameView gameView = new GameView(this);
+        //setContentView(gameView);
+        // Tell system to use the layout defined in our XML file.
         setContentView(R.layout.activity_fullscreen);
         
         // Define our buttons
@@ -50,6 +57,7 @@ public class FullscreenActivity extends Activity {
 		buttonJump1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
+            	Log.d("ButtonPress", "Button Pressed: Jump1");
 				if(playerYpos == FLOOR) {
 					playerYspeed = playerYspeed + JUMP_SPEED;
 					//TODO: PLAY SOUND HERE (Jump)
@@ -63,6 +71,7 @@ public class FullscreenActivity extends Activity {
 		buttonJump2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
+            	Log.d("ButtonPress", "Button Pressed: Jump2");
             	if(playerYpos == FLOOR) {
 					playerYspeed = playerYspeed + JUMP_SPEED;
 					//TODO: PLAY SOUND HERE (Jump)
@@ -76,6 +85,7 @@ public class FullscreenActivity extends Activity {
 		buttonRight.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
+            	Log.d("ButtonPress", "Button Pressed: Right");
 				if(playerXspeed <= MAX_SPEED)
 					playerXspeed = playerXspeed + RUN_SPEED;
 				if(playerXspeed > MAX_SPEED)
@@ -89,6 +99,7 @@ public class FullscreenActivity extends Activity {
 		buttonLeft.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{	
+            	Log.d("ButtonPress", "Button Pressed: Left");
 				if(playerXspeed >= MAX_SPEED)
 					playerXspeed = playerXspeed - RUN_SPEED;
 				if(playerXspeed > MAX_SPEED)

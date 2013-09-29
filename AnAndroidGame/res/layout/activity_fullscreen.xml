@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>    
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:id="@+id/layoutContainer"
     android:orientation="horizontal"
     android:foregroundGravity="right">
         
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#468966"
+        android:background="#1B6CBF"
     	android:orientation="vertical"
         android:layout_weight="3">
         
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1">
@@ -24,13 +25,14 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:background="@null"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:text="@string/Jump1" />
                 
         </LinearLayout>
         
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1">
@@ -40,6 +42,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:background="@null"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:text="@string/Left" />
@@ -48,21 +51,27 @@
 
     </LinearLayout>
     
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#FFF0A5"
+        android:background="#12487F"
         android:layout_weight="2">
+        
+            <com.csci430.anandroidgame.GameView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/gameView" />
+            
     </LinearLayout>
         
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#FFB03B"
+        android:background="#1B6CBF"
     	android:orientation="vertical"
         android:layout_weight="3">
         
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1">
@@ -72,13 +81,14 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:background="@null"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:text="@string/Jump2" />
                 
         </LinearLayout>
         
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1">
@@ -88,6 +98,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:background="@null"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:text="@string/Right" />
