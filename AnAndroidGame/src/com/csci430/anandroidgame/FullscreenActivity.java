@@ -40,7 +40,7 @@ public class FullscreenActivity extends Activity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         //GameView gameView = new GameView(this);
-        //setContentView(gameView);
+        //setContentView(new GameView(this));
         // Tell system to use the layout defined in our XML file.
         setContentView(R.layout.activity_fullscreen);
         
