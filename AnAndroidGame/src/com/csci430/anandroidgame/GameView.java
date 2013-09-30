@@ -1,5 +1,7 @@
 package com.csci430.anandroidgame;
 
+import com.csci430.anandroidgame.Player;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -19,7 +21,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mSurfaceH;
     private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Context mCtx = null;
-    GameThread mThread;
+    private GameThread mThread;
 
     public GameView(Context context) {
         super(context);
@@ -51,7 +53,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         setFocusable(true);
     }
 
-    public GameThread getmThread() {
+    public GameThread getThread() {
         return mThread;
     }
 
@@ -83,75 +85,79 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    class GameThread extends Thread {
-        private int mCanvasWidth = 200;
-        private int mCanvasHeight = 400;
-        private int mVelocity = 1;
-        private boolean mRun = false;
-
-        private float mObjX;
-        private float mObjY;
-        private float mHeadingX;
-        private float mHeadingY;
-
-        public GameThread(SurfaceHolder surfaceHolder, Context context, Handler handler) {
-        mSurfaceH = surfaceHolder;
-        handler = handler;
-        mCtx = context;
-    }
-
-    @SuppressLint("NewApi")
-        public void doStart() {
-        synchronized (mSurfaceH) {
-            // Start bubble in centre and create some random motion
-            mObjX = mCanvasWidth / 2;
-            mObjY = mCanvasHeight / 2;
-            //mHeadingX = (float) (-1 + (Math.random() * 2));
-            //mHeadingY = (float) (-1 + (Math.random() * 2));
-            mHeadingX = 1;
-            mHeadingY = 0;
-        }
-    }
-
-    public void run() {
-        while (mRun) {
-            Canvas c = null;
-            try {
-                c = mSurfaceH.lockCanvas(null);
-                synchronized (mSurfaceH) {
-                    doDraw(c);
-                }
-            } finally {
-                if (c != null) {
-                    mSurfaceH.unlockCanvasAndPost(c);
-                }
-            }
-        }
-    }
-
-    public void setRunning(boolean b) { 
-        mRun = b;
-    }
-    
-    public void setSurfaceSize(int width, int height) {
-        synchronized (mSurfaceH) {
-            mCanvasWidth = width;
-            mCanvasHeight = height;
-            doStart();
-        }
-    }
-    
-    private void doDraw(Canvas canvas) {
-        // If we're at top, botton, left, or right edge
-        if (mObjX <= 0 || mObjX >= mCanvasWidth || mObjY <= 0 || mObjY >= mCanvasHeight) {
-            // Invert our direction
-            mVelocity = -mVelocity;
-        }
-        mObjX = mObjX + (mHeadingX * mVelocity);
-        mObjY = mObjY + (mHeadingY * mVelocity);
-        canvas.restore();
-        canvas.drawColor(Color.GREEN);
-        canvas.drawCircle(mObjX, mObjY, 50, mPaint);
-        }
+	class GameThread extends Thread {
+	    private int mCanvasWidth = 200;
+	    private int mCanvasHeight = 400;
+	    private volatile int mVelocity = 1;
+	    private boolean mRun = false;
+	
+	    private float mObjX;
+	    private float mObjY;
+	    private float mHeadingX;
+	    private float mHeadingY;
+	    
+	    protected Player p;
+	
+	    public GameThread(SurfaceHolder surfaceHolder, Context context, Handler handler) {
+		    mSurfaceH = surfaceHolder;
+		    handler = handler;
+		    mCtx = context;
+		    p = new Player(100, 0);
+	    }
+	
+	    @SuppressLint("NewApi")
+	        public void doStart() {
+	        synchronized (mSurfaceH) {
+	            // Start bubble in centre and create some random motion
+	            mObjX = mCanvasWidth / 2;
+	            mObjY = mCanvasHeight / 2;
+	            //mHeadingX = (float) (-1 + (Math.random() * 2));
+	            //mHeadingY = (float) (-1 + (Math.random() * 2));
+	            mHeadingX = 1;
+	            mHeadingY = 0;
+	        }
+	    }
+	
+	    public void run() {
+	        while (mRun) {
+	            Canvas c = null;
+	            try {
+	                c = mSurfaceH.lockCanvas(null);
+	                synchronized (mSurfaceH) {
+	                    doDraw(c);
+	                }
+	            } finally {
+	                if (c != null) {
+	                    mSurfaceH.unlockCanvasAndPost(c);
+	                }
+	            }
+	        }
+	    }
+	
+	    public void setRunning(boolean b) { 
+	        mRun = b;
+	    }
+	    
+	    public void setSurfaceSize(int width, int height) {
+	        synchronized (mSurfaceH) {
+	            mCanvasWidth = width;
+	            mCanvasHeight = height;
+	            doStart();
+	        }
+	    }
+	    
+	    private void doDraw(Canvas canvas) {
+	        // If we're at top, botton, left, or right edge
+	        if (mObjX <= 0 || mObjX >= mCanvasWidth || mObjY <= 0 || mObjY >= mCanvasHeight) {
+	            // Invert our direction
+	            mVelocity = -mVelocity;
+	        }
+	        mObjX = mObjX + (mHeadingX * mVelocity);
+	        mObjY = mObjY + (mHeadingY * mVelocity);
+	        canvas.restore();
+	        canvas.drawColor(Color.GREEN);
+	        //canvas.drawCircle(mObjX, mObjY, 50, mPaint);
+	        p.updateAndDraw(canvas);
+	    }
     }
 }

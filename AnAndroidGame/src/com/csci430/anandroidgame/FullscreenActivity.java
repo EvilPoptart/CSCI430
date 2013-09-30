@@ -44,6 +44,8 @@ public class FullscreenActivity extends Activity {
         // Tell system to use the layout defined in our XML file.
         setContentView(R.layout.activity_fullscreen);
         
+        final GameView gameView = (GameView) findViewById(R.id.gameCamvas);
+        
         // Define our buttons
 		buttonJump1 = (Button) findViewById(R.id.buttonJump1);
 		buttonJump2 = (Button) findViewById(R.id.buttonJump2);
@@ -58,6 +60,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{
             	Log.d("ButtonPress", "Button Pressed: Jump1");
+            	gameView.getThread().p.jump();
 				if(playerYpos == FLOOR) {
 					playerYspeed = playerYspeed + JUMP_SPEED;
 					//TODO: PLAY SOUND HERE (Jump)
@@ -72,6 +75,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{
             	Log.d("ButtonPress", "Button Pressed: Jump2");
+            	gameView.getThread().p.jump();
             	if(playerYpos == FLOOR) {
 					playerYspeed = playerYspeed + JUMP_SPEED;
 					//TODO: PLAY SOUND HERE (Jump)
@@ -86,6 +90,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{
             	Log.d("ButtonPress", "Button Pressed: Right");
+            	gameView.getThread().p.updateVelX(1);
 				if(playerXspeed <= MAX_SPEED)
 					playerXspeed = playerXspeed + RUN_SPEED;
 				if(playerXspeed > MAX_SPEED)
@@ -100,6 +105,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{	
             	Log.d("ButtonPress", "Button Pressed: Left");
+            	gameView.getThread().p.updateVelX(-1);
 				if(playerXspeed >= MAX_SPEED)
 					playerXspeed = playerXspeed - RUN_SPEED;
 				if(playerXspeed > MAX_SPEED)
