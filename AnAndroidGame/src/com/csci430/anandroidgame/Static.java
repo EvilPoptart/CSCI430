@@ -28,6 +28,8 @@ public class Static extends Moving {
 			height,
 			initXPos,
 			initYPos,
+			0, // initXVel
+			0, // initYVel
 			paint);
 	}
 }

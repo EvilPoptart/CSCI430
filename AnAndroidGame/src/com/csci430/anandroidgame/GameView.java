@@ -103,7 +103,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	    Display display = wm.getDefaultDisplay();
 	    Point size = new Point();
 	    Player p1;
-	    Moving bg;
+	    Graphic bg;
 	    	
 	    public GameThread(SurfaceHolder surfaceHolder, Context context, Handler handler) {
 		    mSurfaceH = surfaceHolder;
@@ -125,7 +125,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	    	    int width = size.x;
 	    	    int height = size.y;
 	    	    p1 = new Player(35, 60, 0, 0, mPaint1);
-	    	    bg = new Moving(400, height, 0, 0, mPaint2);
+	    	    bg = new Graphic(400, height, 0, 0, mPaint2);
 	        }
 	    }
 	
