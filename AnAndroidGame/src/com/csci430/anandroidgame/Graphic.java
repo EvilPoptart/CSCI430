@@ -1,9 +1,14 @@
 package com.csci430.anandroidgame;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.view.Display;
+import android.view.WindowManager;
 
 /*
  * A GameElement that will be Drawn to the screen.
@@ -76,17 +81,38 @@ public class Graphic extends GameElement {
 	// It's blank because this class is designed to be extended.
 	public Graphic() {}
 	
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
 	public Graphic(
 			int width,
 			int height,
 			int initXPos,
 			int initYPos,
-			Paint paint) {
-		mWidth = width;
-		mHeight = height;
+			Paint paint,
+			Context context) {
 		mXPos = initXPos;
 		mYPos = initYPos;
 		mPaint = paint;
+		
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+    	int screenHeight = 0;
+    	int screenWidth = 0;
+    	
+    	// Check our working API version and run the appropriate commands
+    	if (android.os.Build.VERSION.SDK_INT >= 13) {
+        	// Get device height and width
+            Point size = new Point();
+    	    display.getSize(size);
+    	    screenWidth = size.x;
+    	    screenHeight = size.y;
+    	} else {
+    		screenWidth = display.getWidth();  // deprecated
+        	screenHeight = display.getHeight();  // deprecated
+    	}
+    	
+		mWidth = screenWidth;
+		mHeight = screenHeight;
 		
 		// Create rectangle that will be drawn for this object
 		mSourceRect = new Rect(mXPos, mYPos, (mXPos + mWidth), (mYPos + mHeight));

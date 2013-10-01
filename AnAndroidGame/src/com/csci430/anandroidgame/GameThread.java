@@ -19,8 +19,8 @@ import android.view.WindowManager;
  */
 class GameThread extends Thread {
     private boolean mRun = false;
-    private Context mCtx;
     private SurfaceHolder mSurfaceH;
+    protected Context mCtx;
 
     private final Paint mPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mPaint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -63,25 +63,25 @@ class GameThread extends Thread {
             WindowManager wm = (WindowManager) mCtx.getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();
         	int height = 0;
-        	//int width = 0; commented out because we don't currently need it, though we will soon.
+        	int width = 0;
         	
         	// Check our working API version and run the appropriate commands
         	if (android.os.Build.VERSION.SDK_INT >= 13) {
 	        	// Get device height and width
 	            Point size = new Point();
 	    	    display.getSize(size);
-	    	    //width = size.x;
+	    	    width = size.x;
 	    	    height = size.y;
         	} else {
-	        	//width = display.getWidth();  // deprecated
+	        	width = display.getWidth();  // deprecated
 	        	height = display.getHeight();  // deprecated
         	}
     	    
     	    // Create our player
-    	    p1 = new Player(35, 60, 0, 0, mPaint1);
+    	    p1 = new Player(35, 60, 200, 0, mPaint1, mCtx);
     	    
     	    // Create the background in lovely bright green
-    	    bg = new Graphic(400, height, 0, 0, mPaint2);
+    	    bg = new Graphic(width, height, 0, 0, mPaint2, mCtx);
         }
     }
     

@@ -1,5 +1,6 @@
 package com.csci430.anandroidgame;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 
@@ -23,7 +24,8 @@ public class Static extends Moving {
 			int height,
 			int initXPos,
 			int initYPos,
-			Paint paint) {
+			Paint paint,
+			Context context) {
 		super(
 			width, 
 			height,
@@ -31,7 +33,8 @@ public class Static extends Moving {
 			initYPos,
 			0, // initXVel
 			0, // initYVel
-			paint);
+			paint,
+			context);
 	}
 
 	/*

@@ -1,15 +1,21 @@
 package com.csci430.anandroidgame;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 
 /*
  * A GameElement that will be Drawn to the screen, that will be Animated.
  */
+@SuppressLint("NewApi")
 public class Moving extends Graphic {
 	
 	/*
@@ -68,14 +74,17 @@ public class Moving extends Graphic {
 		mXVel = initXVel;
 		mYVel = initYVel;
 		mBitmap = bitmap;
+		
 		mFriction = 1;
 		mGravity = 1;
 		mMaxFallSpeed = 20;
 		mMaxRunSpeed = 10;
 		mJumpSpeed = -mGravity * 20;
+		mRunAcceleration = 1;
+
+    	
 		mActualFloor = 500;
 		mRelFloor = mActualFloor - mHeight;
-		mRunAcceleration = 1;
 		
 		// Create rectangle that will be drawn for this object
 		mSourceRect = new Rect(mXPos, mYPos, (mXPos + mWidth), (mYPos + mHeight));
@@ -93,6 +102,19 @@ public class Moving extends Graphic {
 	 * initYVel:	Initial Y-axis velocity
 	 * paint:		The paint object that controls color for our rect
 	 */
+
+    @SuppressLint("NewApi")
+    /* 
+     * We're aware of the NewApi error caused by
+     * 	display.getSize(size);
+     * and have chosen to keep it to support devices running > Android 3.2 (API 13)
+     */
+	@SuppressWarnings("deprecation")
+    /* 
+     * We're aware of the deprecation error caused by
+     * 	height = display.getHeight();
+     * and have chosen to keep it to support devices running < Android 3.2 (API 13)
+     */
 	public Moving(
 			int width,
 			int height,
@@ -100,7 +122,8 @@ public class Moving extends Graphic {
 			int initYPos,
 			int initXVel,
 			int initYVel,
-			Paint paint) {
+			Paint paint,
+			Context context) {
 		// Initialize relevant variables
 		mWidth = width;
 		mHeight = height;
@@ -114,9 +137,24 @@ public class Moving extends Graphic {
 		mMaxFallSpeed = 20;
 		mMaxRunSpeed = 10;
 		mJumpSpeed = -mGravity * 20;
-		mActualFloor = 500;
-		mRelFloor = mActualFloor - mHeight;
 		mRunAcceleration = 1;
+		
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+    	int screenHeight = 0;
+    	
+    	// Check our working API version and run the appropriate commands
+    	if (android.os.Build.VERSION.SDK_INT >= 13) {
+        	// Get device height and width
+            Point size = new Point();
+    	    display.getSize(size);
+    	    screenHeight = size.y;
+    	} else {
+        	screenHeight = display.getHeight();  // deprecated
+    	}
+    	
+		mActualFloor = screenHeight;
+		mRelFloor = mActualFloor - mHeight;
 		
 		// Create rectangle that will be drawn for this object
 		mSourceRect = new Rect(mXPos, mYPos, (mXPos + mWidth), (mYPos + mHeight));
@@ -134,6 +172,8 @@ public class Moving extends Graphic {
 		applyGravity();
 		mXPos += mXVel;
 		mYPos += mYVel;
+		
+		Log.d("Player Pos", "(" + mXPos + ", " + mYPos + ")");
 		
 		// Move the object to its new position
 		mSourceRect.offsetTo(mXPos, mYPos);

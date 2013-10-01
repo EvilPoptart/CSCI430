@@ -1,5 +1,6 @@
 package com.csci430.anandroidgame;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 
@@ -28,8 +29,9 @@ public class Player extends Static {  // TODO: Change to extend Animated once we
 			int height, // TODO: remove
 			int initXPos,
 			int initYPos,
-			Paint paint) {
-		super(mPlayerWidth, mPlayerHeight, initXPos, initYPos, paint);
+			Paint paint,
+			Context context) {
+		super(mPlayerWidth, mPlayerHeight, initXPos, initYPos, paint, context);
 	}
 
 	/*
