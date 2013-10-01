@@ -42,7 +42,7 @@ public class Moving extends Graphic {
 	 */
 
 	/*
-	 * With initial velocity
+	 * Bitmap
 	 * 
 	 * width:		This object's width
 	 * height:		This object's height
@@ -51,6 +51,47 @@ public class Moving extends Graphic {
 	 * initXVel:	Initial X-axis velocity
 	 * initYVel:	Initial Y-axis velocity
 	 * bitmap:		The bitmap image to be displayed
+	 */
+	public Moving(
+			int width,
+			int height,
+			int initXPos,
+			int initYPos,
+			int initXVel,
+			int initYVel,
+			Bitmap bitmap) {
+		// Initialize relevant variables
+		mWidth = width;
+		mHeight = height;
+		mXPos = initXPos;
+		mYPos = initYPos;
+		mXVel = initXVel;
+		mYVel = initYVel;
+		mBitmap = bitmap;
+		mFriction = 1;
+		mGravity = 1;
+		mMaxFallSpeed = 20;
+		mMaxRunSpeed = 10;
+		mJumpSpeed = -mGravity * 20;
+		mActualFloor = 500;
+		mRelFloor = mActualFloor - mHeight;
+		mRunAcceleration = 1;
+		
+		// Create rectangle that will be drawn for this object
+		mSourceRect = new Rect(mXPos, mYPos, (mXPos + mWidth), (mYPos + mHeight));
+	}
+	
+	/*
+	 * Development Constructor.
+	 * TODO: remove once we are no longer using solid color rectangles for testing purposes
+	 * 
+	 * width:		This object's width
+	 * height:		This object's height
+	 * initXPos:	Initial X-axis position
+	 * initYPos:	Initial Y-axis position
+	 * initXVel:	Initial X-axis velocity
+	 * initYVel:	Initial Y-axis velocity
+	 * paint:		The paint object that controls color for our rect
 	 */
 	public Moving(
 			int width,

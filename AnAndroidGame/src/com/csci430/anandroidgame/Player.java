@@ -1,5 +1,6 @@
 package com.csci430.anandroidgame;
 
+import android.graphics.Bitmap;
 import android.graphics.Paint;
 
 public class Player extends Static {  // TODO: Change to extend Animated once we implement animated sprites
@@ -41,6 +42,7 @@ public class Player extends Static {  // TODO: Change to extend Animated once we
 	 * initXVel:	Initial X-axis velocity
 	 * initYVel:	Initial Y-axis velocity
 	 * bitmap:		The bitmap image to be displayed
+	 */
 	public Player(
 			int width,
 			int height,
@@ -51,6 +53,5 @@ public class Player extends Static {  // TODO: Change to extend Animated once we
 			Bitmap bitmap) {
 		super(width, height, initXPos, initYPos, initXVel, initYVel, bitmap);
 	}
-	 */
 
 }

@@ -30,7 +30,7 @@ public class FullscreenActivity extends Activity {
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	// ?
+    	// Call the function onCreate() from the class we're extending (Activity)
     	super.onCreate(savedInstanceState);
     	
     	// Hide title. Must be called before setContentView()
@@ -39,11 +39,10 @@ public class FullscreenActivity extends Activity {
         // Hide status bar. Must be called before setContentView()
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        //GameView gameView = new GameView(this);
-        //setContentView(new GameView(this));
         // Tell system to use the layout defined in our XML file.
         setContentView(R.layout.activity_fullscreen);
         
+        // Create reference to our GameView. Needed to assign functionality to buttons.
         final GameView gameView = (GameView) findViewById(R.id.gameCamvas);
         
         // Define our buttons
@@ -61,10 +60,6 @@ public class FullscreenActivity extends Activity {
 			{
             	Log.d("ButtonPress", "Button Pressed: Jump1");
             	gameView.getThread().p1.jump();
-				if(playerYpos == FLOOR) {
-					playerYspeed = playerYspeed + JUMP_SPEED;
-					//TODO: PLAY SOUND HERE (Jump)
-				}
 			}
         });
 
@@ -76,10 +71,6 @@ public class FullscreenActivity extends Activity {
 			{
             	Log.d("ButtonPress", "Button Pressed: Jump2");
             	gameView.getThread().p1.jump();
-            	if(playerYpos == FLOOR) {
-					playerYspeed = playerYspeed + JUMP_SPEED;
-					//TODO: PLAY SOUND HERE (Jump)
-				}
 			}
         });
 		
@@ -91,10 +82,6 @@ public class FullscreenActivity extends Activity {
 			{
             	Log.d("ButtonPress", "Button Pressed: Right");
             	gameView.getThread().p1.runRight();
-				if(playerXspeed <= MAX_SPEED)
-					playerXspeed = playerXspeed + RUN_SPEED;
-				if(playerXspeed > MAX_SPEED)
-					playerXspeed = MAX_SPEED;
 			}
         });
 		
@@ -106,10 +93,6 @@ public class FullscreenActivity extends Activity {
 			{	
             	Log.d("ButtonPress", "Button Pressed: Left");
             	gameView.getThread().p1.runLeft();
-				if(playerXspeed >= MAX_SPEED)
-					playerXspeed = playerXspeed - RUN_SPEED;
-				if(playerXspeed > MAX_SPEED)
-					playerXspeed = (MAX_SPEED * -1);
             }
         });
 		
