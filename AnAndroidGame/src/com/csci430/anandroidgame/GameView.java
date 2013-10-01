@@ -1,7 +1,5 @@
 package com.csci430.anandroidgame;
 
-import com.csci430.anandroidgame.Player;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,7 +9,6 @@ import android.graphics.Paint.Style;
 import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,7 +16,8 @@ import android.view.WindowManager;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mSurfaceH;
-    private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint mPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint mPaint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Context mCtx = null;
     private GameThread mThread;
 
@@ -27,8 +25,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
         mSurfaceH = getHolder();
         mSurfaceH.addCallback(this);
-        mPaint.setColor(Color.BLUE);
-        mPaint.setStyle(Style.FILL);
+        mPaint1.setColor(Color.BLUE);
+        mPaint1.setStyle(Style.FILL);
+        mPaint2.setColor(Color.GREEN);
+        mPaint2.setStyle(Style.FILL);
         mCtx = context;
         setFocusable(true);
     }
@@ -37,8 +37,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super(context, attrs);
         mSurfaceH = getHolder();
         mSurfaceH.addCallback(this);
-        mPaint.setColor(Color.BLUE);
-        mPaint.setStyle(Style.FILL);
+        mPaint1.setColor(Color.BLUE);
+        mPaint1.setStyle(Style.FILL);
+        mPaint2.setColor(Color.GREEN);
+        mPaint2.setStyle(Style.FILL);
         mCtx = context;
         setFocusable(true);
     }
@@ -47,8 +49,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super(context, attrs, defStyle);
         mSurfaceH = getHolder();
         mSurfaceH.addCallback(this);
-        mPaint.setColor(Color.BLUE);
-        mPaint.setStyle(Style.FILL);
+        mPaint1.setColor(Color.BLUE);
+        mPaint1.setStyle(Style.FILL);
+        mPaint2.setColor(Color.GREEN);
+        mPaint2.setStyle(Style.FILL);
         mCtx = context;
         setFocusable(true);
     }
@@ -59,8 +63,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void surfaceCreated(SurfaceHolder holder) {
         Canvas canvas = mSurfaceH.lockCanvas();
-        canvas.drawColor(Color.BLACK);
-        canvas.drawCircle(100, 200, 50, mPaint);
         mSurfaceH.unlockCanvasAndPost(canvas);
 
         mThread = new GameThread(mSurfaceH, mCtx, new Handler());
@@ -96,13 +98,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	    private float mHeadingX;
 	    private float mHeadingY;
 	    
-	    protected Player p;
-	
+	    // Player creation
+	    WindowManager wm = (WindowManager) mCtx.getSystemService(Context.WINDOW_SERVICE);
+	    Display display = wm.getDefaultDisplay();
+	    Point size = new Point();
+	    Player p1;
+	    Moving bg;
+	    	
 	    public GameThread(SurfaceHolder surfaceHolder, Context context, Handler handler) {
 		    mSurfaceH = surfaceHolder;
-		    handler = handler;
 		    mCtx = context;
-		    p = new Player(100, 0);
 	    }
 	
 	    @SuppressLint("NewApi")
@@ -115,6 +120,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	            //mHeadingY = (float) (-1 + (Math.random() * 2));
 	            mHeadingX = 1;
 	            mHeadingY = 0;
+
+	    	    display.getSize(size);
+	    	    int width = size.x;
+	    	    int height = size.y;
+	    	    p1 = new Player(35, 60, 0, 0, mPaint1);
+	    	    bg = new Moving(400, height, 0, 0, mPaint2);
 	        }
 	    }
 	
@@ -147,17 +158,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	    }
 	    
 	    private void doDraw(Canvas canvas) {
+	    	// Lock the canvas for editing
+	        canvas.save();
 	        // If we're at top, botton, left, or right edge
 	        if (mObjX <= 0 || mObjX >= mCanvasWidth || mObjY <= 0 || mObjY >= mCanvasHeight) {
 	            // Invert our direction
 	            mVelocity = -mVelocity;
 	        }
+	        
 	        mObjX = mObjX + (mHeadingX * mVelocity);
 	        mObjY = mObjY + (mHeadingY * mVelocity);
+	        // Unlock the canvas
 	        canvas.restore();
-	        canvas.drawColor(Color.GREEN);
+
+        	// The background will never be updated, so just call draw()
+	        bg.draw(canvas);
+	        
+	        // Update and draw the player
+	        p1.updateAndDraw(canvas);
+	        
 	        //canvas.drawCircle(mObjX, mObjY, 50, mPaint);
-	        p.updateAndDraw(canvas);
 	    }
     }
 }

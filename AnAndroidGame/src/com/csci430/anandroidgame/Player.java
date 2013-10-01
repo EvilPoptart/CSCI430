@@ -1,57 +1,56 @@
 package com.csci430.anandroidgame;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 
-import com.csci430.anandroidgame.GameElement;
+public class Player extends Static {  // TODO: Change to extend Animated once we implement animated sprites
+	protected static int mPlayerWidth = 35;
+	protected static int mPlayerHeight = 60;
 
-public class Player extends GameElement {
-	private int mScore;
-	private int mPWidth = 35;
-	private int mPHeight = 60;
+	/*
+	 * Constructors
+	 * ========================================================================
+	 */
+	
+	/*
+	 * Without initial velocity
+	 * 
+	 * width:		This object's width
+	 * height:		This object's height
+	 * initXPos:	Initial X-axis position
+	 * initYPos:	Initial Y-axis position
+	 * initXVel:	Initial X-axis velocity (assumed to be 0)
+	 * initYVel:	Initial Y-axis velocity (assumed to be 0)
+	 * bitmap:		The bitmap image to be displayed
+	 */
+	public Player(
+			int width, // TODO: remove
+			int height, // TODO: remove
+			int initXPos,
+			int initYPos,
+			Paint paint) {
+		super(mPlayerWidth, mPlayerHeight, initXPos, initYPos, paint);
+	}
 
-	private int mPFriction = 1;
-	private int mPGravity = 1;
-	private int mPMaxRunSpeed = 1;
-	private int mPJumpSpeed = 20;
-	
-	public Player(float x, float y) {
-		mScore = 0;
-		mWidth = mPWidth;
-		mHeight = mPHeight;
-		mPosX = x;
-		mPosY = y;
-		mVelX = 0;
-		mVelY = 0;
-		
-		mFriction = mPFriction;
-		mGravity = mPGravity;
-		mMaxRunSpeed = mPMaxRunSpeed;
-		mJumpSpeed = mPJumpSpeed;
-		mFloor = 400 - mPHeight;
-		setVelY(mPGravity);
+	/*
+	 * With initial velocity
+	 * 
+	 * width:		This object's width
+	 * height:		This object's height
+	 * initXPos:	Initial X-axis position
+	 * initYPos:	Initial Y-axis position
+	 * initXVel:	Initial X-axis velocity
+	 * initYVel:	Initial Y-axis velocity
+	 * bitmap:		The bitmap image to be displayed
+	public Player(
+			int width,
+			int height,
+			int initXPos,
+			int initYPos,
+			int initXVel,
+			int initYVel,
+			Bitmap bitmap) {
+		super(width, height, initXPos, initYPos, initXVel, initYVel, bitmap);
 	}
-	
-	public Player(float x, float y, int vX, int vY) {
-		mScore = 0;
-		mWidth = mPWidth;
-		mHeight = mPHeight;
-		mPosX = x;
-		mPosY = y;
-		mVelX = vX;
-		mVelY = vY;
-		
-		mFriction = mPFriction;
-		mGravity = mPGravity;
-		mMaxRunSpeed = mPMaxRunSpeed;
-		mJumpSpeed = mPJumpSpeed;
-		mFloor = 400 - mPHeight;
-		setVelY(mPGravity);
-	}
-	
-	public void jump() {
-		updateVelY(-mPJumpSpeed);
-	}
+	 */
+
 }

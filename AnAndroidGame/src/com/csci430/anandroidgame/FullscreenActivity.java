@@ -8,7 +8,7 @@ import android.view.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.csci430.anandroidgame.GameView;
+//import com.csci430.anandroidgame.GameView;
 
 public class FullscreenActivity extends Activity {
 
@@ -60,7 +60,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{
             	Log.d("ButtonPress", "Button Pressed: Jump1");
-            	gameView.getThread().p.jump();
+            	gameView.getThread().p1.jump();
 				if(playerYpos == FLOOR) {
 					playerYspeed = playerYspeed + JUMP_SPEED;
 					//TODO: PLAY SOUND HERE (Jump)
@@ -75,7 +75,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{
             	Log.d("ButtonPress", "Button Pressed: Jump2");
-            	gameView.getThread().p.jump();
+            	gameView.getThread().p1.jump();
             	if(playerYpos == FLOOR) {
 					playerYspeed = playerYspeed + JUMP_SPEED;
 					//TODO: PLAY SOUND HERE (Jump)
@@ -90,7 +90,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{
             	Log.d("ButtonPress", "Button Pressed: Right");
-            	gameView.getThread().p.updateVelX(1);
+            	gameView.getThread().p1.runRight();
 				if(playerXspeed <= MAX_SPEED)
 					playerXspeed = playerXspeed + RUN_SPEED;
 				if(playerXspeed > MAX_SPEED)
@@ -105,7 +105,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{	
             	Log.d("ButtonPress", "Button Pressed: Left");
-            	gameView.getThread().p.updateVelX(-1);
+            	gameView.getThread().p1.runLeft();
 				if(playerXspeed >= MAX_SPEED)
 					playerXspeed = playerXspeed - RUN_SPEED;
 				if(playerXspeed > MAX_SPEED)
