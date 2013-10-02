@@ -1,0 +1,88 @@
+API:
+
+Main activity
+	interface buttons
+		call global.worldthings[0].left/right/jump
+	in timed Loop
+		global.update()
+		
+		
+	
+Global
+	oneTimeVars	//such as screen size
+	
+	soundControler object
+	graphics object
+	
+	WorldThings[]	//FORCE player to be index 0
+	Levels[]
+	
+	FUNCTIONS:
+	
+	update()
+		valueUpdater() //ie position, velocity ect
+		graphics.draw() call
+	
+	
+	
+	
+gameObjects		//stored in global array
+	positionX
+	positionY
+	velocityX
+	velocityY
+	typeOf
+		ai
+		player
+		worldObject //coins or platforms (ie non moving stuff)
+	spriteSheetLocationX
+	spriteSheetLocationY
+	visible (for collectibles)
+	solid	(for platforms)
+
+	FUNCTIONS:
+
+	accessors for position X and Y
+	positionUpdateFunctions()
+		X Y velocity 
+		
+	//Player Specific code
+	jump()
+		checks for ground, if found adds y velocity
+	left()
+		add left velocity
+	right()
+		add right velocity
+		
+	//AI specific
+	ai_Logic function here (tracking or just dumb movement)
+	
+	
+levels		//stored in global array		
+	backgroundImage
+	worldObjectLocations[int, int] //Top Left pixel of coins, platforms, ect...
+	
+	FUNCTIONS:
+	
+	accessors for image and locations
+	
+	
+	
+	
+soundControler 	//object in global
+	public soundbyte functions
+	public backgroundMusic
+	
+	
+	
+graphics 		//object in global
+	animations
+	spriteSheets[]
+	
+	FUNCTIONS:
+	
+	
+	draw objects
+		go through global.worldThings and draw all that are visible using their XY coords
+		//super.worldThings
+	
