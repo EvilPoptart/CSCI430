@@ -8,21 +8,9 @@ import android.view.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//import com.csci430.anandroidgame.GameView;
+import com.csci430.anandroidgame.GameView;
 
 public class FullscreenActivity extends Activity {
-
-	public final double RUN_SPEED = 10.00;			//run speed modifier
-    public final double JUMP_SPEED = 5.00;			//jump speed
-	public final double MAX_SPEED = 15;
-	public final double GRAVITY = 3;				//falling acceleration
-	public final double SLIP = 5;					//horiz slow when button not pressed
-
-	private int playerXpos;
-	private int playerYpos;
-	private double playerXspeed;
-    private double playerYspeed;
-    private double FLOOR = 10;						//TODO: replace with floor function for map
     public Button buttonJump1;
 	public Button buttonJump2;
 	public Button buttonLeft;
@@ -59,7 +47,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{
             	Log.d("ButtonPress", "Button Pressed: Jump1");
-            	gameView.getThread().p1.jump();
+            	//gameView.getThread().p1.jump();
 			}
         });
 
@@ -70,7 +58,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{
             	Log.d("ButtonPress", "Button Pressed: Jump2");
-            	gameView.getThread().p1.jump();
+            	//gameView.getThread().p1.jump();
 			}
         });
 		
@@ -81,7 +69,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{
             	Log.d("ButtonPress", "Button Pressed: Right");
-            	gameView.getThread().p1.runRight();
+            	//gameView.getThread().p1.runRight();
 			}
         });
 		
@@ -92,7 +80,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{	
             	Log.d("ButtonPress", "Button Pressed: Left");
-            	gameView.getThread().p1.runLeft();
+            	//gameView.getThread().p1.runLeft();
             }
         });
 		
@@ -115,31 +103,6 @@ public class FullscreenActivity extends Activity {
     }
     private Runnable Timer_Tick = new Runnable() {
     	public void run() {
-			playerXpos = playerXpos + (int)playerXspeed;		//update postion on screen
-			if((playerYpos + (int)playerYspeed) <= FLOOR) {
-				playerYpos = 10;
-				playerYspeed = 0;
-				//TODO: play sound here (land)
-			}
-			
-			playerYspeed -= GRAVITY;							//update speeds for next cycle
-			
-			if(playerYspeed < -15)				//MAX fall speed
-			{
-				if(playerYspeed < -15)
-					playerYspeed = -15;
-			}	
-			
-			if(playerXspeed > 0){				//X speed correction 
-				playerXspeed -= SLIP;
-				if(playerXspeed < 0)
-					playerXspeed = 0;
-			}
-			else {
-				playerXspeed += SLIP;
-				if(playerXspeed > 0)
-					playerXspeed = 0;
-			}
     	}
-	};
+    };
 }
