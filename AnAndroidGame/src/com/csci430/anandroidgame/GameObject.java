@@ -20,6 +20,7 @@ public class GameObject extends Global{
 	
 	private boolean solid;
 	private boolean visible;
+	private boolean collided;
 	private int typeOf;		//0:player, 1:AI, 2: object
 	
 	private Paint paint;
@@ -54,6 +55,11 @@ public class GameObject extends Global{
 		paint = p;
 		surfH = sh;
 		
+		if(type == 0)
+		{
+			velocityY = 3;
+		}
+		collided = false;
 		spriteRect = new Rect(posX, posY, (posX + sizeX), (posY + sizeY));
 	}
 	
@@ -88,17 +94,24 @@ public class GameObject extends Global{
 			velocityX = 0;
 		}
 		
-		velocityY += 5;
-		if(positionY > (Global.metrics.heightPixels - sizeY))
-		{
-			positionY = Global.metrics.heightPixels - sizeY;
-			velocityY = 0;
+		
+		//wrap in collision detection
+		if(collided == false){	
+			velocityY += 5;
+			if(positionY > (Global.metrics.heightPixels - sizeY))
+			{
+				positionY = Global.metrics.heightPixels - sizeY;
+				velocityY = 0;
+			}
 		}
+		// /wrap
+		
 		
 		spriteRect.offsetTo(positionX, positionY);
 	}
 	public void jumps()
 	{
+		collided = false;
 		if(velocityY == 0)	//assume on jumpable platform if velY == 0
 		{
 			velocityY += jumpSpeed;
@@ -180,5 +193,18 @@ public class GameObject extends Global{
 	public void setPaint(Paint p)
 	{
 		paint = p;
+	}
+	public void setPosY(int posY)
+	{
+		positionY = posY;
+	}
+	public int getSizeY()
+	{
+		return sizeY;
+	}
+	public void setColY()
+	{
+		collided = true;
+		velocityY = 0;
 	}
 }
