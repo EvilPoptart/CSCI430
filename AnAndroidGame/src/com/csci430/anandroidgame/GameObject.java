@@ -2,6 +2,7 @@ package com.csci430.anandroidgame;
 
 public class GameObject extends Global{
 	private final int MAX_H_SPEED = 20;		//max horiz speed
+	private final int MAX_Y_SPEED = 40;
 	private final int runSpeed = 5;		//button press increment
 	private final int jumpSpeed = 10;
 	
@@ -28,8 +29,8 @@ public class GameObject extends Global{
 		visible = true;
 		typeOf = 2;		//0:player, 1:AI, 2: object
 		
-		int spriteSheetLocationX;
-		int spriteSheetLocationY;
+		//int spriteSheetLocationX;
+		//int spriteSheetLocationY;
 
 	}
 	
@@ -41,6 +42,10 @@ public class GameObject extends Global{
 	{
 		//TODO: if on floor, velocityY += jump
 		velocityY += jumpSpeed;
+		if(velocityY > MAX_Y_SPEED)
+			velocityY = MAX_Y_SPEED; 
+		if(velocityY > ((-1)*MAX_Y_SPEED))
+			velocityY = (-1)*MAX_Y_SPEED;
 	}
 	public void runLeft()
 	{
@@ -79,4 +84,8 @@ public class GameObject extends Global{
 		visible = vis;
 	}
 
+	public int getType()
+	{
+		return typeOf;
+	}
 }

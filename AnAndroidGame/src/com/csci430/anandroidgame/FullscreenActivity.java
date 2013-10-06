@@ -31,7 +31,9 @@ public class FullscreenActivity extends Activity {
         setContentView(R.layout.activity_fullscreen);
         
         // Create reference to our GameView. Needed to assign functionality to buttons.
-        final GameView gameView = (GameView) findViewById(R.id.gameCamvas);
+        //final GameView gameView = (GameView) findViewById(R.id.gameCamvas);
+        super.onCreate(savedInstanceState);
+        setContentView(new GameView(this));
         
         // Define our buttons
 		buttonJump1 = (Button) findViewById(R.id.buttonJump1);

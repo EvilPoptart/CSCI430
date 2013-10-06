@@ -4,7 +4,7 @@ public class Graphics extends Global{
 	//animation function
 	//image spriteSheets[]
 	
-	Graphic bg;		//will be replaced by level image eventually
+	//Graphic bg;		//will be replaced by level image eventually
 	
 	/*
 		Reference global to pull screen sizes.
