@@ -77,7 +77,6 @@ public class GameObject extends Global{
 			if(velocityX > 0 )
 				velocityX = 0;
 		}
-		
 		if(positionX < 0)
 		{
 			positionX = 0;
@@ -88,6 +87,7 @@ public class GameObject extends Global{
 			positionX = Global.metrics.widthPixels - sizeX;
 			velocityX = 0;
 		}
+		
 		velocityY += 5;
 		if(positionY > (Global.metrics.heightPixels - sizeY))
 		{

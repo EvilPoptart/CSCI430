@@ -99,12 +99,6 @@ public class FullscreenActivity extends Activity {
     }
     private Runnable Timer_Tick = new Runnable() {
     	public void run() {
-    		if(Global.worldObjects.size() > 0){
-	    		for (int i = 0; i < Global.worldObjects.size(); i++)
-	    		{
-	    			Global.worldObjects.get(i).tickUpdate();
-	    		}
-    		}
     	}
     };
 }

@@ -6,10 +6,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.os.Handler;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 
 
+@SuppressWarnings("unused")
 class GameThread extends Thread{
 	  private boolean run = false;
 	  private SurfaceHolder sh;
@@ -30,13 +32,16 @@ class GameThread extends Thread{
 	    	paint.setColor(Color.BLUE);
 		    paint.setStyle(Style.FILL);
 		    player = new GameObject(0, 35, 60, 100, 100, paint, sh);
-		    Global.worldObjects.add(player);
 		    
 		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		    
 		    paint.setColor(Color.GREEN);
 			paint.setStyle(Style.FILL);  
 		    backGround = new GameObject(2, Global.metrics.widthPixels, Global.metrics.heightPixels, 0, 0, paint, sh);
+		    
+		    Global.worldObjects.add(player);
 		    Global.worldObjects.add(backGround);
+		    
 	    	
 	    }
 	  }
@@ -70,9 +75,10 @@ class GameThread extends Thread{
 	  private void doDraw(Canvas canvas) {
 		  canvas.save();
 		  
-		  //background
-		  canvas.drawRect(Global.worldObjects.get(2).getSprite(), Global.worldObjects.get(2).getPaint());
+		  Global.worldObjects.get(0).tickUpdate();	//update player
+		  
 		  canvas.drawRect(Global.worldObjects.get(1).getSprite(), Global.worldObjects.get(1).getPaint());
+		  canvas.drawRect(Global.worldObjects.get(0).getSprite(), Global.worldObjects.get(0).getPaint());
 		  
 		  canvas.restore();
 	  }
