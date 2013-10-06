@@ -20,7 +20,6 @@ public class GameObject extends Global{
 	
 	private boolean solid;
 	private boolean visible;
-	private boolean collided;
 	private int typeOf;		//0:player, 1:AI, 2: object
 	
 	private Paint paint;
@@ -59,12 +58,17 @@ public class GameObject extends Global{
 		{
 			velocityY = 3;
 		}
-		collided = false;
 		spriteRect = new Rect(posX, posY, (posX + sizeX), (posY + sizeY));
 	}
 	
+	@SuppressWarnings("unused")
 	public void tickUpdate()
 	{
+		int tempPosX = positionX;
+		int tempPosY = positionY;
+		float tempVelX = velocityX;
+		float tempVelY = velocityY;
+		
 		if(typeOf == 0 || typeOf == 1)
 		{
 			positionX += velocityX;
@@ -95,23 +99,42 @@ public class GameObject extends Global{
 		}
 		
 		
-		//wrap in collision detection
-		if(collided == false){	
-			velocityY += 5;
-			if(positionY > (Global.metrics.heightPixels - sizeY))
-			{
-				positionY = Global.metrics.heightPixels - sizeY;
-				velocityY = 0;
-			}
+		velocityY += 5;
+		if(positionY > (Global.metrics.heightPixels - sizeY))
+		{
+			positionY = Global.metrics.heightPixels - sizeY;
+			velocityY = 0;
 		}
-		// /wrap
 		
-		
-		spriteRect.offsetTo(positionX, positionY);
+		if (colision())
+		{
+			velocityX = tempVelX;
+			velocityY = 0;
+			spriteRect.offsetTo(positionX, positionY);
+		}
+		else
+		{
+			spriteRect.offsetTo(positionX, positionY);
+		}
 	}
+	
+	private boolean colision()
+	{
+		//replace this with loop for all objects ID >= 2
+		if( Rect.intersects(this.getSprite(), Global.worldObjects.get(2).getSprite()))
+		{
+			this.setPosY(Global.worldObjects.get(2).getPosY() - this.getSizeY());
+			
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public void jumps()
 	{
-		collided = false;
 		if(velocityY == 0)	//assume on jumpable platform if velY == 0
 		{
 			velocityY += jumpSpeed;
@@ -202,9 +225,8 @@ public class GameObject extends Global{
 	{
 		return sizeY;
 	}
-	public void setColY()
+	public void setVelocityY(int v)
 	{
-		collided = true;
-		velocityY = 0;
+		velocityY = v;
 	}
 }

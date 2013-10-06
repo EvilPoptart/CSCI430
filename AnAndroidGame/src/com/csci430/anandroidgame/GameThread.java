@@ -7,12 +7,12 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.util.Log;
+//import android.util.Log;
 import android.view.SurfaceHolder;
 
 
 
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 class GameThread extends Thread{
 	  private boolean run = false;
 	  private SurfaceHolder sh;
@@ -82,9 +82,7 @@ class GameThread extends Thread{
 		  canvas.save();
 		  
 		  Global.worldObjects.get(0).tickUpdate();	//update player
-		  
-		  collision();								//detect collisions (y direction only atm)
-		  
+		    
 		  canvas.drawRect(Global.worldObjects.get(1).getSprite(), Global.worldObjects.get(1).getPaint());
 		  canvas.drawRect(Global.worldObjects.get(0).getSprite(), Global.worldObjects.get(0).getPaint());
 		  canvas.drawRect(Global.worldObjects.get(2).getSprite(), Global.worldObjects.get(2).getPaint());
@@ -93,15 +91,4 @@ class GameThread extends Thread{
 		  canvas.restore();
 	  }
 	  
-	  //collision detection
-	  private void collision()
-	  {
-		if(Rect.intersects(Global.worldObjects.get(0).getSprite(), Global.worldObjects.get(2).getSprite()))
-		{
-			Log.d("Collision","DETECTED"); 
-			//player.setPosY( screenHeight - (Colliding Object + playerHeight))
-			Global.worldObjects.get(0).setPosY(Global.metrics.heightPixels - Global.worldObjects.get(2).getPosY() + Global.worldObjects.get(0).getSizeY());
-			Global.worldObjects.get(0).setColY();
-		}
-	  }
 	}
