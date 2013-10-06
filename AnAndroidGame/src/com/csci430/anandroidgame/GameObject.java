@@ -99,13 +99,15 @@ public class GameObject extends Global{
 	}
 	public void jumps()
 	{
-		//TODO: if on floor, velocityY += jump
-		velocityY += jumpSpeed;
-		
-		if(velocityY > MAX_Y_SPEED)
-			velocityY = MAX_Y_SPEED; 
-		if(velocityY > ((-1)*MAX_Y_SPEED))
-			velocityY = (-1)*MAX_Y_SPEED;
+		if(velocityY == 0)	//assume on jumpable platform if velY == 0
+		{
+			velocityY += jumpSpeed;
+			
+			if(velocityY > MAX_Y_SPEED)
+				velocityY = MAX_Y_SPEED; 
+			if(velocityY > ((-1)*MAX_Y_SPEED))
+				velocityY = (-1)*MAX_Y_SPEED;
+		}
 	}
 	public void runLefts()
 	{
