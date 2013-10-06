@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.widget.Button;
 import android.view.*;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class FullscreenActivity extends Activity {
@@ -22,8 +20,6 @@ public class FullscreenActivity extends Activity {
     	
     	// Hide title. Must be called before setContentView()
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-    	
-        // Hide status bar. Must be called before setContentView()
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // Tell system to use the layout defined in our XML file.
@@ -38,7 +34,6 @@ public class FullscreenActivity extends Activity {
 		buttonJump2 = (Button) findViewById(R.id.buttonJump2);
 		buttonRight = (Button) findViewById(R.id.buttonRight);
 		buttonLeft  = (Button) findViewById(R.id.buttonLeft);
-		Timer updateCycle = new Timer();
 		
 		/*
 		 * Handles player jumping (upper left)
@@ -80,25 +75,6 @@ public class FullscreenActivity extends Activity {
             }
         });
 		
-		/*
-		 * Handles the main draw loop. Refreshes the screen at a fixed rate.
-		 */
-		updateCycle.scheduleAtFixedRate(new TimerTask() {
-        	@Override
-        	public void run()
-        	{
-        		updateCycle();
-				//Redraw
-        	}        	
-        },0,50);	
-    }
-
-	//these two functions are used to keep the UI and timer in sync  http://steve.odyfamily.com/?p=12
-    private void updateCycle(){
-    	this.runOnUiThread(Timer_Tick);
-    }
-    private Runnable Timer_Tick = new Runnable() {
-    	public void run() {
-    	}
-    };
+	}
+    
 }
