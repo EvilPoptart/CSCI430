@@ -1,7 +1,5 @@
 package com.csci430.anandroidgame;
 
-import java.util.Vector;
-
 public class GameObject extends Global{
 	private final int MAX_H_SPEED = 20;		//max horiz speed
 	private final int runSpeed = 5;		//button press increment
@@ -12,59 +10,73 @@ public class GameObject extends Global{
 	private float velocityX;
 	private float velocityY;
 	
-	private bool solid;
-	private bool visible;
+	private boolean solid;
+	private boolean visible;
 	private int typeOf;		//0:player, 1:AI, 2: object
 	
 	int spriteSheetLocationX;
 	int spriteSheetLocationY;
-}
 
-public void jump()
-{
-	//TODO: if on floor, velocityY += jump
-	velocity += jumpSpeed;
-}
+	GameObject()
+	{
+		positionX = 0;
+		positionY = 0;
+		velocityX = 0;
+		velocityY = 0;
+		
+		solid = false;
+		visible = true;
+		typeOf = 2;		//0:player, 1:AI, 2: object
+		
+		int spriteSheetLocationX;
+		int spriteSheetLocationY;
 
-public void left()
-{
-	velocityX -= runSpeed;
-	if (velocityX > MAX_H_SPEED)
-		velocityX = MAX_H_SPEED;
-}
- public void right()
-{
-	velocityX += runSpeed;
-	if (velocityX > MAX_H_SPEED)
-		velocityX = MAX_H_SPEED;
-}
+	}
+	
+	public void tickUpdate()
+	{
+		//TODO: position and speed update for moving objects	
+	}
+	public void jump()
+	{
+		//TODO: if on floor, velocityY += jump
+		velocityY += jumpSpeed;
+	}
+	public void runLeft()
+	{
+		velocityX -= runSpeed;
+		if (velocityX > MAX_H_SPEED)
+			velocityX = MAX_H_SPEED;
+	}
+	public void runRight()
+	{
+		velocityX += runSpeed;
+		if (velocityX > MAX_H_SPEED)
+			velocityX = MAX_H_SPEED;
+	}
+	public int posX()
+	{
+		return positionX;
+	}
+	public int posY()
+	{
+		return positionY;
+	}
+	public boolean isSolid()
+	{
+		return solid;
+	}
+	public void setSolid(boolean sol)
+	{
+		solid = sol;
+	}
+	public boolean isVisible()
+	{
+		return visible;
+	}
+	public void setVisible(boolean vis)
+	{
+		visible = vis;
+	}
 
-public int posX()
-{
-	return positionX;
-}
-
-public int posY()
-{
-	return positionY;
-}
-
-public bool isSolid()
-{
-	return solid;
-}
-
-public void setSolid(bool sol)
-{
-	solid = sol;
-}
-
-public bool isVisible()
-{
-	return visible();
-}
-
-public void setVisible(bool vis)
-{
-	visible = vis;
 }

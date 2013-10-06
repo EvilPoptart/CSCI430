@@ -1,7 +1,5 @@
 package com.csci430.anandroidgame;
 
-import java.util.Vector;
-
 public class Graphics extends Global{
 	//animation function
 	//image spriteSheets[]

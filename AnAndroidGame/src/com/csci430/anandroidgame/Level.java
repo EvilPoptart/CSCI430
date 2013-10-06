@@ -1,10 +1,9 @@
 package com.csci430.anandroidgame;
 
-import java.util.Vector;
 
-public class Level extends global{
+public class Level extends Global{
 
 	//public image background
-	public worldObjectLocation = new vector(int x, int y);
+	
 }
 
