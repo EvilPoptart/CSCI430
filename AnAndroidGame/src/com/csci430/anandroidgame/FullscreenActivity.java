@@ -2,13 +2,12 @@ package com.csci430.anandroidgame;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.widget.Button;
 import android.view.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.csci430.anandroidgame.GameView;
 
 public class FullscreenActivity extends Activity {
     public Button buttonJump1;
@@ -30,10 +29,9 @@ public class FullscreenActivity extends Activity {
         // Tell system to use the layout defined in our XML file.
         setContentView(R.layout.activity_fullscreen);
         
-        // Create reference to our GameView. Needed to assign functionality to buttons.
-        //final GameView gameView = (GameView) findViewById(R.id.gameCamvas);
-        super.onCreate(savedInstanceState);
-        setContentView(new GameView(this));
+        //Used in screen Sizes throughout the application
+        Global.metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(Global.metrics);    
         
         // Define our buttons
 		buttonJump1 = (Button) findViewById(R.id.buttonJump1);
@@ -48,8 +46,7 @@ public class FullscreenActivity extends Activity {
 		buttonJump1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
-            	Log.d("ButtonPress", "Button Pressed: Jump1");
-            	//gameView.getThread().p1.jump();
+            	Global.jump();
 			}
         });
 
@@ -59,8 +56,7 @@ public class FullscreenActivity extends Activity {
 		buttonJump2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
-            	Log.d("ButtonPress", "Button Pressed: Jump2");
-            	//gameView.getThread().p1.jump();
+            	Global.jump();
 			}
         });
 		
@@ -70,8 +66,7 @@ public class FullscreenActivity extends Activity {
 		buttonRight.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
-            	Log.d("ButtonPress", "Button Pressed: Right");
-            	//gameView.getThread().p1.runRight();
+            	Global.runRight();
 			}
         });
 		
@@ -81,8 +76,7 @@ public class FullscreenActivity extends Activity {
 		buttonLeft.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{	
-            	Log.d("ButtonPress", "Button Pressed: Left");
-            	//gameView.getThread().p1.runLeft();
+            	Global.runLeft();
             }
         });
 		
@@ -105,6 +99,12 @@ public class FullscreenActivity extends Activity {
     }
     private Runnable Timer_Tick = new Runnable() {
     	public void run() {
+    		if(Global.worldObjects.size() > 0){
+	    		for (int i = 0; i < Global.worldObjects.size(); i++)
+	    		{
+	    			Global.worldObjects.get(i).tickUpdate();
+	    		}
+    		}
     	}
     };
 }

@@ -1,10 +1,9 @@
 package com.csci430.anandroidgame;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
+import android.graphics.Canvas;
 import android.os.Handler;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -12,30 +11,61 @@ import android.view.SurfaceView;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	GameThread thread;
 	private SurfaceHolder sh;
-	private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private GameThread mThread;
 	private Context ctx = null;
 	
-	public GameView(Context context) {
-		super(context);
-	    sh = getHolder();
-	    sh.addCallback(this);
-	    paint.setColor(Color.BLUE);
-	    paint.setStyle(Style.FILL);
-		ctx = context;
-		setFocusable(true); // make sure we get key events
-	}
-	
-	public GameThread getThread() {
-		return thread;
-	}
-	public void surfaceCreated(SurfaceHolder holder) {
-		thread = new GameThread(sh, ctx, new Handler());
-		thread.setRunning(true);
-		thread.start();
-	}
+	/*
+	 * Constructors
+	 * ========================================================================
+	 */
+    
+    public GameView(Context context) {
+        super(context);
+        sh = getHolder();
+        sh.addCallback(this);
+        ctx = context;
+        setFocusable(true);
+    }
+
+    public GameView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        sh = getHolder();
+        sh.addCallback(this);
+        ctx = context;
+        setFocusable(true);
+    }
+
+    public GameView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        sh = getHolder();
+        sh.addCallback(this);
+        ctx = context;
+        setFocusable(true);
+    }
+    
+    /*
+     * Get-ers
+     */
+
+    public GameThread getThread() {
+        return mThread;
+    }
+    
+    
+    public void surfaceCreated(SurfaceHolder holder) {
+        Canvas canvas = sh.lockCanvas();
+        sh.unlockCanvasAndPost(canvas);
+
+        thread = new GameThread(sh, ctx, new Handler());
+        thread.setRunning(true);
+        thread.start();
+    }
+    
+    
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {      
 		thread.setSurfaceSize(width, height);
 	}
+	
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		boolean retry = true;
 		thread.setRunning(false);

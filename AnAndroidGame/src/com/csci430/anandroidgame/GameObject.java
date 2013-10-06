@@ -1,13 +1,20 @@
 package com.csci430.anandroidgame;
 
+import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.view.SurfaceHolder;
+
 public class GameObject extends Global{
-	private final int MAX_H_SPEED = 20;		//max horiz speed
-	private final int MAX_Y_SPEED = 40;
-	private final int runSpeed = 5;		//button press increment
-	private final int jumpSpeed = 10;
+	private int MAX_H_SPEED = 60;		//max horiz speed
+	private int MAX_Y_SPEED = 40;
+	private int runSpeed = 10;		    //button press increment
+	private int jumpSpeed = 10;
 	
 	private int positionX;
 	private int positionY;
+	private int sizeX;
+	private int sizeY;
 	private float velocityX;
 	private float velocityY;
 	
@@ -15,8 +22,12 @@ public class GameObject extends Global{
 	private boolean visible;
 	private int typeOf;		//0:player, 1:AI, 2: object
 	
-	int spriteSheetLocationX;
-	int spriteSheetLocationY;
+	private Paint paint;
+	private Context context;
+	private SurfaceHolder surfH;
+	private Rect spriteRect;
+	
+	int spriteSheetLocation;
 
 	GameObject()
 	{
@@ -29,41 +40,90 @@ public class GameObject extends Global{
 		visible = true;
 		typeOf = 2;		//0:player, 1:AI, 2: object
 		
-		//int spriteSheetLocationX;
-		//int spriteSheetLocationY;
-
+		spriteSheetLocation = 0;	//for animations and such
+	}
+	
+	//Player Create: type = 0;
+	GameObject(int type, int sX, int sY, int posX, int posY, Paint p, SurfaceHolder sh)
+	{
+		typeOf = type;
+		sizeX = sX;
+		sizeY = sY;
+		positionX = posX;
+		positionY = posY;
+		paint = p;
+		surfH = sh;
+		
+		spriteRect = new Rect(posX, posY, (posX + sizeX), (posY + sizeY));
 	}
 	
 	public void tickUpdate()
 	{
-		//TODO: position and speed update for moving objects	
+		if(typeOf == 0 || typeOf == 1)
+		{
+			positionX += velocityX;
+			positionY += velocityY;	
+		}
+		
+		if(velocityX > 0)
+		{
+			velocityX -= 1;
+			if(velocityX < 0 )
+				velocityX = 0;
+		}
+		else
+		{
+			velocityX += 1;
+			if(velocityX > 0 )
+				velocityX = 0;
+		}
+		
+		if(positionX < 0)
+		{
+			positionX = 0;
+			velocityX = 0;
+		}
+		if(positionX > Global.metrics.widthPixels)
+		{
+			positionX = Global.metrics.widthPixels - sizeX;
+			velocityX = 0;
+		}
+		velocityY += 5;
+		if(positionY > (Global.metrics.heightPixels - sizeY))
+		{
+			positionY = Global.metrics.heightPixels - sizeY;
+			velocityY = 0;
+		}
+		
+		spriteRect.offsetTo(positionX, positionY);
 	}
-	public void jump()
+	public void jumps()
 	{
 		//TODO: if on floor, velocityY += jump
 		velocityY += jumpSpeed;
+		
 		if(velocityY > MAX_Y_SPEED)
 			velocityY = MAX_Y_SPEED; 
 		if(velocityY > ((-1)*MAX_Y_SPEED))
 			velocityY = (-1)*MAX_Y_SPEED;
 	}
-	public void runLeft()
+	public void runLefts()
 	{
 		velocityX -= runSpeed;
 		if (velocityX > MAX_H_SPEED)
 			velocityX = MAX_H_SPEED;
 	}
-	public void runRight()
+	public void runRights()
 	{
 		velocityX += runSpeed;
 		if (velocityX > MAX_H_SPEED)
 			velocityX = MAX_H_SPEED;
 	}
-	public int posX()
+	public int getPosX()
 	{
 		return positionX;
 	}
-	public int posY()
+	public int getPosY()
 	{
 		return positionY;
 	}
@@ -83,9 +143,40 @@ public class GameObject extends Global{
 	{
 		visible = vis;
 	}
-
 	public int getType()
 	{
 		return typeOf;
+	}
+	public void setCtx(Context ctx)
+	{
+		context = ctx;
+	}
+	public Context getCtx()
+	{
+		return context;
+	}
+	public void setSH(SurfaceHolder sh)
+	{
+		surfH = sh;
+	}
+	public SurfaceHolder getSH()
+	{
+		return surfH;
+	}
+	public Rect getSprite()
+	{
+		return spriteRect;
+	}
+	public void moveSpriteTo(int x, int y)
+	{
+		spriteRect.offsetTo(x, y);
+	}
+	public Paint getPaint()
+	{
+		return paint;
+	}
+	public void setPaint(Paint p)
+	{
+		paint = p;
 	}
 }

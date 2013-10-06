@@ -4,36 +4,40 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.os.Handler;
 import android.view.SurfaceHolder;
 
 
+
 class GameThread extends Thread{
-	  private int canvasWidth = Global.screenWidth;
-	  private int canvasHeight = Global.screenHeight;
-	  private static final int SPEED = 2;
 	  private boolean run = false;
+	  private SurfaceHolder sh;
+	  protected Context ctx;
+	  private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+	  private static GameObject player;
+	  private static GameObject backGround;
 	  
-	  private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-	  private Context ctx = null;
-	  private SurfaceHolder sh = null;
 	  
-	  private float bubbleX;
-	  private float bubbleY;
-	  private float headingX;
-	  private float headingY;
-	    
 	  public GameThread(SurfaceHolder surfaceHolder, Context context, Handler handler) {
 		sh = surfaceHolder;
 	    ctx = context;
 	  }
+	  
 	  public void doStart() {
 	    synchronized (sh) {
-	      // Start bubble in center and create some random motion
-	      bubbleX = canvasWidth / 2;
-	      bubbleY = canvasHeight / 2;
-	      headingX = (float) (-1 + (Math.random() * 2));
-	      headingY = (float) (-1 + (Math.random() * 2));
+	    	paint.setColor(Color.BLUE);
+		    paint.setStyle(Style.FILL);
+		    player = new GameObject(0, 35, 60, 100, 100, paint, sh);
+		    Global.worldObjects.add(player);
+		    
+		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		    paint.setColor(Color.GREEN);
+			paint.setStyle(Style.FILL);  
+		    backGround = new GameObject(2, Global.metrics.widthPixels, Global.metrics.heightPixels, 0, 0, paint, sh);
+		    Global.worldObjects.add(backGround);
+	    	
 	    }
 	  }
 	  public void run() {
@@ -53,20 +57,23 @@ class GameThread extends Thread{
 	  }
 	    
 	  public void setRunning(boolean b) { 
-	    run = b;
+		  run = b;
 	  }
+	  
+	  
 	  public void setSurfaceSize(int width, int height) {
-	    synchronized (sh) {
-	      canvasWidth = width;
-	      canvasHeight = height;
-	      doStart();
-	    }
+		  synchronized (sh) {
+			  doStart();
+		  }
 	  }
+	  
 	  private void doDraw(Canvas canvas) {
-	    bubbleX = bubbleX + (headingX * SPEED);
-	    bubbleY = bubbleY + (headingY * SPEED);
-	    canvas.restore();
-	    canvas.drawColor(Color.BLACK);
-	    canvas.drawCircle(bubbleX, bubbleY, 50, paint);
+		  canvas.save();
+		  
+		  //background
+		  canvas.drawRect(Global.worldObjects.get(2).getSprite(), Global.worldObjects.get(2).getPaint());
+		  canvas.drawRect(Global.worldObjects.get(1).getSprite(), Global.worldObjects.get(1).getPaint());
+		  
+		  canvas.restore();
 	  }
 	}
