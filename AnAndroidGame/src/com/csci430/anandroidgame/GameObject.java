@@ -108,7 +108,6 @@ public class GameObject extends Global{
 		
 		if (colision())
 		{
-			velocityX = tempVelX;
 			velocityY = 0;
 			spriteRect.offsetTo(positionX, positionY);
 		}
@@ -123,7 +122,8 @@ public class GameObject extends Global{
 		//replace this with loop for all objects ID >= 2
 		if( Rect.intersects(this.getSprite(), Global.worldObjects.get(2).getSprite()))
 		{
-			this.setPosY(Global.worldObjects.get(2).getPosY() - this.getSizeY());
+			//the +1 is to prevent hopping when the player is on a surface
+			positionY = (Global.worldObjects.get(2).getPosY() - this.getSizeY() + 1);
 			
 			return true;
 		}

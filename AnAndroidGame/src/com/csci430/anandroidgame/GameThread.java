@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.Rect;
 import android.os.Handler;
 //import android.util.Log;
 import android.view.SurfaceHolder;
@@ -81,7 +80,7 @@ class GameThread extends Thread{
 	  private void doDraw(Canvas canvas) {
 		  canvas.save();
 		  
-		  Global.worldObjects.get(0).tickUpdate();	//update player
+		  Global.worldObjects.get(0).tickUpdate();	//update player (currently only checks object.0 vs object.2)
 		    
 		  canvas.drawRect(Global.worldObjects.get(1).getSprite(), Global.worldObjects.get(1).getPaint());
 		  canvas.drawRect(Global.worldObjects.get(0).getSprite(), Global.worldObjects.get(0).getPaint());
