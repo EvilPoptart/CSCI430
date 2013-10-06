@@ -61,20 +61,16 @@ public class GameObject extends Global{
 		spriteRect = new Rect(posX, posY, (posX + sizeX), (posY + sizeY));
 	}
 	
-	@SuppressWarnings("unused")
 	public void tickUpdate()
-	{
-		int tempPosX = positionX;
-		int tempPosY = positionY;
-		float tempVelX = velocityX;
-		float tempVelY = velocityY;
-		
+	{	
+		//position update, only for player and AI, not static objects
 		if(typeOf == 0 || typeOf == 1)
 		{
 			positionX += velocityX;
 			positionY += velocityY;	
 		}
 		
+		//velocity update for time
 		if(velocityX > 0)
 		{
 			velocityX -= 1;
@@ -87,19 +83,20 @@ public class GameObject extends Global{
 			if(velocityX > 0 )
 				velocityX = 0;
 		}
+		//Left Wall Collision
 		if(positionX < 0)
 		{
 			positionX = 0;
 			velocityX = 0;
 		}
+		//Right Wall Collision
 		if(positionX > Global.metrics.widthPixels)
 		{
 			positionX = Global.metrics.widthPixels - sizeX;
 			velocityX = 0;
 		}
 		
-		
-		velocityY += 5;
+		//if on floor remove velocity
 		if(positionY > (Global.metrics.heightPixels - sizeY))
 		{
 			positionY = Global.metrics.heightPixels - sizeY;
@@ -108,11 +105,12 @@ public class GameObject extends Global{
 		
 		if (colision())
 		{
-			velocityY = 0;
 			spriteRect.offsetTo(positionX, positionY);
 		}
 		else
 		{
+			//if not on an item/floor increase downward velocity
+			velocityY += 5;
 			spriteRect.offsetTo(positionX, positionY);
 		}
 	}
@@ -122,8 +120,14 @@ public class GameObject extends Global{
 		//replace this with loop for all objects ID >= 2
 		if( Rect.intersects(this.getSprite(), Global.worldObjects.get(2).getSprite()))
 		{
-			//the +1 is to prevent hopping when the player is on a surface
-			positionY = (Global.worldObjects.get(2).getPosY() - this.getSizeY() + 1);
+			/* need to figure out how to only collide with top OR bottom OR left OR right
+			 * right now it will always "pop" player to top of object
+			 * 
+			 * the +1 is to prevent hopping when the player is on a surface
+			 */
+			
+			
+			this.positionY = (Global.worldObjects.get(2).getPosY() - this.sizeY);
 			
 			return true;
 		}
@@ -135,15 +139,15 @@ public class GameObject extends Global{
 	
 	public void jumps()
 	{
-		if(velocityY == 0)	//assume on jumpable platform if velY == 0
-		{
+		//if(velocityY == 0)	//assume on jumpable platform if velY == 0
+		//{
 			velocityY += jumpSpeed;
 			
 			if(velocityY > MAX_Y_SPEED)
 				velocityY = MAX_Y_SPEED; 
 			if(velocityY > ((-1)*MAX_Y_SPEED))
 				velocityY = (-1)*MAX_Y_SPEED;
-		}
+		//}
 	}
 	public void runLefts()
 	{
@@ -204,10 +208,6 @@ public class GameObject extends Global{
 	public Rect getSprite()
 	{
 		return spriteRect;
-	}
-	public void moveSpriteTo(int x, int y)
-	{
-		spriteRect.offsetTo(x, y);
 	}
 	public Paint getPaint()
 	{
