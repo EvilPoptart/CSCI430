@@ -14,9 +14,7 @@ public class Global extends FullscreenActivity {
 
 	Global(){
 		worldObjects = new Vector<GameObject>();
-
 		levels = new Vector<Level>();	
-		
 	}
 	
 	public static void jump() {
