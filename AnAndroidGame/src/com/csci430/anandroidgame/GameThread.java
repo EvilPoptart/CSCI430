@@ -30,20 +30,26 @@ class GameThread extends Thread{
 	  
 	  public void doStart() {
 	    synchronized (sh) {
+	    	//player
 	    	paint.setColor(Color.BLUE);
 		    paint.setStyle(Style.FILL);
 		    player = new GameObject(0, 35, 60, 100, 100, paint, sh);
+		    // /player
 		    
+		    //background
 		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		    paint.setColor(Color.GREEN);
 			paint.setStyle(Style.FILL);  
 		    backGround = new GameObject(2, Global.metrics.widthPixels, Global.metrics.heightPixels, 0, 0, paint, sh);
+		    // /background
 		    
+		    //Other Objects
 		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		    paint.setColor(Color.GRAY);
 			paint.setStyle(Style.FILL);  
 		    thingy = new GameObject(2, 200, 50, 0, (Global.metrics.heightPixels - 50), paint, sh);
 		    
+		    //Load into array for use.
 		    Global.worldObjects.add(player);
 		    Global.worldObjects.add(backGround);
 		    Global.worldObjects.add(thingy);
@@ -69,7 +75,6 @@ class GameThread extends Thread{
 	  public void setRunning(boolean b) { 
 		  run = b;
 	  }
-	  
 	  
 	  public void setSurfaceSize(int width, int height) {
 		  synchronized (sh) {

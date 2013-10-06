@@ -73,8 +73,7 @@ public class FullscreenActivity extends Activity {
 			{	
             	Global.runLeft();
             }
-        });
-		
+        });	
 	}
     
 }

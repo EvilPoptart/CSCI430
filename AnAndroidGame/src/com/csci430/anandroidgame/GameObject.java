@@ -3,12 +3,13 @@ package com.csci430.anandroidgame;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class GameObject extends Global{
-	private int MAX_H_SPEED = 60;		//max horiz speed
-	private int MAX_Y_SPEED = 40;
-	private int runSpeed = 10;		    //button press increment
+	private int MAX_H_SPEED = 30;		//max horiz speed
+	private int MAX_Y_SPEED = 30;
+	private int runSpeed = 5;		    //button press increment
 	private int jumpSpeed = 10;
 	
 	private int positionX;
@@ -21,6 +22,7 @@ public class GameObject extends Global{
 	private boolean solid;
 	private boolean visible;
 	private int typeOf;		//0:player, 1:AI, 2: object
+	private boolean prev_Colide;
 	
 	private Paint paint;
 	private Context context;
@@ -53,11 +55,8 @@ public class GameObject extends Global{
 		positionY = posY;
 		paint = p;
 		surfH = sh;
+		prev_Colide = false;
 		
-		if(type == 0)
-		{
-			velocityY = 3;
-		}
 		spriteRect = new Rect(posX, posY, (posX + sizeX), (posY + sizeY));
 	}
 	
@@ -83,12 +82,14 @@ public class GameObject extends Global{
 			if(velocityX > 0 )
 				velocityX = 0;
 		}
+		
 		//Left Wall Collision
 		if(positionX < 0)
 		{
 			positionX = 0;
 			velocityX = 0;
 		}
+		
 		//Right Wall Collision
 		if(positionX > Global.metrics.widthPixels)
 		{
@@ -103,20 +104,22 @@ public class GameObject extends Global{
 			velocityY = 0;
 		}
 		
+		
 		if (colision())
 		{
+			prev_Colide = true;
+			Log.d("Collision","Detected");
 			spriteRect.offsetTo(positionX, positionY);
 		}
 		else
 		{
-			//if not on an item/floor increase downward velocity
 			velocityY += 5;
+			prev_Colide = false;
 			spriteRect.offsetTo(positionX, positionY);
 		}
 	}
 	
-	private boolean colision()
-	{
+	private boolean colision() {
 		//replace this with loop for all objects ID >= 2
 		if( Rect.intersects(this.getSprite(), Global.worldObjects.get(2).getSprite()))
 		{
@@ -125,9 +128,8 @@ public class GameObject extends Global{
 			 * 
 			 * the +1 is to prevent hopping when the player is on a surface
 			 */
-			
-			
-			this.positionY = (Global.worldObjects.get(2).getPosY() - this.sizeY);
+			if(prev_Colide == false)	//stops hopping, allows jumping
+				this.positionY = (Global.worldObjects.get(2).getPosY() - this.sizeY + 1);
 			
 			return true;
 		}
@@ -139,27 +141,30 @@ public class GameObject extends Global{
 	
 	public void jumps()
 	{
-		//if(velocityY == 0)	//assume on jumpable platform if velY == 0
-		//{
+		if(velocityY == 0)	//assume on jumpable platform if velY == 0
+		{
 			velocityY += jumpSpeed;
 			
 			if(velocityY > MAX_Y_SPEED)
 				velocityY = MAX_Y_SPEED; 
 			if(velocityY > ((-1)*MAX_Y_SPEED))
 				velocityY = (-1)*MAX_Y_SPEED;
-		//}
+		}
+		prev_Colide = false;
 	}
 	public void runLefts()
 	{
 		velocityX -= runSpeed;
 		if (velocityX > MAX_H_SPEED)
 			velocityX = MAX_H_SPEED;
+		prev_Colide = false;
 	}
 	public void runRights()
 	{
 		velocityX += runSpeed;
 		if (velocityX > MAX_H_SPEED)
 			velocityX = MAX_H_SPEED;
+		prev_Colide = false;
 	}
 	public int getPosX()
 	{
