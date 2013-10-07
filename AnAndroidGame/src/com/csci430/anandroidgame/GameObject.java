@@ -9,8 +9,8 @@ import android.view.SurfaceHolder;
 public class GameObject extends Global{
 	private int MAX_H_SPEED = 30;		//max horiz speed
 	private int MAX_Y_SPEED = 30;
-	private int runSpeed = 5;		    //button press increment
-	private int jumpSpeed = 10;
+	private int runSpeed = 10;		    //button press increment
+	private int jumpSpeed = 20;
 	
 	private int positionX;
 	private int positionY;
@@ -62,60 +62,60 @@ public class GameObject extends Global{
 	
 	public void tickUpdate()
 	{	
+		prev_Colide = false;
 		//position update, only for player and AI, not static objects
 		if(typeOf == 0 || typeOf == 1)
 		{
 			positionX += velocityX;
 			positionY += velocityY;	
-		}
 		
-		//velocity update for time
-		if(velocityX > 0)
-		{
-			velocityX -= 1;
-			if(velocityX < 0 )
+			//velocity update for time
+			if(velocityX > 0)
+			{
+				velocityX -= 1;
+				if(velocityX < 0 )
+					velocityX = 0;
+			}
+			else
+			{
+				velocityX += 1;
+				if(velocityX > 0 )
+					velocityX = 0;
+			}
+			
+			//Left Wall Collision
+			if(positionX < 0)
+			{
+				positionX = 0;
 				velocityX = 0;
-		}
-		else
-		{
-			velocityX += 1;
-			if(velocityX > 0 )
+			}
+			
+			//Right Wall Collision
+			if(positionX > Global.metrics.widthPixels)
+			{
+				positionX = Global.metrics.widthPixels - sizeX;
 				velocityX = 0;
-		}
-		
-		//Left Wall Collision
-		if(positionX < 0)
-		{
-			positionX = 0;
-			velocityX = 0;
-		}
-		
-		//Right Wall Collision
-		if(positionX > Global.metrics.widthPixels)
-		{
-			positionX = Global.metrics.widthPixels - sizeX;
-			velocityX = 0;
-		}
-		
-		//if on floor remove velocity
-		if(positionY > (Global.metrics.heightPixels - sizeY))
-		{
-			positionY = Global.metrics.heightPixels - sizeY;
-			velocityY = 0;
-		}
-		
-		
-		if (colision())
-		{
-			prev_Colide = true;
-			Log.d("Collision","Detected");
-			spriteRect.offsetTo(positionX, positionY);
-		}
-		else
-		{
-			velocityY += 5;
-			prev_Colide = false;
-			spriteRect.offsetTo(positionX, positionY);
+			}
+			
+			//if on floor remove velocity
+			if(positionY > (Global.metrics.heightPixels - sizeY))
+			{
+				positionY = Global.metrics.heightPixels - sizeY;
+				velocityY = 0;
+			}
+			
+			if (colision())
+			{
+				prev_Colide = true;
+				Log.d("Collision","Detected");
+				spriteRect.offsetTo(positionX, positionY);
+			}
+			else
+			{
+				velocityY += 5;
+				prev_Colide = false;
+				spriteRect.offsetTo(positionX, positionY);
+			}
 		}
 	}
 	
@@ -129,8 +129,10 @@ public class GameObject extends Global{
 			 * the +1 is to prevent hopping when the player is on a surface
 			 */
 			if(prev_Colide == false)	//stops hopping, allows jumping
-				this.positionY = (Global.worldObjects.get(2).getPosY() - this.sizeY + 1);
-			
+			{
+				this.positionY = (Global.worldObjects.get(2).getPosY() - this.sizeY);
+				velocityY = 0;
+			}
 			return true;
 		}
 		else
@@ -141,7 +143,8 @@ public class GameObject extends Global{
 	
 	public void jumps()
 	{
-		if(velocityY == 0)	//assume on jumpable platform if velY == 0
+		Log.d("ButtonPress", "Y Velocity: " + Float.toString(velocityY));
+		if(velocityY <= 5)	//assume on jumpable platform if velY <= 5
 		{
 			velocityY += jumpSpeed;
 			

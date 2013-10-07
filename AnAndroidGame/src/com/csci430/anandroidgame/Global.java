@@ -11,25 +11,23 @@ public class Global extends FullscreenActivity {
 	public static DisplayMetrics metrics;
 	
 	public Sound sounds;
-	private static int player;
+	public static int playerIndex;
+	public static int backgroundIndex;
 
 	Global(){
 		worldObjects = new Vector<GameObject>();
 		levels = new Vector<Level>();	
 	}
 	public static void jump() {
-		player = 0;
 		Log.d("ButtonPress", "Button Pressed: Jump");
-		Global.worldObjects.get(player).jumps();
+		Global.worldObjects.get(playerIndex).jumps();
 	}
 	public static void runLeft() {
-		player = 0;
 		Log.d("ButtonPress", "Button Pressed: Left");
-		Global.worldObjects.get(player).runLefts();
+		Global.worldObjects.get(playerIndex).runLefts();
 	}
 	public static void runRight() {
-		player = 0;
 		Log.d("ButtonPress", "Button Pressed: Right");
-		Global.worldObjects.get(player).runRights();
+		Global.worldObjects.get(playerIndex).runRights();
 	}
 }
