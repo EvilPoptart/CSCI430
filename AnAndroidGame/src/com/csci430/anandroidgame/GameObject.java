@@ -62,13 +62,25 @@ public class GameObject extends Global{
 	
 	public void tickUpdate()
 	{	
-		prev_Colide = false;
 		//position update, only for player and AI, not static objects
 		if(typeOf == 0 || typeOf == 1)
 		{
-			positionX += velocityX;
-			positionY += velocityY;	
-		
+			Rect ghost;				//use for collision detection.
+			ghost = spriteRect;
+			ghost.offset((int)velocityX, (int)velocityY);
+			
+			if(collision(ghost))
+			{
+				Log.d("Shit","Occured");
+				velocityY = 0;
+			}
+			else
+			{
+				positionX += velocityX;
+				positionY += velocityY;
+				velocityY +=5;
+			}
+			
 			//velocity update for time
 			if(velocityX > 0)
 			{
@@ -103,42 +115,14 @@ public class GameObject extends Global{
 				positionY = Global.metrics.heightPixels - sizeY;
 				velocityY = 0;
 			}
-			
-			if (colision())
-			{
-				prev_Colide = true;
-				Log.d("Collision","Detected");
-				spriteRect.offsetTo(positionX, positionY);
-			}
-			else
-			{
-				velocityY += 5;
-				prev_Colide = false;
-				spriteRect.offsetTo(positionX, positionY);
-			}
 		}
 	}
 	
-	private boolean colision() {
-		//replace this with loop for all objects ID >= 2
-		if( Rect.intersects(this.getSprite(), Global.worldObjects.get(2).getSprite()))
-		{
-			/* need to figure out how to only collide with top OR bottom OR left OR right
-			 * right now it will always "pop" player to top of object
-			 * 
-			 * the +1 is to prevent hopping when the player is on a surface
-			 */
-			if(prev_Colide == false)	//stops hopping, allows jumping
-			{
-				this.positionY = (Global.worldObjects.get(2).getPosY() - this.sizeY);
-				velocityY = 0;
-			}
+	private boolean collision(Rect ghost) {
+		//TODO: loop through all world objects
+		if(ghost.intersect(Global.worldObjects.get(2).spriteRect))
 			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 	
 	public void jumps()

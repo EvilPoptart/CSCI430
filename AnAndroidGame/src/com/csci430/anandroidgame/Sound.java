@@ -6,13 +6,13 @@ public class Sound extends Global{
 	//private background
 
 
-public void playJump()
-{
-	//play jump soundbyte
-}
-
-public void playBackground()
-{
-	//play background
-}
+	public void playJump()
+	{
+		//play jump soundbyte
+	}
+	
+	public void playBackground()
+	{
+		//play background
+	}
 }
