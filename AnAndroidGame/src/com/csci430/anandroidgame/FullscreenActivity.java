@@ -12,6 +12,7 @@ public class FullscreenActivity extends Activity {
 	public Button buttonJump2;
 	public Button buttonLeft;
 	public Button buttonRight;
+	public static Global placeHolder;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,8 @@ public class FullscreenActivity extends Activity {
 		buttonJump2 = (Button) findViewById(R.id.buttonJump2);
 		buttonRight = (Button) findViewById(R.id.buttonRight);
 		buttonLeft  = (Button) findViewById(R.id.buttonLeft);
+		
+		placeHolder = new Global();
 		
 		/*
 		 * Handles player jumping (upper left)

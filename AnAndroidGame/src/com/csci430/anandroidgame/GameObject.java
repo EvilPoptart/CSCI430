@@ -64,7 +64,8 @@ public class GameObject extends Global{
 		if(typeOf == 0 || typeOf == 1)
 		{
 			Rect ghost;				//use for collision detection.
-			ghost = spriteRect;
+			String temp = spriteRect.flattenToString();
+			ghost = Rect.unflattenFromString(temp);
 			ghost.offset((int)velocityX, (int)velocityY);
 			
 			int col = collision(ghost);
@@ -127,7 +128,7 @@ public class GameObject extends Global{
 	
 	private int collision(Rect ghost) {
 		//TODO: loop through all world objects
-		int i = 0;
+		int i = 2;
 		//Loop here
 		if(ghost.intersect(Global.worldObjects.get(i).spriteRect))
 		{	
@@ -135,7 +136,7 @@ public class GameObject extends Global{
 			return i;
 		}
 		//end loop
-		return i;
+		return 0;
 	}
 	
 	public void jumps()
