@@ -51,7 +51,10 @@ class GameThread extends Thread{
 		    
 		    //Load into array for use.
 		    Global.worldObjects.add(player);
+		    Global.playerIndex = Global.worldObjects.size() - 1;
 		    Global.worldObjects.add(backGround);
+		    Global.backgroundIndex = Global.worldObjects.size() -1;
+		    
 		    Global.worldObjects.add(thingy);
 	    	
 	    }
@@ -87,8 +90,8 @@ class GameThread extends Thread{
 		  
 		  Global.worldObjects.get(0).tickUpdate();	//update player (currently only checks object.0 vs object.2)
 		    
-		  canvas.drawRect(Global.worldObjects.get(1).getSprite(), Global.worldObjects.get(1).getPaint());
-		  canvas.drawRect(Global.worldObjects.get(0).getSprite(), Global.worldObjects.get(0).getPaint());
+		  canvas.drawRect(Global.worldObjects.get(Global.backgroundIndex).getSprite(), Global.worldObjects.get(Global.backgroundIndex).getPaint());
+		  canvas.drawRect(Global.worldObjects.get(Global.playerIndex).getSprite(), Global.worldObjects.get(Global.playerIndex).getPaint());
 		  canvas.drawRect(Global.worldObjects.get(2).getSprite(), Global.worldObjects.get(2).getPaint());
 		  
 		  

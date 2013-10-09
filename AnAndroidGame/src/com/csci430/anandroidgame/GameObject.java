@@ -22,7 +22,6 @@ public class GameObject extends Global{
 	private boolean solid;
 	private boolean visible;
 	private int typeOf;		//0:player, 1:AI, 2: object
-	private boolean prev_Colide;
 	
 	private Paint paint;
 	private Context context;
@@ -55,7 +54,6 @@ public class GameObject extends Global{
 		positionY = posY;
 		paint = p;
 		surfH = sh;
-		prev_Colide = false;
 		
 		spriteRect = new Rect(posX, posY, (posX + sizeX), (posY + sizeY));
 	}
@@ -69,16 +67,22 @@ public class GameObject extends Global{
 			ghost = spriteRect;
 			ghost.offset((int)velocityX, (int)velocityY);
 			
-			if(collision(ghost))
+			int col = collision(ghost);
+			
+			if(col != 0)
 			{
 				Log.d("Shit","Occured");
 				velocityY = 0;
+				spriteRect.offsetTo(positionX, positionY);
 			}
 			else
 			{
 				positionX += velocityX;
 				positionY += velocityY;
 				velocityY +=5;
+				colWall();
+				onFloor();
+				spriteRect.offsetTo(positionX, positionY);
 			}
 			
 			//velocity update for time
@@ -94,35 +98,44 @@ public class GameObject extends Global{
 				if(velocityX > 0 )
 					velocityX = 0;
 			}
-			
-			//Left Wall Collision
-			if(positionX < 0)
-			{
-				positionX = 0;
-				velocityX = 0;
-			}
-			
-			//Right Wall Collision
-			if(positionX > Global.metrics.widthPixels)
-			{
-				positionX = Global.metrics.widthPixels - sizeX;
-				velocityX = 0;
-			}
-			
-			//if on floor remove velocity
-			if(positionY > (Global.metrics.heightPixels - sizeY))
-			{
-				positionY = Global.metrics.heightPixels - sizeY;
-				velocityY = 0;
-			}
+			colWall();
+		}
+	}
+	private void onFloor(){
+		if(positionY > (Global.metrics.heightPixels - sizeY))
+		{
+			positionY = Global.metrics.heightPixels - sizeY;
+			velocityY = 0;
+		}
+	}
+	private void colWall(){
+		//Left Wall Collision
+		if(positionX < 0)
+		{
+			positionX = 0;
+			velocityX = 0;
+		}
+		
+		//Right Wall Collision
+		if(positionX > Global.metrics.widthPixels)
+		{
+			positionX = Global.metrics.widthPixels - sizeX;
+			velocityX = 0;
 		}
 	}
 	
-	private boolean collision(Rect ghost) {
+	
+	private int collision(Rect ghost) {
 		//TODO: loop through all world objects
-		if(ghost.intersect(Global.worldObjects.get(2).spriteRect))
-			return true;
-		return false;
+		int i = 0;
+		//Loop here
+		if(ghost.intersect(Global.worldObjects.get(i).spriteRect))
+		{	
+			positionY = Global.worldObjects.get(i).positionY - sizeY;
+			return i;
+		}
+		//end loop
+		return i;
 	}
 	
 	public void jumps()
@@ -137,21 +150,18 @@ public class GameObject extends Global{
 			if(velocityY > ((-1)*MAX_Y_SPEED))
 				velocityY = (-1)*MAX_Y_SPEED;
 		}
-		prev_Colide = false;
 	}
 	public void runLefts()
 	{
 		velocityX -= runSpeed;
 		if (velocityX > MAX_H_SPEED)
 			velocityX = MAX_H_SPEED;
-		prev_Colide = false;
 	}
 	public void runRights()
 	{
 		velocityX += runSpeed;
 		if (velocityX > MAX_H_SPEED)
 			velocityX = MAX_H_SPEED;
-		prev_Colide = false;
 	}
 	public int getPosX()
 	{
