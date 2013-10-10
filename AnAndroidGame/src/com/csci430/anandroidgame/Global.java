@@ -19,15 +19,12 @@ public class Global extends FullscreenActivity {
 		levels = new Vector<Level>();	
 	}
 	public static void jump() {
-		Log.d("ButtonPress", "Button Pressed: Jump");
 		Global.worldObjects.get(playerIndex).jumps();
 	}
 	public static void runLeft() {
-		Log.d("ButtonPress", "Button Pressed: Left");
 		Global.worldObjects.get(playerIndex).runLefts();
 	}
 	public static void runRight() {
-		Log.d("ButtonPress", "Button Pressed: Right");
 		Global.worldObjects.get(playerIndex).runRights();
 	}
 }

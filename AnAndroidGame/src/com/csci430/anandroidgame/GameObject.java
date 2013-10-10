@@ -72,7 +72,6 @@ public class GameObject extends Global{
 			
 			if(col != 0)
 			{
-				Log.d("Shit","Occured");
 				velocityY = 0;
 				spriteRect.offsetTo(positionX, positionY);
 			}
@@ -141,7 +140,6 @@ public class GameObject extends Global{
 	
 	public void jumps()
 	{
-		Log.d("ButtonPress", "Y Velocity: " + Float.toString(velocityY));
 		if(velocityY <= 5)	//assume on jumpable platform if velY <= 5
 		{
 			velocityY += jumpSpeed;

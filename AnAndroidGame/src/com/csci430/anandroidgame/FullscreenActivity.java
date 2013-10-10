@@ -37,6 +37,7 @@ public class FullscreenActivity extends Activity {
 		buttonLeft  = (Button) findViewById(R.id.buttonLeft);
 		
 		placeHolder = new Global();
+		Global.worldObjects.clear();
 		
 		/*
 		 * Handles player jumping (upper left)
