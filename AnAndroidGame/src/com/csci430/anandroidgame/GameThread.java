@@ -56,6 +56,8 @@ class GameThread extends Thread{
 		    Global.backgroundIndex = Global.worldObjects.size() -1;
 		    
 		    Global.worldObjects.add(thingy);
+		    
+		    Sound.track1(ctx);
 	    	
 	    }
 	  }

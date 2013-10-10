@@ -41,6 +41,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         sh.addCallback(this);
         ctx = context;
         setFocusable(true);
+        
     }
     
     /*

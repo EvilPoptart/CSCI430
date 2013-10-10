@@ -1,14 +1,17 @@
 package com.csci430.anandroidgame;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.widget.Button;
 import android.view.*;
+import android.media.*;
 
 
 public class FullscreenActivity extends Activity {
-    public Button buttonJump1;
+    protected static final Context context = null;
+	public Button buttonJump1;
 	public Button buttonJump2;
 	public Button buttonLeft;
 	public Button buttonRight;
@@ -35,6 +38,7 @@ public class FullscreenActivity extends Activity {
 		buttonJump2 = (Button) findViewById(R.id.buttonJump2);
 		buttonRight = (Button) findViewById(R.id.buttonRight);
 		buttonLeft  = (Button) findViewById(R.id.buttonLeft);
+		final MediaPlayer jumpsound = MediaPlayer.create(this, R.raw.jump);
 		
 		placeHolder = new Global();
 		Global.worldObjects.clear();
@@ -44,7 +48,8 @@ public class FullscreenActivity extends Activity {
 		 */
 		buttonJump1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
-			{
+			{            
+        		jumpsound.start();
             	Global.jump();
 			}
         });
@@ -55,6 +60,7 @@ public class FullscreenActivity extends Activity {
 		buttonJump2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
+        		jumpsound.start();
             	Global.jump();
 			}
         });
