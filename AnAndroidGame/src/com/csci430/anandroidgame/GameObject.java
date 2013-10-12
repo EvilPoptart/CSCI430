@@ -7,9 +7,9 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class GameObject extends Global{
-	private int MAX_H_SPEED = 30;		//max horiz speed
+	private int MAX_H_SPEED = 7;		//max horiz speed
 	private int MAX_Y_SPEED = 30;
-	private int runSpeed = 10;		    //button press increment
+	private int runSpeed = 1;		    //button press increment
 	private int jumpSpeed = 20;
 	
 	private int positionX;
@@ -63,18 +63,51 @@ public class GameObject extends Global{
 		//position update, only for player and AI, not static objects
 		if(typeOf == 0 || typeOf == 1)
 		{
-			Rect ghost;				//use for collision detection.
-			String temp = spriteRect.flattenToString();
-			ghost = Rect.unflattenFromString(temp);
+			// Create a ghost to be used for collision detection.
+			// The ghost will move one tick ahead of the moving game object
+			// to let us know if the object is about to hit anything.
+			Rect ghost;
+			String ourCurPosition = spriteRect.flattenToString();
+			ghost = Rect.unflattenFromString(ourCurPosition);
+			
+			// Move the ghost to where we will be
 			ghost.offset((int)velocityX, (int)velocityY);
 			
-			int col = collision(ghost);
-			
-			if(col != 0)
+			// If the ghost collides with anything, put us against the object
+			int colObjectIndex = collision(ghost);
+			if(colObjectIndex != 0)
 			{
+				Log.i("Collision", "Future collision detected with " + colObjectIndex);
+				GameObject colObject = Global.worldObjects.get(colObjectIndex);				
+				Log.i("Player Position", "(" + this.positionX + ", " + this.positionY + ")");
+				Log.i("Object Position", "(" + colObject.positionX + ", " + colObject.positionY + ")");
+
+				// find the direction of collision
+				if (((this.positionY - this.sizeY) > colObject.positionX) &&
+						(colObject.spriteRect.contains(ghost.left, ghost.bottom) || 
+							colObject.spriteRect.contains(ghost.right, ghost.bottom))) {
+					// top
+					// put our feet on the ground
+				}
+				else if (this.positionY < (colObject.positionY - colObject.sizeY)) {
+					Log.i("Collision", "Bottom!");
+					// bottom
+					// put our head on the object
+				}
+				else if ((this.positionX > colObject.positionX)) {
+					Log.i("Collision", "Right!");
+					// right
+					// put ourselves next to the object
+				}
+				else {
+					Log.i("Collision", "Left!");
+					// left
+					// put ourselves next to the object
+				}
 				velocityY = 0;
 				spriteRect.offsetTo(positionX, positionY);
 			}
+			// otherwise, keep moving
 			else
 			{
 				positionX += velocityX;
@@ -85,6 +118,7 @@ public class GameObject extends Global{
 				spriteRect.offsetTo(positionX, positionY);
 			}
 			
+			// Friction!
 			//velocity update for time
 			if(velocityX > 0)
 			{
@@ -131,7 +165,7 @@ public class GameObject extends Global{
 		//Loop here
 		if(ghost.intersect(Global.worldObjects.get(i).spriteRect))
 		{	
-			positionY = Global.worldObjects.get(i).positionY - sizeY;
+			//positionY = Global.worldObjects.get(i).positionY - sizeY;
 			return i;
 		}
 		//end loop
@@ -161,6 +195,43 @@ public class GameObject extends Global{
 		velocityX += runSpeed;
 		if (velocityX > MAX_H_SPEED)
 			velocityX = MAX_H_SPEED;
+	}
+	// ref: http://stackoverflow.com/a/7852459
+	public void startRunRights() {
+		Global.setRunning(true);
+		new Thread(new Runnable() {
+			public void run() {
+				while(Global.isRunning()) {
+					// if we can run faster, do so
+					if (velocityX < MAX_H_SPEED) {
+						velocityX += runSpeed;
+					}
+					// if we're moving too fast, reset to MAX_H_SPEED
+					else if (velocityX > MAX_H_SPEED) {
+						velocityX = MAX_H_SPEED;
+					}
+					// else, velocityX == MAX_H_SPEED, and we do nothing
+				}
+			}
+		}).start();
+	}
+	public void startRunLefts() {
+		Global.setRunning(true);
+		new Thread(new Runnable() {
+			public void run() {
+				while(Global.isRunning()) {
+					// if we can run faster, do so
+					if (velocityX > -MAX_H_SPEED) {
+						velocityX -= runSpeed;
+					}
+					// if we're moving too fast, reset to MAX_H_SPEED
+					else if (velocityX < -MAX_H_SPEED) {
+						velocityX = -MAX_H_SPEED;
+					}
+					// else, velocityX == -MAX_H_SPEED, and we do nothing
+				}
+			}
+		}).start();
 	}
 	public int getPosX()
 	{

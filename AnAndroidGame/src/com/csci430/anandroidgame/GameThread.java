@@ -20,7 +20,7 @@ class GameThread extends Thread{
 
 	  private static GameObject player;
 	  private static GameObject backGround;
-	  private static GameObject thingy;
+	  private static GameObject platform1;
 	  
 	  
 	  public GameThread(SurfaceHolder surfaceHolder, Context context, Handler handler) {
@@ -47,7 +47,7 @@ class GameThread extends Thread{
 		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		    paint.setColor(Color.GRAY);
 			paint.setStyle(Style.FILL);  
-		    thingy = new GameObject(2, 200, 50, 0, (Global.metrics.heightPixels - 50), paint, sh);
+		    platform1 = new GameObject(2, 200, 20, 100, (Global.metrics.heightPixels - 20 - 70), paint, sh);
 		    
 		    //Load into array for use.
 		    Global.worldObjects.add(player);
@@ -55,7 +55,7 @@ class GameThread extends Thread{
 		    Global.worldObjects.add(backGround);
 		    Global.backgroundIndex = Global.worldObjects.size() -1;
 		    
-		    Global.worldObjects.add(thingy);
+		    Global.worldObjects.add(platform1);
 		    
 		    Sound.track1(ctx);
 	    	

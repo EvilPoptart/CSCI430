@@ -13,6 +13,8 @@ public class Global extends FullscreenActivity {
 	public Sound sounds;
 	public static int playerIndex;
 	public static int backgroundIndex;
+	
+	public static boolean currentlyRunning = false;
 
 	Global(){
 		worldObjects = new Vector<GameObject>();
@@ -26,5 +28,17 @@ public class Global extends FullscreenActivity {
 	}
 	public static void runRight() {
 		Global.worldObjects.get(playerIndex).runRights();
+	}
+	public static void startRunningRight() {
+		Global.worldObjects.get(playerIndex).startRunRights();
+	}
+	public static void startRunningLeft() {
+		Global.worldObjects.get(playerIndex).startRunLefts();
+	}
+	public static void setRunning(boolean areWeRunning) {
+		currentlyRunning = areWeRunning;
+	}
+	public static boolean isRunning() {
+		return currentlyRunning;
 	}
 }
