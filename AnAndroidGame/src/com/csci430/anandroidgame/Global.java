@@ -7,6 +7,7 @@ import android.util.Log;
 
 public class Global extends FullscreenActivity {
 	public static Vector<GameObject> worldObjects;
+	public static Vector<GameObject> solidObjects;
 	public static Vector<Level> levels;
 	public static DisplayMetrics metrics;
 	
@@ -18,6 +19,7 @@ public class Global extends FullscreenActivity {
 
 	Global(){
 		worldObjects = new Vector<GameObject>();
+		solidObjects = new Vector<GameObject>();
 		levels = new Vector<Level>();	
 	}
 	public static void jump() {

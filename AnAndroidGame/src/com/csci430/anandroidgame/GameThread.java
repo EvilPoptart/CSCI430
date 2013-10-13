@@ -21,6 +21,9 @@ class GameThread extends Thread{
 	  private static GameObject player;
 	  private static GameObject backGround;
 	  private static GameObject platform1;
+	  private static GameObject platform2;
+	  private static GameObject platform3;
+	  private static GameObject platform4;
 	  
 	  
 	  public GameThread(SurfaceHolder surfaceHolder, Context context, Handler handler) {
@@ -42,25 +45,46 @@ class GameThread extends Thread{
 			paint.setStyle(Style.FILL);  
 		    backGround = new GameObject(2, Global.metrics.widthPixels, Global.metrics.heightPixels, 0, 0, paint, sh);
 		    // /background
-		    
+
 		    //Other Objects
 		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		    paint.setColor(Color.GRAY);
-			paint.setStyle(Style.FILL);  
-		    platform1 = new GameObject(2, 200, 20, 100, (Global.metrics.heightPixels - 20 - 70), paint, sh);
+			paint.setStyle(Style.FILL);
+		    platform1 = new GameObject(2, 200, 20, 0, (Global.metrics.heightPixels - 50 - 100), paint, sh);
+
+		    //Other Objects
+		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		    paint.setColor(Color.GRAY);
+			paint.setStyle(Style.FILL);
+		    platform2 = new GameObject(2, 200, 20, 300, (Global.metrics.heightPixels - 50 - 300), paint, sh);
+
+		    //Other Objects
+		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		    paint.setColor(Color.GRAY);
+			paint.setStyle(Style.FILL);
+		    platform3 = new GameObject(2, 40, 300, 500, (Global.metrics.heightPixels - 50 - 300), paint, sh);
+
+		    //Other Objects
+		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		    paint.setColor(Color.GRAY);
+			paint.setStyle(Style.FILL);
+		    platform4 = new GameObject(2, 40, 300, 800, (Global.metrics.heightPixels - 300), paint, sh);
 		    
 		    //Load into array for use.
 		    Global.worldObjects.add(player);
 		    Global.playerIndex = Global.worldObjects.size() - 1;
 		    Global.worldObjects.add(backGround);
 		    Global.backgroundIndex = Global.worldObjects.size() -1;
-		    
-		    Global.worldObjects.add(platform1);
+
+		    Global.solidObjects.add(platform1);
+		    Global.solidObjects.add(platform2);
+		    Global.solidObjects.add(platform3);
+		    Global.solidObjects.add(platform4);
 		    
 		    Sound.track1(ctx);
-	    	
 	    }
 	  }
+	  
 	  public void run() {
 	    while (run) {
 	      Canvas c = null;
@@ -94,7 +118,9 @@ class GameThread extends Thread{
 		    
 		  canvas.drawRect(Global.worldObjects.get(Global.backgroundIndex).getSprite(), Global.worldObjects.get(Global.backgroundIndex).getPaint());
 		  canvas.drawRect(Global.worldObjects.get(Global.playerIndex).getSprite(), Global.worldObjects.get(Global.playerIndex).getPaint());
-		  canvas.drawRect(Global.worldObjects.get(2).getSprite(), Global.worldObjects.get(2).getPaint());
+			for (int i = 0; i < Global.solidObjects.size(); i++) {
+				canvas.drawRect(Global.solidObjects.get(i).getSprite(), Global.solidObjects.get(i).getPaint());
+			}
 		  
 		  
 		  canvas.restore();

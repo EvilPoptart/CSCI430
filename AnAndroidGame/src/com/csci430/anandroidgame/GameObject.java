@@ -6,11 +6,11 @@ import android.graphics.Rect;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-public class GameObject extends Global{
+public class GameObject extends Global {
 	private int MAX_H_SPEED = 7;		//max horiz speed
-	private int MAX_Y_SPEED = 30;
+	private int MAX_Y_SPEED = 60;
 	private int runSpeed = 1;		    //button press increment
-	private int jumpSpeed = 20;
+	private int jumpSpeed = 45;
 	
 	private int positionX;
 	private int positionY;
@@ -75,36 +75,50 @@ public class GameObject extends Global{
 			
 			// If the ghost collides with anything, put us against the object
 			int colObjectIndex = collision(ghost);
-			if(colObjectIndex != 0)
+			if(colObjectIndex != -1)
 			{
 				Log.i("Collision", "Future collision detected with " + colObjectIndex);
-				GameObject colObject = Global.worldObjects.get(colObjectIndex);				
+				GameObject colObject = Global.solidObjects.get(colObjectIndex);		
 				Log.i("Player Position", "(" + this.positionX + ", " + this.positionY + ")");
 				Log.i("Object Position", "(" + colObject.positionX + ", " + colObject.positionY + ")");
 
 				// find the direction of collision
-				if (((this.positionY - this.sizeY) > colObject.positionX) &&
-						(colObject.spriteRect.contains(ghost.left, ghost.bottom) || 
-							colObject.spriteRect.contains(ghost.right, ghost.bottom))) {
+				if ((this.positionY + this.sizeY) <= colObject.positionY) {
+					Log.i("Collision", "Top!");
 					// top
 					// put our feet on the ground
+					this.positionY = colObject.positionY - this.sizeY;
+					velocityY = 0;
+					positionX += velocityX;
 				}
-				else if (this.positionY < (colObject.positionY - colObject.sizeY)) {
+				else if (this.positionY > (colObject.positionY + colObject.sizeY)) {
 					Log.i("Collision", "Bottom!");
 					// bottom
 					// put our head on the object
+					this.positionY = colObject.positionY + colObject.sizeY;
+					velocityY = 0;
+					positionX += velocityX;
 				}
-				else if ((this.positionX > colObject.positionX)) {
+				else if (this.positionX > colObject.positionX) {
 					Log.i("Collision", "Right!");
 					// right
 					// put ourselves next to the object
+					this.positionX = colObject.positionX + colObject.sizeX;
+					velocityX = 0;
+					positionY += velocityY;
+					velocityY +=5;
 				}
 				else {
 					Log.i("Collision", "Left!");
 					// left
 					// put ourselves next to the object
+					this.positionX = colObject.positionX - this.sizeX;
+					velocityX = 0;
+					positionY += velocityY;
+					velocityY +=5;
 				}
-				velocityY = 0;
+				colWall();
+				onFloor();
 				spriteRect.offsetTo(positionX, positionY);
 			}
 			// otherwise, keep moving
@@ -158,18 +172,29 @@ public class GameObject extends Global{
 		}
 	}
 	
-	
+	/*
+	 * Possible site of major bug!
+	 * 
+	 * If the hardware isn't able to iterate over all solidObjects quickly enough, we could 
+	 * miss a collision. That probably won't happen for a while. If it does, we'll need to 
+	 * compartmentalize the level and check the nearest three compartments (left, center, right)
+	 * for collision.
+	 *   |        0          |         1         |         2         |         3         |
+	 *   |                   |       check       |       check       |       check       |
+	 *   |                   |                   |                   |                   |
+	 *   |                   |                   |                   |                   |
+	 *   |                   |                   |         O         |                   |
+	 *   |                   |                   |        /|\        |                   |
+	 *   |___________________|___________________|________/_\________|___________________|____
+	 */
 	private int collision(Rect ghost) {
-		//TODO: loop through all world objects
-		int i = 2;
-		//Loop here
-		if(ghost.intersect(Global.worldObjects.get(i).spriteRect))
-		{	
-			//positionY = Global.worldObjects.get(i).positionY - sizeY;
-			return i;
+		for (int i = 0; i < Global.solidObjects.size(); i++) {
+			if(ghost.intersect(Global.solidObjects.get(i).spriteRect))
+			{	
+				return i;
+			}
 		}
-		//end loop
-		return 0;
+		return -1;
 	}
 	
 	public void jumps()
