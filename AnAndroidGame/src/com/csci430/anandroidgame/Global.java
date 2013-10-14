@@ -2,8 +2,6 @@ package com.csci430.anandroidgame;
 
 import java.util.Vector;
 import android.util.DisplayMetrics;
-//import android.graphics.Paint;
-import android.util.Log;
 
 public class Global extends FullscreenActivity {
 	public static Vector<GameObject> worldObjects;
@@ -14,6 +12,7 @@ public class Global extends FullscreenActivity {
 	public Sound sounds;
 	public static int playerIndex;
 	public static int backgroundIndex;
+	public static final int BLOCK_SIZE = 50;
 	
 	public static boolean currentlyRunning = false;
 

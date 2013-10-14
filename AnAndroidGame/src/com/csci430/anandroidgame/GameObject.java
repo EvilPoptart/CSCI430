@@ -3,14 +3,13 @@ package com.csci430.anandroidgame;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class GameObject extends Global {
-	private int MAX_H_SPEED = 7;		//max horiz speed
-	private int MAX_Y_SPEED = 60;
+	private int MAX_H_SPEED = (int) (Global.BLOCK_SIZE * 0.10);		//max horiz speed
+	private int MAX_Y_SPEED = (int) (Global.BLOCK_SIZE * 0.75);
 	private int runSpeed = 1;		    //button press increment
-	private int jumpSpeed = 45;
+	private int jumpSpeed = (int) (Global.BLOCK_SIZE * 0.75);
 	
 	private int positionX;
 	private int positionY;
@@ -48,14 +47,28 @@ public class GameObject extends Global {
 	GameObject(int type, int sX, int sY, int posX, int posY, Paint p, SurfaceHolder sh)
 	{
 		typeOf = type;
-		sizeX = sX;
-		sizeY = sY;
-		positionX = posX;
-		positionY = posY;
+		sizeX = sX * Global.BLOCK_SIZE;
+		sizeY = sY * Global.BLOCK_SIZE;
+		positionX = posX * Global.BLOCK_SIZE;
+		positionY = Global.metrics.heightPixels - ((posY  + sY) * Global.BLOCK_SIZE);
 		paint = p;
 		surfH = sh;
 		
-		spriteRect = new Rect(posX, posY, (posX + sizeX), (posY + sizeY));
+		spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
+	}
+	
+	// for objects == screen size
+	GameObject(int type, int posX, int posY, Paint p, SurfaceHolder sh)
+	{
+		typeOf = type;
+		sizeX = Global.metrics.widthPixels;
+		sizeY = Global.metrics.heightPixels;
+		positionX = posX * Global.BLOCK_SIZE;
+		positionY = posY * Global.BLOCK_SIZE;
+		paint = p;
+		surfH = sh;
+		
+		spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
 	}
 	
 	public void tickUpdate()
@@ -77,30 +90,24 @@ public class GameObject extends Global {
 			int colObjectIndex = collision(ghost);
 			if(colObjectIndex != -1)
 			{
-				Log.i("Collision", "Future collision detected with " + colObjectIndex);
-				GameObject colObject = Global.solidObjects.get(colObjectIndex);		
-				Log.i("Player Position", "(" + this.positionX + ", " + this.positionY + ")");
-				Log.i("Object Position", "(" + colObject.positionX + ", " + colObject.positionY + ")");
+				GameObject colObject = Global.solidObjects.get(colObjectIndex);
 
 				// find the direction of collision
-				if ((this.positionY + this.sizeY) <= colObject.positionY) {
-					Log.i("Collision", "Top!");
+				if ((this.positionY + this.sizeY) <= colObject.positionY) {	
 					// top
 					// put our feet on the ground
 					this.positionY = colObject.positionY - this.sizeY;
 					velocityY = 0;
 					positionX += velocityX;
 				}
-				else if (this.positionY > (colObject.positionY + colObject.sizeY)) {
-					Log.i("Collision", "Bottom!");
+				else if (this.positionY >= (colObject.positionY + colObject.sizeY)) {
 					// bottom
 					// put our head on the object
 					this.positionY = colObject.positionY + colObject.sizeY;
 					velocityY = 0;
 					positionX += velocityX;
 				}
-				else if (this.positionX > colObject.positionX) {
-					Log.i("Collision", "Right!");
+				else if (this.positionX >= (colObject.positionX + colObject.sizeX)) {
 					// right
 					// put ourselves next to the object
 					this.positionX = colObject.positionX + colObject.sizeX;
@@ -108,8 +115,7 @@ public class GameObject extends Global {
 					positionY += velocityY;
 					velocityY +=5;
 				}
-				else {
-					Log.i("Collision", "Left!");
+				else if ((this.positionX + this.sizeX) <= colObject.positionX) {
 					// left
 					// put ourselves next to the object
 					this.positionX = colObject.positionX - this.sizeX;

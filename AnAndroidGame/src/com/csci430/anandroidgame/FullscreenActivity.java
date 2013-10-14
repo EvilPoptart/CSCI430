@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.widget.Button;
 import android.view.*;
-import android.view.View.OnTouchListener;
 import android.media.*;
 
 
@@ -51,7 +49,6 @@ public class FullscreenActivity extends Activity {
 		buttonJump1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{            
-				Log.i("Buttons", "Jump (left)");
         		jumpsound.start();
             	Global.jump();
 			}
@@ -63,7 +60,6 @@ public class FullscreenActivity extends Activity {
 		buttonJump2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) 
 			{
-				Log.i("Buttons", "Jump (right)");
         		jumpsound.start();
             	Global.jump();
 			}
@@ -75,11 +71,9 @@ public class FullscreenActivity extends Activity {
 		buttonRight.setOnTouchListener(new View.OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					Log.i("Buttons", "Right DOWN");
 					Global.startRunningRight();
 				}
 				else if (event.getAction() == MotionEvent.ACTION_UP) {
-					Log.i("Buttons", "Right UP");
 					Global.setRunning(false);
 				}
 				return false;
@@ -92,11 +86,9 @@ public class FullscreenActivity extends Activity {
 		buttonLeft.setOnTouchListener(new View.OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					Log.i("Buttons", "Left DOWN");
 					Global.startRunningLeft();
 				}
 				else if (event.getAction() == MotionEvent.ACTION_UP) {
-					Log.i("Buttons", "Left UP");
 					Global.setRunning(false);
 				}
 				return false;
