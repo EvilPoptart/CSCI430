@@ -36,8 +36,13 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int activity_fullscreen=0x7f030000;
     }
     public static final class raw {
-        public static final int jump=0x7f040000;
-        public static final int mainsong=0x7f040001;
+        public static final int coin=0x7f040000;
+        public static final int dead=0x7f040001;
+        public static final int fanfare=0x7f040002;
+        public static final int gameover=0x7f040003;
+        public static final int jump=0x7f040004;
+        public static final int land=0x7f040005;
+        public static final int mainsong=0x7f040006;
     }
     public static final class string {
         public static final int Jump1=0x7f060001;
@@ -109,7 +114,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name com.csci430.anandroidgame:buttonBarButtonStyle
+          @attr name android:buttonBarButtonStyle
         */
         public static final int ButtonBarContainerTheme_buttonBarButtonStyle = 1;
         /**
@@ -119,7 +124,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name com.csci430.anandroidgame:buttonBarStyle
+          @attr name android:buttonBarStyle
         */
         public static final int ButtonBarContainerTheme_buttonBarStyle = 0;
     };
