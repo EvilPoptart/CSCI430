@@ -3,7 +3,7 @@ package com.csci430.anandroidgame;
 import android.content.Context;
 import android.media.*;
 
-public class Sound extends Global{
+public class Sound {
 	//private soundbyte
 	//private soundbyte
 	//private background

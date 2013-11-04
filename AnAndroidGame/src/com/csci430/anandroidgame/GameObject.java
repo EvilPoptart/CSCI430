@@ -1,15 +1,18 @@
 package com.csci430.anandroidgame;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
-public class GameObject extends Global {
-	private int MAX_H_SPEED = (int) (Global.BLOCK_SIZE * 0.10);		//max horiz speed
-	private int MAX_Y_SPEED = (int) (Global.BLOCK_SIZE * 0.75);
+public class GameObject {
+	private int MAX_H_SPEED = (int) (GameThread.BLOCK_SIZE * 0.10);		//max horiz speed
+	private int MAX_Y_SPEED = (int) (GameThread.BLOCK_SIZE * 0.75);
 	private int runSpeed = 1;		    //button press increment
-	private int jumpSpeed = (int) (Global.BLOCK_SIZE * 0.75);
+	private int jumpSpeed = (int) (GameThread.BLOCK_SIZE * 0.75);
 	
 	private int positionX;
 	private int positionY;
@@ -26,6 +29,7 @@ public class GameObject extends Global {
 	private Context context;
 	private SurfaceHolder surfH;
 	private Rect spriteRect;
+	private Bitmap sprite;
 	
 	int spriteSheetLocation;
 
@@ -47,24 +51,32 @@ public class GameObject extends Global {
 	GameObject(int type, int sX, int sY, int posX, int posY, Paint p, SurfaceHolder sh)
 	{
 		typeOf = type;
-		sizeX = sX * Global.BLOCK_SIZE;
-		sizeY = sY * Global.BLOCK_SIZE;
-		positionX = posX * Global.BLOCK_SIZE;
-		positionY = Global.metrics.heightPixels - ((posY  + sY) * Global.BLOCK_SIZE);
+		sizeX = sX * GameThread.BLOCK_SIZE;
+		sizeY = sY * GameThread.BLOCK_SIZE;
+		positionX = posX * GameThread.BLOCK_SIZE;
+		positionY = GameThread.metrics.heightPixels - ((posY  + sY) * GameThread.BLOCK_SIZE);
 		paint = p;
 		surfH = sh;
 		
 		spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
+		if(type == 0){
+			sprite = BitmapFactory.decodeFile("/res/drawable/player_standing.png");
+			Log.d("ONE", "FUCK");
+			if (sprite == null)
+			{
+				Log.d("ONE", "YOU");
+			}
+		}
 	}
 	
 	// for objects == screen size
 	GameObject(int type, int posX, int posY, Paint p, SurfaceHolder sh)
 	{
 		typeOf = type;
-		sizeX = Global.metrics.widthPixels;
-		sizeY = Global.metrics.heightPixels;
-		positionX = posX * Global.BLOCK_SIZE;
-		positionY = posY * Global.BLOCK_SIZE;
+		sizeX = GameThread.metrics.widthPixels;
+		sizeY = GameThread.metrics.heightPixels;
+		positionX = posX * GameThread.BLOCK_SIZE;
+		positionY = posY * GameThread.BLOCK_SIZE;
 		paint = p;
 		surfH = sh;
 		
@@ -90,7 +102,7 @@ public class GameObject extends Global {
 			int colObjectIndex = collision(ghost);
 			if(colObjectIndex != -1)
 			{
-				GameObject colObject = Global.solidObjects.get(colObjectIndex);
+				GameObject colObject = GameThread.solidObjects.get(colObjectIndex);
 
 				// find the direction of collision
 				if ((this.positionY + this.sizeY) <= colObject.positionY) {	
@@ -156,9 +168,9 @@ public class GameObject extends Global {
 		}
 	}
 	private void onFloor(){
-		if(positionY > (Global.metrics.heightPixels - sizeY))
+		if(positionY > (GameThread.metrics.heightPixels - sizeY))
 		{
-			positionY = Global.metrics.heightPixels - sizeY;
+			positionY = GameThread.metrics.heightPixels - sizeY;
 			velocityY = 0;
 		}
 	}
@@ -171,9 +183,9 @@ public class GameObject extends Global {
 		}
 		
 		//Right Wall Collision
-		if(positionX > Global.metrics.widthPixels)
+		if(positionX > GameThread.metrics.widthPixels)
 		{
-			positionX = Global.metrics.widthPixels - sizeX;
+			positionX = GameThread.metrics.widthPixels - sizeX;
 			velocityX = 0;
 		}
 	}
@@ -194,8 +206,8 @@ public class GameObject extends Global {
 	 *   |___________________|___________________|________/_\________|___________________|____
 	 */
 	private int collision(Rect ghost) {
-		for (int i = 0; i < Global.solidObjects.size(); i++) {
-			if(ghost.intersect(Global.solidObjects.get(i).spriteRect))
+		for (int i = 0; i < GameThread.solidObjects.size(); i++) {
+			if(ghost.intersect(GameThread.solidObjects.get(i).spriteRect))
 			{	
 				return i;
 			}
@@ -229,10 +241,10 @@ public class GameObject extends Global {
 	}
 	// ref: http://stackoverflow.com/a/7852459
 	public void startRunRights() {
-		Global.setRunning(true);
+		GameThread.setIsRunning(true);
 		new Thread(new Runnable() {
 			public void run() {
-				while(Global.isRunning()) {
+				while(GameThread.isRunning()) {
 					// if we can run faster, do so
 					if (velocityX < MAX_H_SPEED) {
 						velocityX += runSpeed;
@@ -247,10 +259,10 @@ public class GameObject extends Global {
 		}).start();
 	}
 	public void startRunLefts() {
-		Global.setRunning(true);
+		GameThread.setIsRunning(true);
 		new Thread(new Runnable() {
 			public void run() {
-				while(Global.isRunning()) {
+				while(GameThread.isRunning()) {
 					// if we can run faster, do so
 					if (velocityX > -MAX_H_SPEED) {
 						velocityX -= runSpeed;
@@ -331,5 +343,13 @@ public class GameObject extends Global {
 	public void setVelocityY(int v)
 	{
 		velocityY = v;
+	}
+	public void setSprite(Bitmap input)
+	{
+		sprite = input;
+	}
+	public Bitmap getSpriteGraphic()
+	{
+		return sprite;
 	}
 }

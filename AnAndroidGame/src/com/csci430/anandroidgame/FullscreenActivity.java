@@ -15,7 +15,6 @@ public class FullscreenActivity extends Activity {
 	public Button buttonJump2;
 	public Button buttonLeft;
 	public Button buttonRight;
-	public static Global placeHolder;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +29,8 @@ public class FullscreenActivity extends Activity {
         setContentView(R.layout.activity_fullscreen);
         
         //Used in screen Sizes throughout the application
-        Global.metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(Global.metrics);    
+        GameThread.metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(GameThread.metrics);    
         
         // Define our buttons
 		buttonJump1 = (Button) findViewById(R.id.buttonJump1);
@@ -40,8 +39,6 @@ public class FullscreenActivity extends Activity {
 		buttonLeft  = (Button) findViewById(R.id.buttonLeft);
 		final MediaPlayer jumpsound = MediaPlayer.create(this, R.raw.jump);
 		
-		placeHolder = new Global();
-		Global.worldObjects.clear();
 		
 		/*
 		 * Handles player jumping (upper left)
@@ -50,7 +47,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{            
         		jumpsound.start();
-            	Global.jump();
+            	GameThread.jump();
 			}
         });
 
@@ -61,7 +58,7 @@ public class FullscreenActivity extends Activity {
             public void onClick(View v) 
 			{
         		jumpsound.start();
-            	Global.jump();
+            	GameThread.jump();
 			}
         });
 		
@@ -71,10 +68,10 @@ public class FullscreenActivity extends Activity {
 		buttonRight.setOnTouchListener(new View.OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					Global.startRunningRight();
+					GameThread.startRunningRight();
 				}
 				else if (event.getAction() == MotionEvent.ACTION_UP) {
-					Global.setRunning(false);
+					GameThread.setIsRunning(false);
 				}
 				return false;
 			}
@@ -86,14 +83,13 @@ public class FullscreenActivity extends Activity {
 		buttonLeft.setOnTouchListener(new View.OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					Global.startRunningLeft();
+					GameThread.startRunningLeft();
 				}
 				else if (event.getAction() == MotionEvent.ACTION_UP) {
-					Global.setRunning(false);
+					GameThread.setIsRunning(false);
 				}
 				return false;
 			}
         });	
 	}
-    
 }
