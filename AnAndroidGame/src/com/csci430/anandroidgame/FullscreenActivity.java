@@ -2,6 +2,7 @@ package com.csci430.anandroidgame;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.widget.Button;

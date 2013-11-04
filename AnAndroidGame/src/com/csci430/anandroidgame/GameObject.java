@@ -48,7 +48,7 @@ public class GameObject {
 	}
 	
 	//Player Create: type = 0;
-	GameObject(int type, int sX, int sY, int posX, int posY, Paint p, SurfaceHolder sh)
+	GameObject(int type, int sX, int sY, int posX, int posY, Paint p, SurfaceHolder sh, Context ctx)
 	{
 		typeOf = type;
 		sizeX = sX * GameThread.BLOCK_SIZE;
@@ -60,12 +60,7 @@ public class GameObject {
 		
 		spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
 		if(type == 0){
-			sprite = BitmapFactory.decodeFile("/res/drawable/player_standing.png");
-			Log.d("ONE", "FUCK");
-			if (sprite == null)
-			{
-				Log.d("ONE", "YOU");
-			}
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.player_standing);
 		}
 	}
 	
