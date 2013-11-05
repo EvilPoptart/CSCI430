@@ -3,7 +3,6 @@ package com.csci430.anandroidgame;
 import java.util.Vector;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -88,22 +87,24 @@ class GameThread extends Thread{
 		    // /background
 		    
 
-		    generatePlatform(2, 21, 1, 0, 0, ctx, sh, Color.LTGRAY);	//floor
-		    generatePlatform(2, 3, 1, 4, 2, ctx, sh, Color.LTGRAY);	//Platforms
-			generatePlatform(2, 3, 1, 8, 4, ctx, sh, Color.LTGRAY);
-			generatePlatform(2, 3, 1, 12, 6, ctx, sh, Color.LTGRAY);
-			generatePlatform(2, 3, 1, 16, 8, ctx, sh, Color.YELLOW);	//victoryPlatform
+		    generatePlatform(21, 1, 0, 0, ctx, sh, Color.LTGRAY);	//floor
+		    generatePlatform(3, 1, 4, 2, ctx, sh, Color.LTGRAY);	//Platforms
+			generatePlatform(3, 1, 8, 4, ctx, sh, Color.LTGRAY);
+			generatePlatform(3, 1, 12, 6, ctx, sh, Color.LTGRAY);
+			generatePlatform(3, 1, 16, 8, ctx, sh, Color.YELLOW);	//victoryPlatform
 		    
+			
+			
 		    Sound.track1(ctx);
 	    }
 	  }
 	  
-	  void generatePlatform(int type, int sizeX, int sizeY, int posX, int posY, Context ctx, SurfaceHolder shIn, int color)
+	  void generatePlatform(int sizeX, int sizeY, int posX, int posY, Context ctx, SurfaceHolder shIn, int color)
 	  {
 		  paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		  paint.setColor(color);
 		  paint.setStyle(Style.FILL);
-		  solidObject = new GameObject(type, sizeX, sizeY, posX, posY, paint, shIn, ctx);
+		  solidObject = new GameObject(2, sizeX, sizeY, posX, posY, paint, shIn, ctx);
 		  solidObjects.add(solidObject);
 	  }
 	  
