@@ -5,14 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class GameObject {
-	private int MAX_H_SPEED = (int) (GameThread.BLOCK_SIZE * 0.10);		//max horiz speed
-	private int MAX_Y_SPEED = (int) (GameThread.BLOCK_SIZE * 0.75);
+	private int MAX_H_SPEED = (int) (GameThread.BLOCK_SIZE * 0.08);		//max horiz speed
+	private int MAX_Y_SPEED = (int) (GameThread.BLOCK_SIZE * 0.60);
 	private int runSpeed = 1;		    //button press increment
-	private int jumpSpeed = (int) (GameThread.BLOCK_SIZE * 0.75);
+	private int jumpSpeed = (int) (GameThread.BLOCK_SIZE * 0.60);
 	
 	private int positionX;
 	private int positionY;
@@ -48,7 +47,40 @@ public class GameObject {
 	}
 	
 	//Player Create: type = 0;
-	GameObject(int type, int sX, int sY, int posX, int posY, Paint p, SurfaceHolder sh, Context ctx)
+	GameObject(int type, int sX, int sY, int posX, int posY, SurfaceHolder sh, Context ctx, String tileSetName)
+	{
+		typeOf = type;
+		sizeX = sX * GameThread.BLOCK_SIZE;
+		sizeY = sY * GameThread.BLOCK_SIZE;
+		positionX = posX * GameThread.BLOCK_SIZE;
+		positionY = GameThread.metrics.heightPixels - ((posY  + sY) * GameThread.BLOCK_SIZE);
+		surfH = sh;
+		
+		spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
+
+		// TODO: String comparisons are probably needlessly inefficient for this task. I didn't want
+		// to use a switch statement with integers because it would be much less readable/usable.
+		// Java needs ruby symbols =/
+		// Or enums? That may work.
+		if(tileSetName == "player"){
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.p3_jump);
+		}
+		else if (tileSetName == "grass_left") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass_left);
+		}
+		else if (tileSetName == "grass_mid") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass_mid);
+		}
+		else if (tileSetName == "grass_right") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass_right);
+		}
+		// If the specified tileSetName is not found, display a blue lock.
+		else {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.lock_blue);
+		}
+	}
+	
+	GameObject(int type, int sX, int sY, int posX, int posY, SurfaceHolder sh, Context ctx, Paint p)
 	{
 		typeOf = type;
 		sizeX = sX * GameThread.BLOCK_SIZE;
@@ -59,9 +91,6 @@ public class GameObject {
 		surfH = sh;
 		
 		spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
-		if(type == 0){
-			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.player_standing);
-		}
 	}
 	
 	// for objects == screen size
@@ -77,6 +106,7 @@ public class GameObject {
 		
 		spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
 	}
+	
 	
 	public void tickUpdate()
 	{	
@@ -159,7 +189,7 @@ public class GameObject {
 				if(velocityX > 0 )
 					velocityX = 0;
 			}
-			colWall();
+			//colWall();
 		}
 	}
 	private void onFloor(){
@@ -178,9 +208,9 @@ public class GameObject {
 		}
 		
 		//Right Wall Collision
-		if(positionX > GameThread.metrics.widthPixels)
+		if(positionX > GameThread.BLOCK_SIZE * GameThread.LEVEL_WIDTH - sizeX)
 		{
-			positionX = GameThread.metrics.widthPixels - sizeX;
+			positionX = GameThread.BLOCK_SIZE * GameThread.LEVEL_WIDTH - sizeX;
 			velocityX = 0;
 		}
 	}

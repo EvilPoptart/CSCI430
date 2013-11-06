@@ -19,6 +19,7 @@ class GameThread extends Thread{
 	  private SurfaceHolder sh;
 	  protected Context ctx;
 	  private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	  int cameraX = 9;
 
 	  
 	  private static GameObject player;
@@ -32,7 +33,9 @@ class GameThread extends Thread{
 	  public Sound sounds;
 	  public static int playerIndex;
 	  public static int backgroundIndex;
-	  public static final int BLOCK_SIZE = 50;
+	  public static final int BLOCK_SIZE = 70;
+	  public static final int LEVEL_WIDTH = 29;
+	  public static final int LEVEL_HEIGHT = 9;
 		
 	  public static boolean currentlyRunning = false;
 	  
@@ -72,39 +75,56 @@ class GameThread extends Thread{
 	    	//player
 	    	paint.setColor(Color.BLUE);
 		    paint.setStyle(Style.FILL);
-		    player = new GameObject(0, 1, 1, 0, 10, paint, sh, ctx);
+		    player = new GameObject(0, 1, 1, 0, 10, sh, ctx, "");
 		    worldObjects.add(player);
 		    playerIndex = worldObjects.size() - 1;
 		    // /player
 		    
 		    //background
+		    int skyBlue = 0xffA9FFE1;
 		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		    paint.setColor(Color.DKGRAY);
+		    paint.setColor(skyBlue);
 			paint.setStyle(Style.FILL);  
-		    backGround = new GameObject(2, 0, 0, paint, sh);
+		    //backGround = new GameObject(2, 0, 0, paint, sh);
+		    backGround = new GameObject(2, LEVEL_WIDTH, LEVEL_HEIGHT, 0, 0, sh, ctx, paint);
 		    worldObjects.add(backGround);
 		    backgroundIndex = worldObjects.size() -1;
 		    // /background
 		    
+		    //floor
+    		for (int i = 0; i < LEVEL_WIDTH; i++) {
+    		    generatePlatform(1, 1, i, 0, ctx, sh, "grass_mid");	
+    		}
+    		
+    		//Platforms
+    		int platformWidth;
+    		generatePlatform(1, 1, 7, 2, ctx, sh, "grass_left");
+		    generatePlatform(1, 1, 8, 2, ctx, sh, "grass_right");
+    		
+		    generatePlatform(1, 1, 10, 4, ctx, sh, "grass_left");
+		    generatePlatform(1, 1, 11, 4, ctx, sh, "grass_right");
+    		
+		    generatePlatform(1, 1, 13, 6, ctx, sh, "grass_left");
+		    generatePlatform(1, 1, 14, 6, ctx, sh, "grass_right");
 
-		    generatePlatform(21, 1, 0, 0, ctx, sh, Color.LTGRAY);	//floor
-		    generatePlatform(3, 1, 4, 2, ctx, sh, Color.LTGRAY);	//Platforms
-			generatePlatform(3, 1, 8, 4, ctx, sh, Color.LTGRAY);
-			generatePlatform(3, 1, 12, 6, ctx, sh, Color.LTGRAY);
-			generatePlatform(3, 1, 16, 8, ctx, sh, Color.YELLOW);	//victoryPlatform
+		    generatePlatform(1, 1, 16, 6, ctx, sh, "grass_left");
+		    generatePlatform(1, 1, 17, 6, ctx, sh, "grass_mid");
+		    generatePlatform(1, 1, 18, 6, ctx, sh, "grass_right");
 		    
-			
+		    platformWidth = 10;
+    		generatePlatform(1, 1, 14, 2, ctx, sh, "grass_left");
+    		for (int i = 0; i < platformWidth; i++) {
+    		    generatePlatform(1, 1, (15 + i), 2, ctx, sh, "grass_mid");
+    		}
+		    generatePlatform(1, 1, (15 + platformWidth), 2, ctx, sh, "grass_right");
 			
 		    Sound.track1(ctx);
 	    }
 	  }
 	  
-	  void generatePlatform(int sizeX, int sizeY, int posX, int posY, Context ctx, SurfaceHolder shIn, int color)
+	  void generatePlatform(int sizeX, int sizeY, int posX, int posY, Context ctx, SurfaceHolder shIn, String tileSetName)
 	  {
-		  paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		  paint.setColor(color);
-		  paint.setStyle(Style.FILL);
-		  solidObject = new GameObject(2, sizeX, sizeY, posX, posY, paint, shIn, ctx);
+		  solidObject = new GameObject(2, sizeX, sizeY, posX, posY, shIn, ctx, tileSetName);
 		  solidObjects.add(solidObject);
 	  }
 	  
@@ -139,16 +159,32 @@ class GameThread extends Thread{
 		  canvas.save();
 		  if(worldObjects.size() > 0){
 			  worldObjects.get(playerIndex).tickUpdate();	//update player (currently only checks object.0 (player) vs object.2("solid Objects"))
+	  		  
+			  // Move the canvas around the x axis while the player is sufficiently away from the edges of the level.
+			  // If the player is at the far left, cameraX will be 0.
+			  if (worldObjects.get(playerIndex).getPosX() > (BLOCK_SIZE * 5)) {
+				  // Move camera with the player
+				  cameraX = (BLOCK_SIZE * 5 - worldObjects.get(playerIndex).getPosX());
+				  // Stop the camera if we're at the rightmost side of the level
+	  			  if (worldObjects.get(playerIndex).getPosX() > (BLOCK_SIZE * LEVEL_WIDTH - (metrics.widthPixels - BLOCK_SIZE * 5))) {
+					  cameraX = (metrics.widthPixels - BLOCK_SIZE * LEVEL_WIDTH);
+	  			  }
+			  }
+			  
+			  // Set the camera to an appropriate x-offset
+			  canvas.translate(cameraX, 0);
 			  
 			  //DrawBackgroud
 			  canvas.drawRect(worldObjects.get(backgroundIndex).getSprite(), worldObjects.get(backgroundIndex).getPaint());
+			  //canvas.drawBitmap(worldObjects.get(backgroundIndex).getSpriteGraphic(), worldObjects.get(backgroundIndex).getPosX(), worldObjects.get(backgroundIndex).getPosY(), null);
 		
 			  //DrawPlayer
 			  canvas.drawBitmap(worldObjects.get(playerIndex).getSpriteGraphic(), worldObjects.get(playerIndex).getPosX(), worldObjects.get(playerIndex).getPosY(), null);
 			  
 			  //Draw Platforms
 			  for (int i = 0; i < solidObjects.size(); i++) {
-				  canvas.drawRect(solidObjects.get(i).getSprite(), solidObjects.get(i).getPaint());
+				  //canvas.drawRect(solidObjects.get(i).getSprite(), solidObjects.get(i).getPaint());
+				  canvas.drawBitmap(solidObjects.get(i).getSpriteGraphic(), solidObjects.get(i).getPosX(), solidObjects.get(i).getPosY(), null);
 			  }
 		  }
 		  canvas.restore();
