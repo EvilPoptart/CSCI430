@@ -43,22 +43,32 @@ public class FullscreenActivity extends Activity {
 		/*
 		 * Handles player jumping (upper left)
 		 */
-		buttonJump1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) 
-			{            
-        		jumpsound.start();
-            	GameThread.jump();
+		buttonJump1.setOnTouchListener(new View.OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+	        		jumpsound.start();
+	            	GameThread.jump();
+				}
+				else if (event.getAction() == MotionEvent.ACTION_UP) {
+					// Do nothing
+				}
+				return false;
 			}
         });
 
 		/*
 		 * Handles player jumping (upper right)
 		 */
-		buttonJump2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) 
-			{
-        		jumpsound.start();
-            	GameThread.jump();
+		buttonJump2.setOnTouchListener(new View.OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+	        		jumpsound.start();
+	            	GameThread.jump();
+				}
+				else if (event.getAction() == MotionEvent.ACTION_UP) {
+					// Do nothing
+				}
+				return false;
 			}
         });
 		
