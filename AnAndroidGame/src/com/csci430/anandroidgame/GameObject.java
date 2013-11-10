@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class GameObject {
@@ -41,6 +42,7 @@ public class GameObject {
 	private SurfaceHolder surfH;
 	private Rect spriteRect;
 	private Bitmap sprite;
+	public Rect spriteSheetLoc;
 	
 	int spriteSheetLocation;
 
@@ -61,6 +63,7 @@ public class GameObject {
 	// Animated objects
 	GameObject(int type, int sX, int sY, int posX, int posY, int fps, SurfaceHolder sh, Context ctx, String tileSetName)
 	{
+		Log.d("Meh", "Player Created");
 		typeOf = type;
 		surfH = sh;
 		
@@ -75,6 +78,7 @@ public class GameObject {
 			positionX = 0;
 			positionY = 0;
 			spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
+			spriteSheetLoc = new Rect(0,0,sizeX, sizeY);
 			
 			frameNr = 7;
 			currentFrame = 0;
@@ -83,13 +87,6 @@ public class GameObject {
 			
 			spriteWidth = sprite.getWidth() / frameNr;
 			spriteHeight = sprite.getHeight() / 3;
-			
-			
-			
-			
-			
-			
-			
 		}
 		// If the specified tileSetName is not found, display a blue lock.
 		else {
@@ -431,7 +428,6 @@ public class GameObject {
 	}
 	// ref: http://obviam.net/index.php/sprite-animation-with-android/
 	public void updateAnimation(long gameTime) {
-		/*
 		if (gameTime > frameTicker + framePeriod) {
 			frameTicker = gameTime;
 			// increment the frame
@@ -441,9 +437,9 @@ public class GameObject {
 			}
 		}
 		// define the rectangle to cut out sprite
-		this.sourceRect.left = currentFrame * spriteWidth;
-		this.sourceRect.right = this.sourceRect.left + spriteWidth;
-		*/
+		
+		this.spriteSheetLoc.offsetTo(currentFrame*spriteWidth, 0);
+		
 	}
 
 	public int getSpriteWidth() {
@@ -452,5 +448,4 @@ public class GameObject {
 	public int getSpriteHeight() {
 		return spriteHeight;
 	}
-
 }

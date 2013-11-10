@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.graphics.BitmapRegionDecoder;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 
@@ -220,26 +221,10 @@ class GameThread extends Thread{
 		
 			  //DrawPlayer
 			  worldObjects.get(playerIndex).updateAnimation(System.currentTimeMillis());
-			  /*
-			  canvas.drawBitmap(
-					  worldObjects.get(playerIndex).getSpriteGraphic(),
-					  worldObjects.get(playerIndex).getPosX(),
-					  worldObjects.get(playerIndex).getPosY(),
-					  null);
-					  */
-					// where to draw the sprite
-				Rect destRect = new Rect(
-						worldObjects.get(playerIndex).getPosX(),
-						worldObjects.get(playerIndex).getPosY(),
-						worldObjects.get(playerIndex).getPosX() + worldObjects.get(playerIndex).getSpriteWidth(),
-						worldObjects.get(playerIndex).getPosX() + worldObjects.get(playerIndex).getSpriteHeight()
-						);
-				canvas.drawBitmap(
-						worldObjects.get(playerIndex).getSpriteGraphic(),
-						worldObjects.get(playerIndex).getSprite(),
-						destRect,
-						null);
-
+			  
+			  
+			  canvas.drawBitmap(worldObjects.get(playerIndex).getSpriteGraphic(), worldObjects.get(playerIndex).spriteSheetLoc, worldObjects.get(playerIndex).getSprite(), null);
+				
 			  
 			  //Draw Platforms
 			  for (int i = 0; i < solidObjects.size(); i++) {
