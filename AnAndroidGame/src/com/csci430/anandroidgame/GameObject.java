@@ -45,8 +45,42 @@ public class GameObject {
 		
 		spriteSheetLocation = 0;	//for animations and such
 	}
+
+	// Animated objects
+	GameObject(int type, int sX, int sY, int posX, int posY, int fps, SurfaceHolder sh, Context ctx, String tileSetName)
+	{
+		typeOf = type;
+		sizeX = sX * GameThread.BLOCK_SIZE;
+		sizeY = sY * GameThread.BLOCK_SIZE;
+		positionX = posX * GameThread.BLOCK_SIZE;
+		positionY = GameThread.metrics.heightPixels - ((posY  + sY) * GameThread.BLOCK_SIZE);
+		surfH = sh;
+		
+		spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
+
+		// TODO: String comparisons are probably needlessly inefficient for this task. I didn't want
+		// to use a switch statement with integers because it would be much less readable/usable.
+		// Java needs ruby symbols =/
+		// Or enums? That may work.
+		if(tileSetName == "player"){
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.p3_jump);
+		}
+		else if (tileSetName == "grass_left") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass_left);
+		}
+		else if (tileSetName == "grass_mid") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass_mid);
+		}
+		else if (tileSetName == "grass_right") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass_right);
+		}
+		// If the specified tileSetName is not found, display a blue lock.
+		else {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.lock_blue);
+		}
+	}
 	
-	//Player Create: type = 0;
+	// Object with bitmap
 	GameObject(int type, int sX, int sY, int posX, int posY, SurfaceHolder sh, Context ctx, String tileSetName)
 	{
 		typeOf = type;
@@ -80,6 +114,7 @@ public class GameObject {
 		}
 	}
 	
+	// Objects with paint
 	GameObject(int type, int sX, int sY, int posX, int posY, SurfaceHolder sh, Context ctx, Paint p)
 	{
 		typeOf = type;
@@ -288,6 +323,8 @@ public class GameObject {
 		new Thread(new Runnable() {
 			public void run() {
 				while(GameThread.isRunning()) {
+					// Animate
+					
 					// if we can run faster, do so
 					if (velocityX > -MAX_H_SPEED) {
 						velocityX -= runSpeed;
