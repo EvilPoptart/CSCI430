@@ -13,6 +13,7 @@ public class GameObject {
 	private int runSpeed = 1;		    //button press increment
 	private int jumpSpeed = (int) (GameThread.BLOCK_SIZE * 0.60);
 	
+	// Where the player exists in space
 	private int positionX;
 	private int positionY;
 	private int sizeX;
@@ -20,6 +21,17 @@ public class GameObject {
 	private float velocityX;
 	private float velocityY;
 	
+	// Animation
+	//private Bitmap bitmap;		// the animation sequence
+	private Rect sourceRect;	// the rectangle to be drawn from the animation bitmap
+	private int frameNr;		// number of frames in animation
+	private int currentFrame;	// the current frame
+	private long frameTicker;	// the time of the last frame update
+	private int framePeriod;	// milliseconds between each frame (1000/fps)
+	
+	private int spriteWidth;	// the width of the sprite to calculate the cut out rectangle
+	private int spriteHeight;	// the height of the sprite
+		
 	private boolean solid;
 	private boolean visible;
 	private int typeOf;		//0:player, 1:AI, 2: object
@@ -50,29 +62,34 @@ public class GameObject {
 	GameObject(int type, int sX, int sY, int posX, int posY, int fps, SurfaceHolder sh, Context ctx, String tileSetName)
 	{
 		typeOf = type;
-		sizeX = sX * GameThread.BLOCK_SIZE;
-		sizeY = sY * GameThread.BLOCK_SIZE;
-		positionX = posX * GameThread.BLOCK_SIZE;
-		positionY = GameThread.metrics.heightPixels - ((posY  + sY) * GameThread.BLOCK_SIZE);
 		surfH = sh;
 		
-		spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
-
 		// TODO: String comparisons are probably needlessly inefficient for this task. I didn't want
 		// to use a switch statement with integers because it would be much less readable/usable.
 		// Java needs ruby symbols =/
 		// Or enums? That may work.
 		if(tileSetName == "player"){
-			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.p3_jump);
-		}
-		else if (tileSetName == "grass_left") {
-			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass_left);
-		}
-		else if (tileSetName == "grass_mid") {
-			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass_mid);
-		}
-		else if (tileSetName == "grass_right") {
-			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass_right);
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.p1_spritesheet);
+			sizeX = 72;
+			sizeY = 97;
+			positionX = 0;
+			positionY = 0;
+			spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
+			
+			frameNr = 7;
+			currentFrame = 0;
+			framePeriod = 1000 / fps;
+			frameTicker = 0l;
+			
+			spriteWidth = sprite.getWidth() / frameNr;
+			spriteHeight = sprite.getHeight() / 3;
+			
+			
+			
+			
+			
+			
+			
 		}
 		// If the specified tileSetName is not found, display a blue lock.
 		else {
@@ -322,9 +339,7 @@ public class GameObject {
 		GameThread.setIsRunning(true);
 		new Thread(new Runnable() {
 			public void run() {
-				while(GameThread.isRunning()) {
-					// Animate
-					
+				while(GameThread.isRunning()) {					
 					// if we can run faster, do so
 					if (velocityX > -MAX_H_SPEED) {
 						velocityX -= runSpeed;
@@ -414,4 +429,28 @@ public class GameObject {
 	{
 		return sprite;
 	}
+	// ref: http://obviam.net/index.php/sprite-animation-with-android/
+	public void updateAnimation(long gameTime) {
+		/*
+		if (gameTime > frameTicker + framePeriod) {
+			frameTicker = gameTime;
+			// increment the frame
+			currentFrame++;
+			if (currentFrame >= frameNr) {
+				currentFrame = 0;
+			}
+		}
+		// define the rectangle to cut out sprite
+		this.sourceRect.left = currentFrame * spriteWidth;
+		this.sourceRect.right = this.sourceRect.left + spriteWidth;
+		*/
+	}
+
+	public int getSpriteWidth() {
+		return spriteWidth;
+	}
+	public int getSpriteHeight() {
+		return spriteHeight;
+	}
+
 }

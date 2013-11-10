@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
+import android.graphics.BitmapRegionDecoder;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
@@ -83,7 +85,7 @@ class GameThread extends Thread{
 	    	//player
 	    	paint.setColor(Color.BLUE);
 		    paint.setStyle(Style.FILL);
-		    player = new GameObject(0, 1, 1, 0, 10, sh, ctx, "");
+		    player = new GameObject(0, 1, 1, 0, 10, 5, sh, ctx, "player");
 		    worldObjects.add(player);
 		    playerIndex = worldObjects.size() - 1;
 		    // /player
@@ -217,7 +219,27 @@ class GameThread extends Thread{
 			  //canvas.drawBitmap(worldObjects.get(backgroundIndex).getSpriteGraphic(), worldObjects.get(backgroundIndex).getPosX(), worldObjects.get(backgroundIndex).getPosY(), null);
 		
 			  //DrawPlayer
-			  canvas.drawBitmap(worldObjects.get(playerIndex).getSpriteGraphic(), worldObjects.get(playerIndex).getPosX(), worldObjects.get(playerIndex).getPosY(), null);
+			  worldObjects.get(playerIndex).updateAnimation(System.currentTimeMillis());
+			  /*
+			  canvas.drawBitmap(
+					  worldObjects.get(playerIndex).getSpriteGraphic(),
+					  worldObjects.get(playerIndex).getPosX(),
+					  worldObjects.get(playerIndex).getPosY(),
+					  null);
+					  */
+					// where to draw the sprite
+				Rect destRect = new Rect(
+						worldObjects.get(playerIndex).getPosX(),
+						worldObjects.get(playerIndex).getPosY(),
+						worldObjects.get(playerIndex).getPosX() + worldObjects.get(playerIndex).getSpriteWidth(),
+						worldObjects.get(playerIndex).getPosX() + worldObjects.get(playerIndex).getSpriteHeight()
+						);
+				canvas.drawBitmap(
+						worldObjects.get(playerIndex).getSpriteGraphic(),
+						worldObjects.get(playerIndex).getSprite(),
+						destRect,
+						null);
+
 			  
 			  //Draw Platforms
 			  for (int i = 0; i < solidObjects.size(); i++) {
