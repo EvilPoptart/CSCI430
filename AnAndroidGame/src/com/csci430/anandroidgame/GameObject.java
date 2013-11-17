@@ -73,8 +73,8 @@ public class GameObject {
 		// Or enums? That may work.
 		if(tileSetName == "player"){
 			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.p1_spritesheet);
-			sizeX = 72;
-			sizeY = 97;
+			sizeX = 50;
+			sizeY = 65;
 			positionX = 0;
 			positionY = 0;
 			spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
