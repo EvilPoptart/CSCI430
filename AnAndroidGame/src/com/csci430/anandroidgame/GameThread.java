@@ -36,9 +36,9 @@ class GameThread extends Thread{
 	  public Sound sounds;
 	  public static int playerIndex;
 	  public static int backgroundIndex;
-	  public static final int BLOCK_SIZE = 70;
+	  public static final int BLOCK_SIZE = 47;
 	  public static final int LEVEL_WIDTH = 29;
-	  public static final int LEVEL_HEIGHT = 9;
+	  public static final int LEVEL_HEIGHT = 15;
 		
 	  public static boolean currentlyRunning = false;
 	  

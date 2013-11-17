@@ -22,15 +22,20 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int black_overlay=0x7f050000;
     }
     public static final class drawable {
-        public static final int grass=0x7f020000;
-        public static final int grass_left=0x7f020001;
-        public static final int grass_mid=0x7f020002;
-        public static final int grass_right=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int lock_blue=0x7f020005;
-        public static final int p1_spritesheet=0x7f020006;
-        public static final int p3_jump=0x7f020007;
-        public static final int player_standing=0x7f020008;
+        public static final int door_open_mid=0x7f020000;
+        public static final int door_open_top=0x7f020001;
+        public static final int grass=0x7f020002;
+        public static final int grass_center=0x7f020003;
+        public static final int grass_left=0x7f020004;
+        public static final int grass_mid=0x7f020005;
+        public static final int grass_right=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int lock_blue=0x7f020008;
+        public static final int p1_spritesheet=0x7f020009;
+        public static final int p1_spritesheet_oneline=0x7f02000a;
+        public static final int p1_spritesheet_testing=0x7f02000b;
+        public static final int p3_jump=0x7f02000c;
+        public static final int player_standing=0x7f02000d;
     }
     public static final class id {
         public static final int buttonJump1=0x7f080002;
@@ -49,8 +54,12 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int fanfare=0x7f040002;
         public static final int gameover=0x7f040003;
         public static final int jump=0x7f040004;
-        public static final int land=0x7f040005;
-        public static final int mainsong=0x7f040006;
+        public static final int key=0x7f040005;
+        public static final int land=0x7f040006;
+        public static final int mainsong=0x7f040007;
+        public static final int song2=0x7f040008;
+        public static final int song3=0x7f040009;
+        public static final int unlock=0x7f04000a;
     }
     public static final class string {
         public static final int Jump1=0x7f060001;
