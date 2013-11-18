@@ -63,7 +63,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         sh.unlockCanvasAndPost(canvas);
 
         thread = new GameThread(sh, ctx, new Handler());
-        thread.setRunning(true);
+        GameThread.setRunning(true);
         thread.start();
     }
     
@@ -74,7 +74,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		boolean retry = true;
-		thread.setRunning(false);
+		GameThread.setRunning(false);
 			while (retry) {
 				try {
 					thread.join();
