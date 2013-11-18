@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -25,6 +26,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         sh.addCallback(this);
         ctx = context;
         setFocusable(true);
+    	Log.d("Startup", "GameView1");
     }
 
     public GameView(Context context, AttributeSet attrs) {
@@ -33,6 +35,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         sh.addCallback(this);
         ctx = context;
         setFocusable(true);
+    	Log.d("Startup", "GameView2");
     }
 
     public GameView(Context context, AttributeSet attrs, int defStyle) {
@@ -41,6 +44,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         sh.addCallback(this);
         ctx = context;
         setFocusable(true);
+    	Log.d("Startup", "GameView3");
         
     }
     
@@ -54,6 +58,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     
     
     public void surfaceCreated(SurfaceHolder holder) {
+    	Log.d("Startup", "surfaceCreated");
         Canvas canvas = sh.lockCanvas();
         sh.unlockCanvasAndPost(canvas);
 

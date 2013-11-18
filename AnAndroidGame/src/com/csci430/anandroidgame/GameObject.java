@@ -10,9 +10,10 @@ import android.view.SurfaceHolder;
 
 public class GameObject {
 	private int MAX_H_SPEED = (int) (GameThread.BLOCK_SIZE * 0.08);		//max horiz speed
-	private int MAX_Y_SPEED = (int) (GameThread.BLOCK_SIZE * 0.60);
+	private int MAX_Y_SPEED = (int) (GameThread.BLOCK_SIZE * 0.3);
 	private int runSpeed = 1;		    //button press increment
-	private int jumpSpeed = (int) (GameThread.BLOCK_SIZE * 0.60);
+	private int jumpSpeed = (int) (GameThread.BLOCK_SIZE * 0.3);
+	private int gravity = 1;
 	
 	// Where the player exists in space
 	private int positionX;
@@ -24,7 +25,7 @@ public class GameObject {
 	
 	// Animation
 	//private Bitmap bitmap;		// the animation sequence
-	private Rect sourceRect;	// the rectangle to be drawn from the animation bitmap
+	//private Rect sourceRect;	// the rectangle to be drawn from the animation bitmap
 	private int frameNr;		// number of frames in animation
 	private int currentFrame;	// the current frame
 	private long frameTicker;	// the time of the last frame update
@@ -35,6 +36,7 @@ public class GameObject {
 		
 	private boolean solid;
 	private boolean visible;
+	private boolean onDoor;
 	private int typeOf;		//0:player, 1:AI, 2: object
 	
 	private Paint paint;
@@ -122,6 +124,12 @@ public class GameObject {
 		else if (tileSetName == "grass_right") {
 			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass_right);
 		}
+		else if (tileSetName == "door_open_mid") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.door_open_mid);
+		}
+		else if (tileSetName == "door_open_top") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.door_open_top);
+		}
 		// If the specified tileSetName is not found, display a blue lock.
 		else {
 			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.lock_blue);
@@ -172,6 +180,20 @@ public class GameObject {
 			// Move the ghost to where we will be
 			ghost.offset((int)velocityX, (int)velocityY);
 			
+			// Check if we're intersecting a doorway
+			onDoor = ghost.intersect(GameThread.worldObjects.get(2).spriteRect);
+			if (Global.levelCompleted && !onDoor) {
+				Global.levelCompleted = false;
+			}
+			if (onDoor) {
+				Global.levelCompleted = true;
+			}
+			
+			// Recreate the ghost.
+			// Player falls through the ground when intersecting a door without these two lines
+			ghost = Rect.unflattenFromString(ourCurPosition);
+			ghost.offset((int)velocityX, (int)velocityY);
+			
 			// If the ghost collides with anything, put us against the object
 			int colObjectIndex = collision(ghost);
 			if(colObjectIndex != -1)
@@ -199,7 +221,7 @@ public class GameObject {
 					this.positionX = colObject.positionX + colObject.sizeX;
 					velocityX = 0;
 					positionY += velocityY;
-					velocityY +=5;
+					velocityY += gravity;
 				}
 				else if ((this.positionX + this.sizeX) <= colObject.positionX) {
 					// left
@@ -207,7 +229,7 @@ public class GameObject {
 					this.positionX = colObject.positionX - this.sizeX;
 					velocityX = 0;
 					positionY += velocityY;
-					velocityY +=5;
+					velocityY += gravity;
 				}
 				colWall();
 				onFloor();
@@ -218,7 +240,7 @@ public class GameObject {
 			{
 				positionX += velocityX;
 				positionY += velocityY;
-				velocityY +=5;
+				velocityY += gravity;
 				colWall();
 				onFloor();
 				spriteRect.offsetTo(positionX, positionY);
@@ -283,6 +305,7 @@ public class GameObject {
 		for (int i = 0; i < GameThread.solidObjects.size(); i++) {
 			if(ghost.intersect(GameThread.solidObjects.get(i).spriteRect))
 			{	
+				Log.d("collision", "colObject id = " + i);
 				return i;
 			}
 		}
@@ -291,7 +314,7 @@ public class GameObject {
 	
 	public void jumps()
 	{
-		if(velocityY <= 5)	//assume on jumpable platform if velY <= 5
+		if(velocityY <= gravity)	//assume on jumpable platform if velY <= 5
 		{
 			velocityY += jumpSpeed;
 			
