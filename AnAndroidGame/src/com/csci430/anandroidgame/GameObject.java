@@ -36,8 +36,7 @@ public class GameObject {
 		
 	private boolean solid;
 	private boolean visible;
-	private boolean onDoor;
-	private int typeOf;		//0:player, 1:AI, 2: object
+	private int typeOf;		//0:player, 1:AI, 2: object, 3: door, 4: coin
 	
 	private Paint paint;
 	private Context context;
@@ -180,14 +179,33 @@ public class GameObject {
 			// Move the ghost to where we will be
 			ghost.offset((int)velocityX, (int)velocityY);
 			
-			// Check if we're intersecting a doorway
-			onDoor = ghost.intersect(GameThread.worldObjects.get(2).spriteRect);
-			if (Global.levelCompleted && !onDoor) {
+			// Check for collision with the door
+			// Door_mid will always be index 2 in worldObjects\
+			if (!Global.levelCompleted) {
+				if(ghost.intersect(GameThread.worldObjects.get(2).spriteRect))
+				{	
+					Global.levelCompleted = true;
+				}
+			}
+			else if (!ghost.intersect(GameThread.worldObjects.get(2).spriteRect)) {
 				Global.levelCompleted = false;
 			}
-			if (onDoor) {
-				Global.levelCompleted = true;
+				
+				
+			int worldColObjectIndex = worldCollision(ghost);
+			if (worldColObjectIndex != -1) {
+				// We're colliding with a non-solid object.
+				// Get the object and act on the collision appropriately based on type.
+				GameObject worldColObject = GameThread.solidObjects.get(worldColObjectIndex);
+				switch (worldColObject.getType()) {
+				case 4: // coin
+					break;
+				default:
+					break;
+				}
 			}
+			
+			
 			
 			// Recreate the ghost.
 			// Player falls through the ground when intersecting a door without these two lines
@@ -195,38 +213,38 @@ public class GameObject {
 			ghost.offset((int)velocityX, (int)velocityY);
 			
 			// If the ghost collides with anything, put us against the object
-			int colObjectIndex = collision(ghost);
-			if(colObjectIndex != -1)
+			int solidColObjectIndex = solidCollision(ghost);
+			if(solidColObjectIndex != -1)
 			{
-				GameObject colObject = GameThread.solidObjects.get(colObjectIndex);
+				GameObject solidColObject = GameThread.solidObjects.get(solidColObjectIndex);
 
 				// find the direction of collision
-				if ((this.positionY + this.sizeY) <= colObject.positionY) {	
+				if ((this.positionY + this.sizeY) <= solidColObject.positionY) {	
 					// top
 					// put our feet on the ground
-					this.positionY = colObject.positionY - this.sizeY;
+					this.positionY = solidColObject.positionY - this.sizeY;
 					velocityY = 0;
 					positionX += velocityX;
 				}
-				else if (this.positionY >= (colObject.positionY + colObject.sizeY)) {
+				else if (this.positionY >= (solidColObject.positionY + solidColObject.sizeY)) {
 					// bottom
 					// put our head on the object
-					this.positionY = colObject.positionY + colObject.sizeY;
+					this.positionY = solidColObject.positionY + solidColObject.sizeY;
 					velocityY = 0;
 					positionX += velocityX;
 				}
-				else if (this.positionX >= (colObject.positionX + colObject.sizeX)) {
+				else if (this.positionX >= (solidColObject.positionX + solidColObject.sizeX)) {
 					// right
 					// put ourselves next to the object
-					this.positionX = colObject.positionX + colObject.sizeX;
+					this.positionX = solidColObject.positionX + solidColObject.sizeX;
 					velocityX = 0;
 					positionY += velocityY;
 					velocityY += gravity;
 				}
-				else if ((this.positionX + this.sizeX) <= colObject.positionX) {
+				else if ((this.positionX + this.sizeX) <= solidColObject.positionX) {
 					// left
 					// put ourselves next to the object
-					this.positionX = colObject.positionX - this.sizeX;
+					this.positionX = solidColObject.positionX - this.sizeX;
 					velocityX = 0;
 					positionY += velocityY;
 					velocityY += gravity;
@@ -301,11 +319,21 @@ public class GameObject {
 	 *   |                   |                   |        /|\        |                   |
 	 *   |___________________|___________________|________/_\________|___________________|____
 	 */
-	private int collision(Rect ghost) {
+	private int solidCollision(Rect ghost) {
 		for (int i = 0; i < GameThread.solidObjects.size(); i++) {
 			if(ghost.intersect(GameThread.solidObjects.get(i).spriteRect))
 			{	
-				Log.d("collision", "colObject id = " + i);
+				Log.d("collision", "solidColObject id = " + i);
+				return i;
+			}
+		}
+		return -1;
+	}
+	private int worldCollision(Rect ghost) {
+		for (int i = 0; i < GameThread.worldObjects.size(); i++) {
+			if(ghost.intersect(GameThread.worldObjects.get(i).spriteRect))
+			{	
+				Log.d("collision", "worldObject id = " + i);
 				return i;
 			}
 		}

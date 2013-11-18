@@ -3,12 +3,11 @@ package com.csci430.anandroidgame;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class LevelMenu extends Activity {
+public class MainMenu extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -17,7 +16,7 @@ public class LevelMenu extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		setContentView(R.layout.activity_level_menu);
+		setContentView(R.layout.activity_main_menu);
 	}
 
 	@Override
@@ -25,17 +24,14 @@ public class LevelMenu extends Activity {
 		super.onPostCreate(savedInstanceState);
 	}
 	
-	public void loadLevelOne(View view) {
-    	Log.d("l1", "loadLevelOne");
-		Intent levelOneIntent = new Intent(this, Level.class);
-		levelOneIntent.putExtra("levelId", "1"); 
-		this.startActivity(levelOneIntent);
+	public void loadLevelMenu(View view) {
+		Intent levelMenuIntent = new Intent(this, LevelMenu.class);
+		this.startActivity(levelMenuIntent);
 	}
 	
-	public void loadLevelTwo(View view) {
-		Intent levelTwoIntent = new Intent(this, Level.class);
-		levelTwoIntent.putExtra("levelId", "2"); 
-		this.startActivity(levelTwoIntent);
+	public void loadSettingsMenu(View view) {
+		Intent settingsMenuIntent = new Intent(this, SettingsMenu.class);
+		this.startActivity(settingsMenuIntent);
 	}
 
 }

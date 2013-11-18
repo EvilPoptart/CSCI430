@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Button;
 import android.view.*;
 import android.media.*;
@@ -21,16 +22,19 @@ public class Level extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
     	// Call the function onCreate() from the class we're extending (Activity)
     	super.onCreate(savedInstanceState);
+    	Log.d("l1", "Level onCreate");
     	
-		Intent intent = getIntent();
-		Global.curLevelId = Integer.parseInt(intent.getStringExtra("levelId")); //if it's a string you stored.
+		Global.curLevelId = Integer.parseInt(getIntent().getStringExtra("levelId"));
     	
     	// Hide title. Must be called before setContentView()
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+    	Log.d("l1", "Level onCreate before GameView");
         // Tell system to use the layout defined in our XML file.
         setContentView(R.layout.activity_level);
+    	Log.d("l1", "Level onCreate after GameView");
+
         
         //Used in screen Sizes throughout the application
         GameThread.metrics = new DisplayMetrics();

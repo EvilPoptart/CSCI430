@@ -22,31 +22,53 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int black_overlay=0x7f050000;
     }
     public static final class drawable {
-        public static final int door_open_mid=0x7f020000;
-        public static final int door_open_top=0x7f020001;
-        public static final int grass=0x7f020002;
-        public static final int grass_center=0x7f020003;
-        public static final int grass_left=0x7f020004;
-        public static final int grass_mid=0x7f020005;
-        public static final int grass_right=0x7f020006;
-        public static final int ic_launcher=0x7f020007;
-        public static final int lock_blue=0x7f020008;
-        public static final int p1_spritesheet=0x7f020009;
-        public static final int p1_spritesheet_oneline=0x7f02000a;
-        public static final int p1_spritesheet_testing=0x7f02000b;
-        public static final int p3_jump=0x7f02000c;
-        public static final int player_standing=0x7f02000d;
+        public static final int coin=0x7f020000;
+        public static final int door_open_mid=0x7f020001;
+        public static final int door_open_top=0x7f020002;
+        public static final int grass=0x7f020003;
+        public static final int grass_center=0x7f020004;
+        public static final int grass_left=0x7f020005;
+        public static final int grass_mid=0x7f020006;
+        public static final int grass_right=0x7f020007;
+        public static final int hud_0=0x7f020008;
+        public static final int hud_1=0x7f020009;
+        public static final int hud_2=0x7f02000a;
+        public static final int hud_3=0x7f02000b;
+        public static final int hud_4=0x7f02000c;
+        public static final int hud_5=0x7f02000d;
+        public static final int hud_6=0x7f02000e;
+        public static final int hud_7=0x7f02000f;
+        public static final int hud_8=0x7f020010;
+        public static final int hud_9=0x7f020011;
+        public static final int hud_coins=0x7f020012;
+        public static final int ic_launcher=0x7f020013;
+        public static final int lock_blue=0x7f020014;
+        public static final int p1_spritesheet=0x7f020015;
+        public static final int p1_spritesheet_oneline=0x7f020016;
+        public static final int p1_spritesheet_testing=0x7f020017;
+        public static final int p3_jump=0x7f020018;
+        public static final int player_standing=0x7f020019;
     }
     public static final class id {
         public static final int buttonJump1=0x7f080002;
         public static final int buttonJump2=0x7f080004;
         public static final int buttonLeft=0x7f080003;
         public static final int buttonRight=0x7f080005;
+        public static final int fullscreen_content=0x7f080006;
+        public static final int fullscreen_content_controls=0x7f080007;
         public static final int gameCanvas=0x7f080001;
         public static final int layoutContainer=0x7f080000;
+        public static final int levelMenu=0x7f08000a;
+        public static final int level_1=0x7f080008;
+        public static final int level_2=0x7f080009;
+        public static final int settingsMenu=0x7f08000b;
     }
     public static final class layout {
-        public static final int activity_fullscreen=0x7f030000;
+        public static final int activity_level=0x7f030000;
+        public static final int activity_level_menu=0x7f030001;
+        public static final int activity_main_menu=0x7f030002;
+        public static final int activity_settings_menu=0x7f030003;
+        public static final int activity_victory_menu=0x7f030004;
     }
     public static final class raw {
         public static final int coin=0x7f040000;
@@ -67,6 +89,16 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int Left=0x7f060003;
         public static final int Right=0x7f060004;
         public static final int app_name=0x7f060000;
+        public static final int continueToNextLevel=0x7f06000e;
+        public static final int levelMenu=0x7f06000b;
+        public static final int level_1=0x7f060009;
+        public static final int level_2=0x7f06000a;
+        public static final int level_menu_content=0x7f060007;
+        public static final int mainMenu=0x7f06000d;
+        public static final int main_menu_content=0x7f060008;
+        public static final int settingsMenu=0x7f06000c;
+        public static final int settings_menu_content=0x7f060006;
+        public static final int victory_menu_content=0x7f060005;
     }
     public static final class style {
         /** 

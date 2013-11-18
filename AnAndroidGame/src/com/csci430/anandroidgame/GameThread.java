@@ -4,11 +4,8 @@ import java.util.Vector;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.Rect;
-import android.graphics.BitmapRegionDecoder;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -18,24 +15,22 @@ import android.view.SurfaceHolder;
 
 //@SuppressWarnings("unused")
 class GameThread extends Thread{
-	  private boolean run = false;
+	  private static boolean run = false;
 	  private SurfaceHolder sh;
 	  protected Context ctx;
 	  private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	  int cameraX = 9;
-
 	  
 	  private static GameObject player;
 	  private static GameObject backGround;
-	  private static GameObject solidObject;
 	  public static Vector<GameObject> worldObjects;
 	  public static Vector<GameObject> solidObjects;
-	  public static Vector<Level> levels;
 	  public static DisplayMetrics metrics;
 		
 	  public Sound sounds;
 	  public static int playerIndex;
 	  public static int backgroundIndex;
+	  public static int doorIndex;
 	  public static final int BLOCK_SIZE = 47;
 	  public static final int LEVEL_WIDTH = 29;
 	  public static final int LEVEL_HEIGHT = 15;
@@ -56,7 +51,6 @@ class GameThread extends Thread{
 	    ctx = context;
 		worldObjects = new Vector<GameObject>();
 		solidObjects = new Vector<GameObject>();
-		levels = new Vector<Level>();
 	  }
 	  
 	  public static void jump() {
@@ -83,60 +77,77 @@ class GameThread extends Thread{
 	  
 	  public void doStart() {
 	    synchronized (sh) {
-	    	//player
-	    	paint.setColor(Color.BLUE);
-		    paint.setStyle(Style.FILL);
-		    player = new GameObject(0, 1, 1, 0, 10, 5, sh, ctx, "player");
-		    worldObjects.add(player);
-		    playerIndex = worldObjects.size() - 1;
-		    // /player
-		    
-		    //background
-		    int skyBlue = 0xffA9FFE1;
-		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		    paint.setColor(skyBlue);
-			paint.setStyle(Style.FILL);  
-		    //backGround = new GameObject(2, 0, 0, paint, sh);
-		    backGround = new GameObject(2, LEVEL_WIDTH, LEVEL_HEIGHT, 0, 0, sh, ctx, paint);
-		    worldObjects.add(backGround);
-		    backgroundIndex = worldObjects.size() -1;
-		    // /background
-		    
-		    //floor
-    		for (int i = 0; i < LEVEL_WIDTH; i++) {
-    		    generatePlatform(1, 1, i, 0, ctx, sh, "grass_mid");	
-    		}
-    		
-    		//Platforms
-    		int platformWidth;
-    		generatePlatform(1, 1, 7, 2, ctx, sh, "grass_left");
-		    generatePlatform(1, 1, 8, 2, ctx, sh, "grass_right");
-    		
-		    generatePlatform(1, 1, 10, 4, ctx, sh, "grass_left");
-		    generatePlatform(1, 1, 11, 4, ctx, sh, "grass_right");
-    		
-		    generatePlatform(1, 1, 13, 6, ctx, sh, "grass_left");
-		    generatePlatform(1, 1, 14, 6, ctx, sh, "grass_right");
-
-		    generatePlatform(1, 1, 16, 6, ctx, sh, "grass_left");
-		    generatePlatform(1, 1, 17, 6, ctx, sh, "grass_mid");
-		    generatePlatform(1, 1, 18, 6, ctx, sh, "grass_right");
-		    
-		    platformWidth = 10;
-    		generatePlatform(1, 1, 14, 2, ctx, sh, "grass_left");
-    		for (int i = 0; i < platformWidth; i++) {
-    		    generatePlatform(1, 1, (15 + i), 2, ctx, sh, "grass_mid");
-    		}
-		    generatePlatform(1, 1, (15 + platformWidth), 2, ctx, sh, "grass_right");
-			
-		    Sound.track1(ctx);
+	    	genLevel();
+	    	Log.d("l1", "end of doStart()");
 	    }
 	  }
 	  
-	  void generatePlatform(int sizeX, int sizeY, int posX, int posY, Context ctx, SurfaceHolder shIn, String tileSetName)
+	  void genLevel() {
+		  switch (Global.curLevelId) {
+		  case 1:
+		    	genPlayer();
+		    	genBG(0xffA9FFE1);
+		    	genDoor(2, 2);
+		    	generatePlatform(LEVEL_WIDTH+2, -1, 0, "grass");
+			    Sound.track1(ctx);
+			  break;
+		  case 2: 
+		    	genPlayer();
+		    	genBG(0xffA9FFE1);
+		    	genDoor(5, 1);
+		    	generatePlatform(LEVEL_WIDTH+2, -1, 0, "grass");
+			  break;
+		  default:
+	    	genPlayer();
+	    	genBG(0xffA9FFE1);
+	    	genDoor(5, 1);
+			  break;
+		  }
+	  }
+	  
+	  void genPlayer() {
+		    player = new GameObject(0, 1, 1, 0, 10, 5, sh, ctx, "player");
+		    worldObjects.add(player);
+		    playerIndex = worldObjects.size() - 1;
+	  }
+	  
+	  void genBG(int color) {
+		    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		    paint.setColor(color);
+			paint.setStyle(Style.FILL);  
+		    backGround = new GameObject(2, LEVEL_WIDTH, LEVEL_HEIGHT, 0, 0, sh, ctx, paint);
+		    worldObjects.add(backGround);
+		    backgroundIndex = worldObjects.size() -1;
+	  }
+	  
+	  void genDoor(int posX, int posY) {
+		    worldObjects.add(new GameObject(3, 1, 1, posX, posY, sh, ctx, "door_open_mid"));
+		    doorIndex = worldObjects.size() - 1;
+		    worldObjects.add(new GameObject(3, 1, 1, posX, posY+1, sh, ctx, "door_open_top"));
+		  
+	  }
+	  void generatePlatform(int sizeX, int posX, int posY, String tileSetName)
 	  {
-		  solidObject = new GameObject(2, sizeX, sizeY, posX, posY, shIn, ctx, tileSetName);
-		  solidObjects.add(solidObject);
+		  if (sizeX > 0) {
+			  if (tileSetName == "grass") {
+				  switch (sizeX) {
+				  case 1:
+					  solidObjects.add(new GameObject(2, 1, 1, posX, posY, sh, ctx, "grass"));
+					  break;
+				  case 2:
+					  solidObjects.add(new GameObject(2, 1, 1, posX, posY, sh, ctx, "grass_left"));
+					  solidObjects.add(new GameObject(2, 1, 1, posX+1, posY, sh, ctx, "grass_right"));
+					  break;
+				  default:
+					  solidObjects.add(new GameObject(2, 1, 1, posX, posY, sh, ctx, "grass_left"));
+					  for (int i = 0; i < sizeX - 2; i ++) {
+						  solidObjects.add(new GameObject(2, 1, 1, posX+1+i, posY, sh, ctx, "grass_mid"));
+					  }
+					  solidObjects.add(new GameObject(2, 1, 1, posX+sizeX-1, posY, sh, ctx, "grass_right"));
+					  break;
+				  }
+			  }
+		  }
 	  }
 	  
 	  
@@ -186,7 +197,7 @@ class GameThread extends Thread{
 	    }
 	  }
 	    
-	  public void setRunning(boolean b) { 
+	  public static void setRunning(boolean b) { 
 		  run = b;
 	  }
 	  
@@ -199,8 +210,10 @@ class GameThread extends Thread{
 	  private void doDraw(Canvas canvas) {
 		  canvas.save();
 		  if(worldObjects.size() > 0){
+			  Log.d("asdf", "1");
 			  worldObjects.get(playerIndex).tickUpdate();	//update player (currently only checks object.0 (player) vs object.2("solid Objects"))
-	  		  
+
+			  Log.d("asdf", "2");
 			  // Move the canvas around the x axis while the player is sufficiently away from the edges of the level.
 			  // If the player is at the far left, cameraX will be 0.
 			  if (worldObjects.get(playerIndex).getPosX() > (BLOCK_SIZE * 5)) {
@@ -211,26 +224,42 @@ class GameThread extends Thread{
 					  cameraX = (metrics.widthPixels - BLOCK_SIZE * LEVEL_WIDTH);
 	  			  }
 			  }
+			  Log.d("asdf", "3");
 			  
 			  // Set the camera to an appropriate x-offset
 			  canvas.translate(cameraX, 0);
-			  
+
+			  Log.d("asdf", "4");
 			  //DrawBackgroud
 			  canvas.drawRect(worldObjects.get(backgroundIndex).getSprite(), worldObjects.get(backgroundIndex).getPaint());
-			  //canvas.drawBitmap(worldObjects.get(backgroundIndex).getSpriteGraphic(), worldObjects.get(backgroundIndex).getPosX(), worldObjects.get(backgroundIndex).getPosY(), null);
-		
-			  //DrawPlayer
-			  worldObjects.get(playerIndex).updateAnimation(System.currentTimeMillis());
 			  
+			  Log.d("asdf", "5");
+			  // Draw door
+			  canvas.drawBitmap(worldObjects.get(doorIndex).getSpriteGraphic(), worldObjects.get(doorIndex).getPosX(), worldObjects.get(doorIndex).getPosY(), null);
+			  canvas.drawBitmap(worldObjects.get(doorIndex+1).getSpriteGraphic(), worldObjects.get(doorIndex+1).getPosX(), worldObjects.get(doorIndex+1).getPosY(), null);
+
+			  Log.d("asdf", "6");
+			  //Draw worldObjects
+			  /*
+			  if (worldObjects.size() > 4) {
+				  for (int i = 4; i < worldObjects.size(); i++) {
+					  canvas.drawBitmap(solidObjects.get(i).getSpriteGraphic(), solidObjects.get(i).getPosX(), solidObjects.get(i).getPosY(), null);
+				  }
+			  }
+			  */
 			  
-			  canvas.drawBitmap(worldObjects.get(playerIndex).getSpriteGraphic(), worldObjects.get(playerIndex).spriteSheetLoc, worldObjects.get(playerIndex).getSprite(), null);
-				
-			  
-			  //Draw Platforms
+			  //Draw solid Objects
 			  for (int i = 0; i < solidObjects.size(); i++) {
-				  //canvas.drawRect(solidObjects.get(i).getSprite(), solidObjects.get(i).getPaint());
 				  canvas.drawBitmap(solidObjects.get(i).getSpriteGraphic(), solidObjects.get(i).getPosX(), solidObjects.get(i).getPosY(), null);
 			  }
+			  Log.d("asdf", "7");
+			  
+			  //DrawPlayer
+			  worldObjects.get(playerIndex).updateAnimation(System.currentTimeMillis());
+			  canvas.drawBitmap(worldObjects.get(playerIndex).getSpriteGraphic(), worldObjects.get(playerIndex).spriteSheetLoc, worldObjects.get(playerIndex).getSprite(), null);
+
+			  Log.d("asdf", "8");
+
 		  }
 		  canvas.restore();
 	  }
