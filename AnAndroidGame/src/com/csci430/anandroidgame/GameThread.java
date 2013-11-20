@@ -32,7 +32,7 @@ class GameThread extends Thread{
 	  public static int backgroundIndex;
 	  public static int doorIndex;
 	  public static final int BLOCK_SIZE = 47;
-	  public static final int LEVEL_WIDTH = 29;
+	  public static final int LEVEL_WIDTH = 35;
 	  public static final int LEVEL_HEIGHT = 15;
 		
 	  public static boolean currentlyRunning = false;
@@ -84,18 +84,40 @@ class GameThread extends Thread{
 	  
 	  void genLevel() {
 		  switch (Global.curLevelId) {
+		  // Level 1
 		  case 1:
 		    	genPlayer();
 		    	genBG(0xffA9FFE1);
-		    	genDoor(2, 2);
-		    	generatePlatform(LEVEL_WIDTH+2, -1, 0, "grass");
+		    	genDoor(27, 9);
+
+		    	genPlatform(3, 5, 3, "grass");
+		    	genPlatform(3, 9, 6, "grass");
+		    	genPlatform(3, 13, 8, "grass");
+		    	genPlatform(2, 18, 8, "grass");
+		    	genPlatform(1, 21, 8, "grass");
+		    	genPlatform(1, 23, 8, "grass");
+		    	genPlatform(3, 25, 8, "grass");
+		    	genPlatform(12, 13, 3, "grass");
+		    	
+		    	genPlatform(LEVEL_WIDTH+2, -1, 0, "grass");
 			    Sound.track1(ctx);
 			  break;
+		  // Level 2
 		  case 2: 
 		    	genPlayer();
 		    	genBG(0xffA9FFE1);
-		    	genDoor(5, 1);
-		    	generatePlatform(LEVEL_WIDTH+2, -1, 0, "grass");
+		    	genDoor(25, 8);
+
+		    	genPlatform(2, 7, 3, "grass");
+		    	genPlatform(2, 3, 6, "grass");
+		    	genPlatform(6, 7, 8, "grass");
+
+		    	genPlatform(1, 16, 4, "grass");
+		    	genPlatform(1, 18, 5, "grass");
+		    	genPlatform(1, 20, 6, "grass");
+		    	genPlatform(2, 24, 7, "grass");
+		    	
+		    	genPlatform(LEVEL_WIDTH+2, -1, 0, "grass");
 			  break;
 		  default:
 	    	genPlayer();
@@ -126,7 +148,7 @@ class GameThread extends Thread{
 		    worldObjects.add(new GameObject(3, 1, 1, posX, posY+1, sh, ctx, "door_open_top"));
 		  
 	  }
-	  void generatePlatform(int sizeX, int posX, int posY, String tileSetName)
+	  void genPlatform(int sizeX, int posX, int posY, String tileSetName)
 	  {
 		  if (sizeX > 0) {
 			  if (tileSetName == "grass") {
@@ -210,10 +232,8 @@ class GameThread extends Thread{
 	  private void doDraw(Canvas canvas) {
 		  canvas.save();
 		  if(worldObjects.size() > 0){
-			  Log.d("asdf", "1");
 			  worldObjects.get(playerIndex).tickUpdate();	//update player (currently only checks object.0 (player) vs object.2("solid Objects"))
 
-			  Log.d("asdf", "2");
 			  // Move the canvas around the x axis while the player is sufficiently away from the edges of the level.
 			  // If the player is at the far left, cameraX will be 0.
 			  if (worldObjects.get(playerIndex).getPosX() > (BLOCK_SIZE * 5)) {
@@ -224,21 +244,17 @@ class GameThread extends Thread{
 					  cameraX = (metrics.widthPixels - BLOCK_SIZE * LEVEL_WIDTH);
 	  			  }
 			  }
-			  Log.d("asdf", "3");
 			  
 			  // Set the camera to an appropriate x-offset
 			  canvas.translate(cameraX, 0);
 
-			  Log.d("asdf", "4");
 			  //DrawBackgroud
 			  canvas.drawRect(worldObjects.get(backgroundIndex).getSprite(), worldObjects.get(backgroundIndex).getPaint());
 			  
-			  Log.d("asdf", "5");
 			  // Draw door
 			  canvas.drawBitmap(worldObjects.get(doorIndex).getSpriteGraphic(), worldObjects.get(doorIndex).getPosX(), worldObjects.get(doorIndex).getPosY(), null);
 			  canvas.drawBitmap(worldObjects.get(doorIndex+1).getSpriteGraphic(), worldObjects.get(doorIndex+1).getPosX(), worldObjects.get(doorIndex+1).getPosY(), null);
 
-			  Log.d("asdf", "6");
 			  //Draw worldObjects
 			  /*
 			  if (worldObjects.size() > 4) {
@@ -252,13 +268,11 @@ class GameThread extends Thread{
 			  for (int i = 0; i < solidObjects.size(); i++) {
 				  canvas.drawBitmap(solidObjects.get(i).getSpriteGraphic(), solidObjects.get(i).getPosX(), solidObjects.get(i).getPosY(), null);
 			  }
-			  Log.d("asdf", "7");
 			  
 			  //DrawPlayer
 			  worldObjects.get(playerIndex).updateAnimation(System.currentTimeMillis());
 			  canvas.drawBitmap(worldObjects.get(playerIndex).getSpriteGraphic(), worldObjects.get(playerIndex).spriteSheetLoc, worldObjects.get(playerIndex).getSprite(), null);
 
-			  Log.d("asdf", "8");
 
 		  }
 		  canvas.restore();

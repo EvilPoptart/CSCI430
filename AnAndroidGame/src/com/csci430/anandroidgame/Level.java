@@ -55,7 +55,7 @@ public class Level extends Activity {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					if (Global.levelCompleted) {
 						// Stop Game
-						GameThread.setIsRunning(false);
+						GameThread.setRunning(false);
 						loadVictoryMenu();
 					}
 	        		jumpsound.start();

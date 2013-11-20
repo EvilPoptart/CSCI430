@@ -10,9 +10,9 @@ import android.view.SurfaceHolder;
 
 public class GameObject {
 	private int MAX_H_SPEED = (int) (GameThread.BLOCK_SIZE * 0.08);		//max horiz speed
-	private int MAX_Y_SPEED = (int) (GameThread.BLOCK_SIZE * 0.3);
+	private int MAX_Y_SPEED = (int) (GameThread.BLOCK_SIZE * 0.4);
 	private int runSpeed = 1;		    //button press increment
-	private int jumpSpeed = (int) (GameThread.BLOCK_SIZE * 0.3);
+	private int jumpSpeed = (int) (GameThread.BLOCK_SIZE * 0.4);
 	private int gravity = 1;
 	
 	// Where the player exists in space
@@ -64,7 +64,6 @@ public class GameObject {
 	// Animated objects
 	GameObject(int type, int sX, int sY, int posX, int posY, int fps, SurfaceHolder sh, Context ctx, String tileSetName)
 	{
-		Log.d("Meh", "Player Created");
 		typeOf = type;
 		surfH = sh;
 		
@@ -74,14 +73,14 @@ public class GameObject {
 		// Or enums? That may work.
 		if(tileSetName == "player"){
 			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.p1_spritesheet);
-			sizeX = 50;
-			sizeY = 65;
+			sizeX = 48;
+			sizeY = 64;
 			positionX = 0;
 			positionY = 0;
 			spriteRect = new Rect(positionX, positionY, (positionX + sizeX), (positionY + sizeY));
 			spriteSheetLoc = new Rect(0,0,sizeX, sizeY);
 			
-			frameNr = 7;
+			frameNr = 11;
 			currentFrame = 0;
 			framePeriod = 1000 / fps;
 			frameTicker = 0l;
@@ -113,6 +112,9 @@ public class GameObject {
 		// Or enums? That may work.
 		if(tileSetName == "player"){
 			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.p3_jump);
+		}
+		else if (tileSetName == "grass") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass);
 		}
 		else if (tileSetName == "grass_left") {
 			sprite = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.grass_left);
@@ -487,9 +489,47 @@ public class GameObject {
 				currentFrame = 0;
 			}
 		}
-		// define the rectangle to cut out sprite
 		
-		this.spriteSheetLoc.offsetTo(currentFrame*spriteWidth, 0);
+		
+		// define the rectangle to cut out sprite
+		switch(currentFrame) {
+		case 0:
+			this.spriteSheetLoc.offsetTo(0, 0);
+			break;
+		case 1:
+			this.spriteSheetLoc.offsetTo((this.sizeX + 1)*1, 0);
+			break;
+		case 2:
+			this.spriteSheetLoc.offsetTo((this.sizeX + 1)*2, 0);
+			break;
+		case 3:
+			this.spriteSheetLoc.offsetTo(0, (this.sizeY + 1)*1);
+			break;
+		case 4:
+			this.spriteSheetLoc.offsetTo((this.sizeX + 1)*1, (this.sizeY + 1)*1);
+			break;
+		case 5:
+			this.spriteSheetLoc.offsetTo((this.sizeX + 1)*2, (this.sizeY + 1)*1);
+			break;
+		case 6:
+			this.spriteSheetLoc.offsetTo((this.sizeX + 1)*3, 0);
+			break;
+		case 7:
+			this.spriteSheetLoc.offsetTo((this.sizeX + 1)*4, 0);
+			break;
+		case 8:
+			this.spriteSheetLoc.offsetTo((this.sizeX + 1)*3, (this.sizeY + 1)*1);
+			break;
+		case 9:
+			this.spriteSheetLoc.offsetTo((this.sizeX + 1)*5, 0);
+			break;
+		case 10:
+			this.spriteSheetLoc.offsetTo((this.sizeX + 1)*4, (this.sizeY + 1)*1);
+			break;
+		default:
+			this.spriteSheetLoc.offsetTo(0, 0);
+			break;
+		}
 		
 	}
 
