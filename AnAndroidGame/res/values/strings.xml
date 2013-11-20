@@ -2,10 +2,10 @@
 <resources>
 
     <string name="app_name">An Android Game</string>
-    <string name="Jump1"> </string>
-    <string name="Jump2"> </string>
-    <string name="Left"> </string>
-    <string name="Right"> </string>
+    <string name="Jump1">Jump</string>
+    <string name="Jump2">Jump</string>
+    <string name="Left">Left</string>
+    <string name="Right">Right</string>
     
     <string name="victory_menu_content">Success!</string>
     <string name="settings_menu_content">Settings</string>

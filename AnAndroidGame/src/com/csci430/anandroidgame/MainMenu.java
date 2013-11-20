@@ -12,9 +12,10 @@ public class MainMenu extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-    	// Hide title. Must be called before setContentView()
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		// Hide title. Must be called before setContentView()
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.activity_main_menu);
 	}
@@ -23,12 +24,12 @@ public class MainMenu extends Activity {
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 	}
-	
+
 	public void loadLevelMenu(View view) {
 		Intent levelMenuIntent = new Intent(this, LevelMenu.class);
 		this.startActivity(levelMenuIntent);
 	}
-	
+
 	public void loadSettingsMenu(View view) {
 		Intent settingsMenuIntent = new Intent(this, SettingsMenu.class);
 		this.startActivity(settingsMenuIntent);

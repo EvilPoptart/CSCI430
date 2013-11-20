@@ -20,6 +20,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class color {
         public static final int black_overlay=0x7f050000;
+        public static final int button_overlay=0x7f050001;
     }
     public static final class drawable {
         public static final int coin=0x7f020000;
