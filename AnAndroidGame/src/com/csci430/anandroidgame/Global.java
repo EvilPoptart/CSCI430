@@ -3,6 +3,7 @@ package com.csci430.anandroidgame;
 public class Global {
 	public static int curLevelId;
 	public static boolean levelCompleted = false;
+	public static boolean playerAlive = true;
 
 	// TODO: Needs to be implemented in GameObject constructors
 	public enum TYPE {

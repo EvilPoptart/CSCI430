@@ -171,6 +171,61 @@ public class GameObject {
 					R.drawable.lock_blue);
 		}
 	}
+	
+	// Used for numbers
+	GameObject(int type, int sX, int sY, SurfaceHolder sh,
+			Context ctx, String tileSetName) {
+		typeOf = type;
+		sizeX = sX * GameThread.BLOCK_SIZE;
+		sizeY = sY * GameThread.BLOCK_SIZE;
+		surfH = sh;
+
+		spriteRect = new Rect(positionX, positionY, (positionX + sizeX),
+				(positionY + sizeY));
+
+		// TODO: String comparisons are probably needlessly inefficient for this
+		// task. I didn't want
+		// to use a switch statement with integers because it would be much less
+		// readable/usable.
+		// Java needs ruby symbols =/
+		// Or enums? That may work.
+		if (tileSetName == "zero") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.hud_0);
+		} else if (tileSetName == "one") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.hud_1);
+		} else if (tileSetName == "two") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.hud_2);
+		} else if (tileSetName == "three") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.hud_3);
+		} else if (tileSetName == "four") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.hud_4);
+		} else if (tileSetName == "five") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.hud_5);
+		} else if (tileSetName == "six") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.hud_6);
+		} else if (tileSetName == "seven") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.hud_7);
+		} else if (tileSetName == "eight") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.hud_8);
+		} else if (tileSetName == "nine") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.hud_9);
+		}
+		// If the specified tileSetName is not found, display a blue lock.
+		else {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.coin);
+		}
+	}
 
 	// Objects with paint
 	GameObject(int type, int sX, int sY, int posX, int posY, SurfaceHolder sh,
@@ -599,6 +654,24 @@ public class GameObject {
 
 	public int getScore() {
 		return score;
+	}
+
+	public int[] getScoreAsImages() {
+		int tmpScore = score;
+		int places = 0;
+		while (tmpScore > 0) {
+			tmpScore = tmpScore / 10;
+			places += 1;
+		}
+		int[] digits = new int[places];
+		tmpScore = score;
+		int i = 0;
+		while (tmpScore > 0) {
+			digits[i] = tmpScore % 10;
+			tmpScore = tmpScore / 10;
+			i += 1;
+		}
+		return digits;
 	}
 
 	public void incrScore(int score) {

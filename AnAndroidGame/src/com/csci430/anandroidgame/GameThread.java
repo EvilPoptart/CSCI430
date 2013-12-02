@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 //@SuppressWarnings("unused")
@@ -17,6 +18,8 @@ class GameThread extends Thread {
 	protected Context ctx;
 	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	int cameraX = 9;
+	int curFrame = 0;
+	int curTime = 0;
 
 	// GameThread's thread will run while run == true
 	private static boolean run = false;
@@ -25,6 +28,7 @@ class GameThread extends Thread {
 	public static Vector<GameObject> worldObjects;
 	public static Vector<GameObject> solidObjects;
 	public static Vector<GameObject> collectibleObjects;
+	public static Vector<GameObject> numberObjects;
 	public static DisplayMetrics metrics;
 
 	public Sound sounds;
@@ -44,6 +48,8 @@ class GameThread extends Thread {
 	private final static int MAX_FRAME_SKIPS = 5;
 	// the frame period
 	private final static int FRAME_PERIOD = 1000 / MAX_FPS;
+	
+	public static int levelMaxTime;
 
 	public GameThread(SurfaceHolder surfaceHolder, Context context,
 			Handler handler) {
@@ -52,6 +58,7 @@ class GameThread extends Thread {
 		worldObjects = new Vector<GameObject>();
 		solidObjects = new Vector<GameObject>();
 		collectibleObjects = new Vector<GameObject>();
+		numberObjects = new Vector<GameObject>();
 	}
 
 	public static void jump() {
@@ -95,6 +102,7 @@ class GameThread extends Thread {
 			genPlayer();
 			genBG(0xffA9FFE1);
 			genDoor(30, 9);
+			genNumbers();
 
 			genPlatform(3, 5, 3, "grass");
 			genPlatform(3, 9, 6, "grass");
@@ -114,12 +122,14 @@ class GameThread extends Thread {
 
 			genPlatform(LEVEL_WIDTH + 2, -1, 0, "grass");
 			Sound.track1(ctx);
+			levelMaxTime = 4;
 			break;
 		// Level 2
 		case 2:
 			genPlayer();
 			genBG(0xffA9FFE1);
 			genDoor(27, 8);
+			genNumbers();
 
 			genPlatform(2, 7, 3, "grass");
 			genPlatform(2, 3, 6, "grass");
@@ -140,13 +150,28 @@ class GameThread extends Thread {
 			genCoin(24, 9);
 
 			genPlatform(LEVEL_WIDTH + 2, -1, 0, "grass");
+			levelMaxTime = 4;
 			break;
 		default:
 			genPlayer();
 			genBG(0xffA9FFE1);
 			genDoor(5, 1);
+			levelMaxTime = 10;
 			break;
 		}
+	}
+
+	private void genNumbers() {
+		numberObjects.add(new GameObject(6, 1, 1, sh, ctx, "zero"));
+		numberObjects.add(new GameObject(6, 1, 1, sh, ctx, "one"));
+		numberObjects.add(new GameObject(6, 1, 1, sh, ctx, "two"));
+		numberObjects.add(new GameObject(6, 1, 1, sh, ctx, "three"));
+		numberObjects.add(new GameObject(6, 1, 1, sh, ctx, "four"));
+		numberObjects.add(new GameObject(6, 1, 1, sh, ctx, "five"));
+		numberObjects.add(new GameObject(6, 1, 1, sh, ctx, "six"));
+		numberObjects.add(new GameObject(6, 1, 1, sh, ctx, "seven"));
+		numberObjects.add(new GameObject(6, 1, 1, sh, ctx, "eight"));
+		numberObjects.add(new GameObject(6, 1, 1, sh, ctx, "nine"));
 	}
 
 	void genCoin(int posX, int posY) {
@@ -271,6 +296,16 @@ class GameThread extends Thread {
 	private void doDraw(Canvas canvas) {
 		canvas.save();
 		if (worldObjects.size() > 0) {
+			curFrame += 1;
+			if (curFrame % MAX_FPS == 0) {
+				curFrame = 0;
+				curTime += 1;
+			}
+			if (curTime == levelMaxTime) {
+				// Kill the player
+				Global.playerAlive = false;
+			}
+			
 			worldObjects.get(playerIndex).tickUpdate(); // update player
 														// (currently only
 														// checks object.0
@@ -291,12 +326,21 @@ class GameThread extends Thread {
 				}
 			}
 
+			Log.d("cameraX", "is: " + -cameraX);
 			// Set the camera to an appropriate x-offset
 			canvas.translate(cameraX, 0);
 
 			// DrawBackgroud
 			canvas.drawRect(worldObjects.get(backgroundIndex).getSprite(),
 					worldObjects.get(backgroundIndex).getPaint());
+			
+			for (int i = 0; i < worldObjects.get(0).getScoreAsImages().length; i++) {
+				//canvas.drawText("" + worldObjects.get(0).getScoreAsImages()[i], -cameraX + 100 - (i * 14), 30, paint);
+				canvas.drawBitmap(numberObjects.get(worldObjects.get(0).getScoreAsImages()[i]).getSpriteGraphic(),
+						-cameraX + 100 - (i * 19),
+						10, null);
+			}
+			canvas.drawText("Time: " + (levelMaxTime - curTime), -cameraX + 200, 30, paint); 
 
 			// Draw door
 			canvas.drawBitmap(worldObjects.get(doorIndex).getSpriteGraphic(),

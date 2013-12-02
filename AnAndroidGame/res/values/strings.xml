@@ -8,6 +8,7 @@
     <string name="Right">Right</string>
     
     <string name="victory_menu_content">Success!</string>
+    <string name="defeat_menu_content">Defeat!</string>
     <string name="settings_menu_content">Settings</string>
     <string name="level_menu_content">Select a Level</string>
     <string name="main_menu_content">An Android Game</string>
