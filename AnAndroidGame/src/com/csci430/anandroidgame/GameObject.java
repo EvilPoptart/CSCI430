@@ -296,6 +296,7 @@ public class GameObject {
 							.remove(collectibleObjColIndex);
 					// Increase our score
 					GameThread.worldObjects.get(0).incrScore(5);
+					Sound.soundCoin(context);
 					break;
 				default:
 					break;

@@ -150,6 +150,7 @@ class GameThread extends Thread {
 			genCoin(24, 9);
 
 			genPlatform(LEVEL_WIDTH + 2, -1, 0, "grass");
+			Sound.track2(ctx);
 			levelMaxTime = 4;
 			break;
 		default:
