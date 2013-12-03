@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -13,18 +14,19 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 public class Level extends Activity {
-	protected static final Context context = null;
+	protected static Context context = null;
 	public Button buttonJump1;
 	public Button buttonJump2;
 	public Button buttonLeft;
 	public Button buttonRight;
+	public static Button buttonDie;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// Call the function onCreate() from the class we're extending
 		// (Activity)
 		super.onCreate(savedInstanceState);
-
+				
 		Global.curLevelId = Integer.parseInt(getIntent().getStringExtra(
 				"levelId"));
 
@@ -34,7 +36,14 @@ public class Level extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		// Tell system to use the layout defined in our XML file.
-		setContentView(R.layout.activity_level);
+		if (Global.curLevelId == 0) {
+			// Tutorial activity has visible buttons
+			setContentView(R.layout.activity_level_tutorial);
+		}
+		else {
+			// Normal level activity has INvisible buttons
+			setContentView(R.layout.activity_level);
+		}
 
 		// Used in screen Sizes throughout the application
 		GameThread.metrics = new DisplayMetrics();
@@ -45,6 +54,7 @@ public class Level extends Activity {
 		buttonJump2 = (Button) findViewById(R.id.buttonJump2);
 		buttonRight = (Button) findViewById(R.id.buttonRight);
 		buttonLeft = (Button) findViewById(R.id.buttonLeft);
+		buttonDie = (Button) findViewById(R.id.buttonDie);
 		final MediaPlayer jumpsound = MediaPlayer.create(this, R.raw.jump);
 
 		/*
@@ -114,6 +124,31 @@ public class Level extends Activity {
 				return false;
 			}
 		});
+		
+		
+		// KillPlayer Testing Code
+		buttonDie.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+				// Stop Game
+        		Log.d("KillPlayer", "GameThread.setRunning(false);");
+				//GameThread.setRunning(false);
+        		Log.d("KillPlayer", "loadVictoryMenu();");
+            	//loadVictoryMenu();
+            }
+        });
+		// END KillPlayer Testing Code
+
+	}
+	
+	public  void loadDefeatMenu() {
+		// KillPlayer Testing Code
+		// Stop Game
+		Log.d("KillPlayer", "GameThread.setRunning(false);");
+		//GameThread.setRunning(false);
+		Log.d("KillPlayer", "loadVictoryMenu();");
+		Intent defeatMenuIntent = new Intent(this, DefeatMenu.class);
+		this.startActivity(defeatMenuIntent);
+		// END KillPlayer Testing Code
 	}
 
 	public void loadVictoryMenu() {

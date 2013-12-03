@@ -43,6 +43,14 @@
             tools:ignore="UselessParent" >
 
             <Button
+                android:id="@+id/tutorial"
+                style="?buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tutorial"
+                android:onClick="loadLevelTutorial" />
+            <Button
                 android:id="@+id/level_1"
                 style="?buttonBarButtonStyle"
                 android:layout_width="0dp"

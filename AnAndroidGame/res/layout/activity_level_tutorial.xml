@@ -28,17 +28,17 @@
                 android:id="@+id/buttonJump1"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
-                android:background="@color/transparent"
+                android:background="@color/button_overlay"
                 android:layout_weight="1"
-                android:text="@string/Empty" />
+                android:text="@string/Jump1" />
 
             <Button
                 android:id="@+id/buttonLeft"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
-                android:background="@color/transparent"
+                android:background="@color/button_overlay"
                 android:layout_weight="1"
-                android:text="@string/Empty" />
+                android:text="@string/Left" />
 
         </LinearLayout>
 
@@ -53,25 +53,18 @@
                 android:id="@+id/buttonJump2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/transparent"
+                android:background="@color/button_overlay"
                 android:layout_weight="1"
-                android:text="@string/Empty" />
+                android:text="@string/Jump2" />
 
             <Button
                 android:id="@+id/buttonRight"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/transparent"
+                android:background="@color/button_overlay"
                 android:layout_weight="1"
-                android:text="@string/Empty" />
+                android:text="@string/Right" />
 
         </LinearLayout>
     </RelativeLayout>   
-	    <Button
-	        android:id="@+id/buttonDie"
-	        android:layout_width="0dp"
-	        android:layout_height="0dp"
-	        android:background="@color/transparent"
-	        android:onClick="loadDefeatMenu"
-	        android:text="@string/Empty" />
 </FrameLayout>

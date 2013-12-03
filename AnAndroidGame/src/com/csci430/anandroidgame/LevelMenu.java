@@ -25,6 +25,12 @@ public class LevelMenu extends Activity {
 		super.onPostCreate(savedInstanceState);
 	}
 
+	public void loadLevelTutorial(View view) {
+		Intent levelTutorialIntent = new Intent(this, Level.class);
+		levelTutorialIntent.putExtra("levelId", "0");
+		this.startActivity(levelTutorialIntent);
+	}
+
 	public void loadLevelOne(View view) {
 		Intent levelOneIntent = new Intent(this, Level.class);
 		levelOneIntent.putExtra("levelId", "1");

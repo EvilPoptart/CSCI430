@@ -6,6 +6,7 @@
     <string name="Jump2">Jump</string>
     <string name="Left">Left</string>
     <string name="Right">Right</string>
+    <string name="Empty"></string>
     
     <string name="victory_menu_content">Success!</string>
     <string name="defeat_menu_content">Defeat!</string>
@@ -13,6 +14,7 @@
     <string name="level_menu_content">Select a Level</string>
     <string name="main_menu_content">An Android Game</string>
     
+    <string name="tutorial">Tutorial</string>
     <string name="level_1">Level One</string>
     <string name="level_2">Level Two</string>
     

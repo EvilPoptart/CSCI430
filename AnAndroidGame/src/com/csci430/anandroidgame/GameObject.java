@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class GameObject {
@@ -269,6 +270,13 @@ public class GameObject {
 
 			// Move the ghost to where we will be
 			ghost.offset((int) velocityX, (int) velocityY);
+
+			// KillPlayer Testing Code
+			if (!Global.playerAlive) {
+				Log.d("KillPlayer", "Global.killPlayer();");
+				Global.killPlayer();
+			}
+			// END KillPlayer Testing Code
 
 			// Check for collision with the door
 			// Door_mid will always be index 2 in worldObjects\
@@ -657,21 +665,29 @@ public class GameObject {
 	}
 
 	public int[] getScoreAsImages() {
-		int tmpScore = score;
-		int places = 0;
-		while (tmpScore > 0) {
-			tmpScore = tmpScore / 10;
-			places += 1;
+		if (score == 0) {
+			int[] digit = new int[1];
+			digit[0] = 0;
+			return digit;
+			
 		}
-		int[] digits = new int[places];
-		tmpScore = score;
-		int i = 0;
-		while (tmpScore > 0) {
-			digits[i] = tmpScore % 10;
-			tmpScore = tmpScore / 10;
-			i += 1;
+		else {
+			int tmpScore = score;
+			int places = 0;
+			while (tmpScore > 0) {
+				tmpScore = tmpScore / 10;
+				places += 1;
+			}
+			int[] digits = new int[places];
+			tmpScore = score;
+			int i = 0;
+			while (tmpScore > 0) {
+				digits[i] = tmpScore % 10;
+				tmpScore = tmpScore / 10;
+				i += 1;
+			}
+			return digits;
 		}
-		return digits;
 	}
 
 	public void incrScore(int score) {
