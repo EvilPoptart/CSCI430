@@ -160,7 +160,6 @@ class GameThread extends Thread {
 
 			genPlatform(LEVEL_WIDTH + 2, -1, 0, "grass");
 			levelMaxTime = 45;
-			curTime = 0;
 			Sound.track1(ctx);
 			break;
 		// Level 2
@@ -200,7 +199,6 @@ class GameThread extends Thread {
 
 			genPlatform(LEVEL_WIDTH + 2, -1, 0, "grass");
 			levelMaxTime = 45;
-			curTime = 0;
 			Sound.track2(ctx);
 			break;
 		default:
@@ -390,8 +388,6 @@ class GameThread extends Thread {
 						(metrics.heightPixels / 2) + 20, paint);
 			} else {
 
-				Log.i("Metrics", "w: " + metrics.widthPixels);
-				Log.i("Metrics", "h: " + metrics.heightPixels);
 				worldObjects.get(playerIndex).tickUpdate(); // update player
 															// (currently only
 															// checks object.0
@@ -517,6 +513,7 @@ class GameThread extends Thread {
 					// The player is dead. Display death message.
 					Log.d("KillPlayer", "stopping thread");
 					setRunning(false);
+					Global.playerAlive = true;
 
 					Paint paint = new Paint();
 					paint.setColor(Color.BLACK);
