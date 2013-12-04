@@ -201,6 +201,7 @@ class GameThread extends Thread {
 			genPlatform(LEVEL_WIDTH + 2, -1, 0, "grass");
 			levelMaxTime = 45;
 			curTime = 0;
+			Sound.track2(ctx);
 			break;
 		default:
 			genPlayer();
