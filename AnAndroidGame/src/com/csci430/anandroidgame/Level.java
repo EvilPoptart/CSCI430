@@ -19,14 +19,44 @@ public class Level extends Activity {
 	public Button buttonJump2;
 	public Button buttonLeft;
 	public Button buttonRight;
-	public static Button buttonDie;
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.d("KillPlayer", "Level Activity Resumed");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.d("KillPlayer", "Level Activity Paused");
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.d("KillPlayer", "Level Activity Stopped");
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.d("KillPlayer", "Level Activity Destroyed");
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Log.d("KillPlayer", "Level Activity Destroyed");
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// Call the function onCreate() from the class we're extending
 		// (Activity)
 		super.onCreate(savedInstanceState);
-				
+		Log.d("KillPlayer", "Level Activity Created");
+
 		Global.curLevelId = Integer.parseInt(getIntent().getStringExtra(
 				"levelId"));
 
@@ -39,8 +69,7 @@ public class Level extends Activity {
 		if (Global.curLevelId == 0) {
 			// Tutorial activity has visible buttons
 			setContentView(R.layout.activity_level_tutorial);
-		}
-		else {
+		} else {
 			// Normal level activity has INvisible buttons
 			setContentView(R.layout.activity_level);
 		}
@@ -54,7 +83,6 @@ public class Level extends Activity {
 		buttonJump2 = (Button) findViewById(R.id.buttonJump2);
 		buttonRight = (Button) findViewById(R.id.buttonRight);
 		buttonLeft = (Button) findViewById(R.id.buttonLeft);
-		buttonDie = (Button) findViewById(R.id.buttonDie);
 		final MediaPlayer jumpsound = MediaPlayer.create(this, R.raw.jump);
 
 		/*
@@ -103,8 +131,10 @@ public class Level extends Activity {
 		buttonRight.setOnTouchListener(new View.OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					Log.d("ButtonRight", "Down");
 					GameThread.startRunningRight();
 				} else if (event.getAction() == MotionEvent.ACTION_UP) {
+					Log.d("ButtonRight", "Up");
 					GameThread.setIsRunning(false);
 				}
 				return false;
@@ -124,28 +154,10 @@ public class Level extends Activity {
 				return false;
 			}
 		});
-		
-		
-		// KillPlayer Testing Code
-		buttonDie.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-				// Stop Game
-        		Log.d("KillPlayer", "GameThread.setRunning(false);");
-				//GameThread.setRunning(false);
-        		Log.d("KillPlayer", "loadVictoryMenu();");
-            	//loadVictoryMenu();
-            }
-        });
-		// END KillPlayer Testing Code
-
 	}
-	
-	public  void loadDefeatMenu() {
+
+	public void loadDefeatMenu() {
 		// KillPlayer Testing Code
-		// Stop Game
-		Log.d("KillPlayer", "GameThread.setRunning(false);");
-		//GameThread.setRunning(false);
-		Log.d("KillPlayer", "loadVictoryMenu();");
 		Intent defeatMenuIntent = new Intent(this, DefeatMenu.class);
 		this.startActivity(defeatMenuIntent);
 		// END KillPlayer Testing Code

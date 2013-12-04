@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class GameObject {
@@ -165,6 +164,9 @@ public class GameObject {
 		} else if (tileSetName == "coin") {
 			sprite = BitmapFactory.decodeResource(ctx.getResources(),
 					R.drawable.coin);
+		} else if (tileSetName == "spikes") {
+			sprite = BitmapFactory.decodeResource(ctx.getResources(),
+					R.drawable.spikes);
 		}
 		// If the specified tileSetName is not found, display a blue lock.
 		else {
@@ -172,10 +174,10 @@ public class GameObject {
 					R.drawable.lock_blue);
 		}
 	}
-	
+
 	// Used for numbers
-	GameObject(int type, int sX, int sY, SurfaceHolder sh,
-			Context ctx, String tileSetName) {
+	GameObject(int type, int sX, int sY, SurfaceHolder sh, Context ctx,
+			String tileSetName) {
 		typeOf = type;
 		sizeX = sX * GameThread.BLOCK_SIZE;
 		sizeY = sY * GameThread.BLOCK_SIZE;
@@ -271,13 +273,6 @@ public class GameObject {
 			// Move the ghost to where we will be
 			ghost.offset((int) velocityX, (int) velocityY);
 
-			// KillPlayer Testing Code
-			if (!Global.playerAlive) {
-				Log.d("KillPlayer", "Global.killPlayer();");
-				Global.killPlayer();
-			}
-			// END KillPlayer Testing Code
-
 			// Check for collision with the door
 			// Door_mid will always be index 2 in worldObjects\
 			if (!Global.levelCompleted) {
@@ -290,7 +285,6 @@ public class GameObject {
 			}
 
 			// Test for collision with coins, gems, hearts, keys
-
 			int collectibleObjColIndex = collectibleCollision(ghost);
 			if (collectibleObjColIndex != -1) {
 				// Get the object and act on the collision appropriately based
@@ -308,6 +302,13 @@ public class GameObject {
 				default:
 					break;
 				}
+			}
+
+			// Test for collision with spikes
+			int harmfulObjColIndex = harmfulCollision(ghost);
+			if (harmfulObjColIndex != -1) {
+				// We've hit something harmful. Die.
+				Global.playerAlive = false;
 			}
 
 			// Recreate the ghost.
@@ -400,6 +401,19 @@ public class GameObject {
 			positionX = GameThread.BLOCK_SIZE * GameThread.LEVEL_WIDTH - sizeX;
 			velocityX = 0;
 		}
+	}
+
+	/**
+	 * Tests for collision with solidObjects. If there is a collision, returns
+	 * index Else returns -1
+	 */
+	private int harmfulCollision(Rect ghost) {
+		for (int i = 0; i < GameThread.harmfulObjects.size(); i++) {
+			if (ghost.intersect(GameThread.harmfulObjects.get(i).spriteRect)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	/**
@@ -669,9 +683,8 @@ public class GameObject {
 			int[] digit = new int[1];
 			digit[0] = 0;
 			return digit;
-			
-		}
-		else {
+
+		} else {
 			int tmpScore = score;
 			int places = 0;
 			while (tmpScore > 0) {

@@ -30,6 +30,7 @@ class GameThread extends Thread {
 	public static Vector<GameObject> solidObjects;
 	public static Vector<GameObject> collectibleObjects;
 	public static Vector<GameObject> numberObjects;
+	public static Vector<GameObject> harmfulObjects;
 	public static DisplayMetrics metrics;
 
 	public Sound sounds;
@@ -49,7 +50,7 @@ class GameThread extends Thread {
 	private final static int MAX_FRAME_SKIPS = 5;
 	// the frame period
 	private final static int FRAME_PERIOD = 1000 / MAX_FPS;
-	
+
 	public static int levelMaxTime;
 	public static int displayTime;
 
@@ -61,6 +62,7 @@ class GameThread extends Thread {
 		solidObjects = new Vector<GameObject>();
 		collectibleObjects = new Vector<GameObject>();
 		numberObjects = new Vector<GameObject>();
+		harmfulObjects = new Vector<GameObject>();
 	}
 
 	public static void jump() {
@@ -101,6 +103,7 @@ class GameThread extends Thread {
 		switch (Global.curLevelId) {
 		// Level Tutorial
 		case 0:
+			curTime = 0;
 			genPlayer();
 			genBG(0xffA9FFE1);
 			genDoor(30, 9);
@@ -125,9 +128,11 @@ class GameThread extends Thread {
 			genPlatform(LEVEL_WIDTH + 2, -1, 0, "grass");
 			Sound.track1(ctx);
 			levelMaxTime = 400;
+			curTime = 0;
 			break;
 		// Level 1
 		case 1:
+			curTime = 0;
 			genPlayer();
 			genBG(0xffA9FFE1);
 			genDoor(27, 8);
@@ -141,6 +146,8 @@ class GameThread extends Thread {
 			genPlatform(1, 19, 5, "grass");
 			genPlatform(1, 22, 6, "grass");
 			genPlatform(3, 26, 7, "grass");
+			genPlatform(1, 13, 1, "grass");
+			genSpikes(21, 14, 1);
 
 			genCoin(7, 5);
 			genCoin(3, 7);
@@ -152,36 +159,48 @@ class GameThread extends Thread {
 			genCoin(24, 9);
 
 			genPlatform(LEVEL_WIDTH + 2, -1, 0, "grass");
-			levelMaxTime = 4;
+			levelMaxTime = 45;
+			curTime = 0;
+			Sound.track1(ctx);
 			break;
 		// Level 2
-		case 3:
+		case 2:
+			curTime = 0;
 			genPlayer();
 			genBG(0xffA9FFE1);
-			genDoor(27, 8);
+			genDoor(33, 5);
 			genNumbers();
 
-			genPlatform(2, 7, 3, "grass");
-			genPlatform(2, 3, 6, "grass");
-			genPlatform(6, 7, 8, "grass");
+			genPlatform(3, 3, 3, "grass");
+			genPlatform(4, 7, 6, "grass");
+			genCoin(5, 4);
+			genCoin(7, 8);
+			genCoin(8, 8);
+			genCoin(11, 4);
+			genPlatform(3, 11, 3, "grass");
 
-			genPlatform(1, 16, 4, "grass");
-			genPlatform(1, 19, 5, "grass");
-			genPlatform(1, 22, 6, "grass");
-			genPlatform(3, 26, 7, "grass");
+			genPlatform(2, 17, 1, "grass");
+			genPlatform(1, 18, 2, "grass");
+			genPlatform(4, 21, 4, "grass");
+			genPlatform(1, 25, 5, "grass");
+			genSpikes(8, 19, 1);
+			genCoin(21, 5);
+			genCoin(22, 5);
+			genCoin(23, 5);
+			genCoin(24, 5);
+			genPlatform(1, 27, 1, "grass");
+			genPlatform(1, 27, 2, "grass");
+			genSpikes(4, 28, 1);
 
-			genCoin(7, 5);
-			genCoin(3, 7);
-			genCoin(10, 9);
-			genCoin(11, 9);
-			
-			genCoin(16, 5);
-			genCoin(19, 6);
-			genCoin(22, 7);
-			genCoin(24, 9);
+			genPlatform(4, 30, 4, "grass");
+			genCoin(28, 6);
+			genCoin(30, 5);
+			genCoin(31, 5);
+			genCoin(32, 5);
 
 			genPlatform(LEVEL_WIDTH + 2, -1, 0, "grass");
-			levelMaxTime = 4;
+			levelMaxTime = 45;
+			curTime = 0;
 			break;
 		default:
 			genPlayer();
@@ -189,6 +208,7 @@ class GameThread extends Thread {
 			genDoor(5, 1);
 			genNumbers();
 			levelMaxTime = 3;
+			curTime = 0;
 			break;
 		}
 	}
@@ -209,6 +229,13 @@ class GameThread extends Thread {
 	void genCoin(int posX, int posY) {
 		collectibleObjects.add(new GameObject(4, 1, 1, posX, posY, sh, ctx,
 				"coin"));
+	}
+
+	void genSpikes(int width, int posX, int posY) {
+		for (int i = 0; i < width; i++) {
+			harmfulObjects.add(new GameObject(4, 1, 1, posX + i, posY, sh, ctx,
+					"spikes"));
+		}
 	}
 
 	void genPlayer() {
@@ -283,17 +310,12 @@ class GameThread extends Thread {
 					// http://obviam.net/index.php/sprite-animation-with-android/
 					beginTime = System.currentTimeMillis();
 					framesSkipped = 0; // resetting the frames skipped
-					
-					
-					
-					//if (true) {
-					//	break;
-					//}
+
+					// if (true) {
+					// break;
+					// }
 					doDraw(c);
-					
-					
-					
-					
+
 					// calculate how long did the cycle take
 					timeDiff = System.currentTimeMillis() - beginTime;
 					// calculate sleep time
@@ -323,6 +345,7 @@ class GameThread extends Thread {
 				}
 			}
 		}
+		Log.d("KillPlayer", "Thread Stopped Running, escaped while loop.");
 	}
 
 	public static void setRunning(boolean b) {
@@ -344,105 +367,169 @@ class GameThread extends Thread {
 				curTime += 1;
 			}
 			// KillPlayer Testing Code
-			Log.d("KillPlayer", "Not Killing Player");
 			if (curTime == levelMaxTime) {
+				curTime = 0;
 				// Kill the player
 				Log.d("KillPlayer", "Global.playerAlive = false;");
-				Global.playerAlive = false;
-			}
-			// END KillPlayer Testing Code
-			
-			worldObjects.get(playerIndex).tickUpdate(); // update player
-														// (currently only
-														// checks object.0
-														// (player) vs
-														// object.2("solid Objects"))
+				// Global.playerAlive = false;
+				Log.d("KillPlayer", "stopping thread");
+				setRunning(false);
 
-			// Move the canvas around the x axis while the player is
-			// sufficiently away from the edges of the level.
-			// If the player is at the far left, cameraX will be 0.
-			if (worldObjects.get(playerIndex).getPosX() > (BLOCK_SIZE * 5)) {
-				// Move camera with the player
-				cameraX = (BLOCK_SIZE * 5 - worldObjects.get(playerIndex)
-						.getPosX());
-				// Stop the camera if we're at the rightmost side of the level
-				if (worldObjects.get(playerIndex).getPosX() > (BLOCK_SIZE
-						* LEVEL_WIDTH - (metrics.widthPixels - BLOCK_SIZE * 5))) {
-					cameraX = (metrics.widthPixels - BLOCK_SIZE * LEVEL_WIDTH);
-				}
-			}
-
-			Log.d("cameraX", "is: " + -cameraX);
-			// Set the camera to an appropriate x-offset
-			canvas.translate(cameraX, 0);
-
-			// DrawBackgroud
-			canvas.drawRect(worldObjects.get(backgroundIndex).getSprite(),
-					worldObjects.get(backgroundIndex).getPaint());
-
-			for (int i = 0; i < worldObjects.get(0).getScoreAsImages().length; i++) {
-				//canvas.drawText("" + worldObjects.get(0).getScoreAsImages()[i], -cameraX + 100 - (i * 14), 30, paint);
-				canvas.drawBitmap(numberObjects.get(worldObjects.get(0).getScoreAsImages()[i]).getSpriteGraphic(),
-						-cameraX - 40 + metrics.widthPixels - (i * 22), 10, null);
-			}
-			
-			// Get digits of displayTime as an array so we can iteratively draw them to the screen
-			displayTime = levelMaxTime - curTime;
-			int places = 0;
-			while (displayTime > 0) {
-				displayTime = displayTime / 10;
-				places += 1;
-			}
-			int[] timeDigits = new int[places];
-			displayTime = levelMaxTime - curTime;
-			int j = 0;
-			while (displayTime > 0) {
-				timeDigits[j] = displayTime % 10;
-				displayTime = displayTime / 10;
-				j += 1;
-			}
-			
-			// Draw time to the screen
-			for (int i = 0; i < timeDigits.length; i++) {
-				canvas.drawBitmap(numberObjects.get(timeDigits[i]).getSpriteGraphic(),
-						-cameraX - 260 + metrics.widthPixels - (i * 22), 10, null);
-			}
-
-			// Draw door
-			canvas.drawBitmap(worldObjects.get(doorIndex).getSpriteGraphic(),
-					worldObjects.get(doorIndex).getPosX(),
-					worldObjects.get(doorIndex).getPosY(), null);
-			canvas.drawBitmap(worldObjects.get(doorIndex + 1)
-					.getSpriteGraphic(), worldObjects.get(doorIndex + 1)
-					.getPosX(), worldObjects.get(doorIndex + 1).getPosY(), null);
-
-			// Draw collectible objects
-			for (int i = 0; i < collectibleObjects.size(); i++) {
-				canvas.drawBitmap(collectibleObjects.get(i).getSpriteGraphic(),
-						collectibleObjects.get(i).getPosX(), collectibleObjects
-								.get(i).getPosY(), null);
-			}
-
-			// Draw solid Objects
-			for (int i = 0; i < solidObjects.size(); i++) {
-				canvas.drawBitmap(solidObjects.get(i).getSpriteGraphic(),
-						solidObjects.get(i).getPosX(), solidObjects.get(i)
-								.getPosY(), null);
-			}
-
-			// DrawPlayer
-			if (currentlyRunning) {
-				worldObjects.get(playerIndex).updateAnimation(
-						System.currentTimeMillis());
-				canvas.drawBitmap(worldObjects.get(playerIndex)
-						.getSpriteGraphic(),
-						worldObjects.get(playerIndex).spriteSheetLoc,
-						worldObjects.get(playerIndex).getSprite(), null);
+				Paint paint = new Paint();
+				paint.setColor(Color.BLACK);
+				canvas.drawRect(0, 0, metrics.widthPixels,
+						metrics.heightPixels, paint);
+				paint.setColor(Color.WHITE);
+				paint.setTextSize(30);
+				canvas.drawText("Oh no! You ran out of time.",
+						(metrics.widthPixels / 2) - 185,
+						(metrics.heightPixels / 2) - 20, paint);
+				canvas.drawText("Press back to try again!",
+						(metrics.widthPixels / 2) - 170,
+						(metrics.heightPixels / 2) + 20, paint);
 			} else {
-				canvas.drawBitmap(worldObjects.get(playerIndex)
-						.getSpriteGraphic(),
-						worldObjects.get(playerIndex).spriteSheetLoc,
-						worldObjects.get(playerIndex).getSprite(), null);
+
+				Log.i("Metrics", "w: " + metrics.widthPixels);
+				Log.i("Metrics", "h: " + metrics.heightPixels);
+				worldObjects.get(playerIndex).tickUpdate(); // update player
+															// (currently only
+															// checks object.0
+															// (player) vs
+															// object.2("solid Objects"))
+
+				if (Global.playerAlive) {
+
+					// Move the canvas around the x axis while the player is
+					// sufficiently away from the edges of the level.
+					// If the player is at the far left, cameraX will be 0.
+					if (worldObjects.get(playerIndex).getPosX() > (BLOCK_SIZE * 5)) {
+						// Move camera with the player
+						cameraX = (BLOCK_SIZE * 5 - worldObjects.get(
+								playerIndex).getPosX());
+						// Stop the camera if we're at the rightmost side of the
+						// level
+						if (worldObjects.get(playerIndex).getPosX() > (BLOCK_SIZE
+								* LEVEL_WIDTH - (metrics.widthPixels - BLOCK_SIZE * 5))) {
+							cameraX = (metrics.widthPixels - BLOCK_SIZE
+									* LEVEL_WIDTH);
+						}
+					}
+
+					// Set the camera to an appropriate x-offset
+					canvas.translate(cameraX, 0);
+
+					// DrawBackgroud
+					canvas.drawRect(worldObjects.get(backgroundIndex)
+							.getSprite(), worldObjects.get(backgroundIndex)
+							.getPaint());
+
+					for (int i = 0; i < worldObjects.get(0).getScoreAsImages().length; i++) {
+						// canvas.drawText("" +
+						// worldObjects.get(0).getScoreAsImages()[i], -cameraX +
+						// 100
+						// -
+						// (i * 14), 30, paint);
+						canvas.drawBitmap(
+								numberObjects
+										.get(worldObjects.get(0)
+												.getScoreAsImages()[i])
+										.getSpriteGraphic(), -cameraX - 40
+										+ metrics.widthPixels - (i * 22), 10,
+								null);
+					}
+
+					// Get digits of displayTime as an array so we can
+					// iteratively
+					// draw
+					// them to the screen
+					displayTime = levelMaxTime - curTime;
+					int places = 0;
+					while (displayTime > 0) {
+						displayTime = displayTime / 10;
+						places += 1;
+					}
+					int[] timeDigits = new int[places];
+					displayTime = levelMaxTime - curTime;
+					int j = 0;
+					while (displayTime > 0) {
+						timeDigits[j] = displayTime % 10;
+						displayTime = displayTime / 10;
+						j += 1;
+					}
+
+					// Draw time to the screen
+					for (int i = 0; i < timeDigits.length; i++) {
+						canvas.drawBitmap(numberObjects.get(timeDigits[i])
+								.getSpriteGraphic(), -cameraX - 260
+								+ metrics.widthPixels - (i * 22), 10, null);
+					}
+
+					// Draw door
+					canvas.drawBitmap(worldObjects.get(doorIndex)
+							.getSpriteGraphic(), worldObjects.get(doorIndex)
+							.getPosX(), worldObjects.get(doorIndex).getPosY(),
+							null);
+					canvas.drawBitmap(worldObjects.get(doorIndex + 1)
+							.getSpriteGraphic(), worldObjects
+							.get(doorIndex + 1).getPosX(),
+							worldObjects.get(doorIndex + 1).getPosY(), null);
+
+					// Draw collectible objects
+					for (int i = 0; i < collectibleObjects.size(); i++) {
+						canvas.drawBitmap(collectibleObjects.get(i)
+								.getSpriteGraphic(), collectibleObjects.get(i)
+								.getPosX(),
+								collectibleObjects.get(i).getPosY(), null);
+					}
+
+					// Draw solid Objects
+					for (int i = 0; i < solidObjects.size(); i++) {
+						canvas.drawBitmap(solidObjects.get(i)
+								.getSpriteGraphic(), solidObjects.get(i)
+								.getPosX(), solidObjects.get(i).getPosY(), null);
+					}
+
+					// Draw harmful objects
+					for (int i = 0; i < harmfulObjects.size(); i++) {
+						canvas.drawBitmap(harmfulObjects.get(i)
+								.getSpriteGraphic(), harmfulObjects.get(i)
+								.getPosX(), harmfulObjects.get(i).getPosY(),
+								null);
+					}
+
+					// DrawPlayer
+					if (currentlyRunning) {
+						worldObjects.get(playerIndex).updateAnimation(
+								System.currentTimeMillis());
+						canvas.drawBitmap(worldObjects.get(playerIndex)
+								.getSpriteGraphic(), worldObjects
+								.get(playerIndex).spriteSheetLoc, worldObjects
+								.get(playerIndex).getSprite(), null);
+					} else {
+						canvas.drawBitmap(worldObjects.get(playerIndex)
+								.getSpriteGraphic(), worldObjects
+								.get(playerIndex).spriteSheetLoc, worldObjects
+								.get(playerIndex).getSprite(), null);
+					}
+
+				} else {
+					// The player is dead. Display death message.
+					Log.d("KillPlayer", "stopping thread");
+					setRunning(false);
+
+					Paint paint = new Paint();
+					paint.setColor(Color.BLACK);
+					canvas.drawRect(0, 0, metrics.widthPixels,
+							metrics.heightPixels, paint);
+					paint.setColor(Color.WHITE);
+					paint.setTextSize(30);
+					canvas.drawText("Oh no! You died.",
+							(metrics.widthPixels / 2) - 120,
+							(metrics.heightPixels / 2) - 20, paint);
+					canvas.drawText("Press back to try again!",
+							(metrics.widthPixels / 2) - 170,
+							(metrics.heightPixels / 2) + 20, paint);
+				}
 			}
 
 		}

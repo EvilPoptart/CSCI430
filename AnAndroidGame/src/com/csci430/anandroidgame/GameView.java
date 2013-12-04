@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -58,6 +59,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		thread = new GameThread(sh, ctx, new Handler());
 		GameThread.setRunning(true);
 		thread.start();
+
+		Log.d("KillPlayer", "End of Gamethread running");
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,

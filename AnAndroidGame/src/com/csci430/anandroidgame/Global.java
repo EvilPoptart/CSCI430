@@ -1,6 +1,5 @@
 package com.csci430.anandroidgame;
 
-import android.util.Log;
 
 public class Global {
 	public static int curLevelId;
@@ -41,11 +40,4 @@ public class Global {
 		// HEART
 		// +1 LIFE
 	}
-
-	// KillPlayer Testing Code
-	public static void killPlayer() {
-		Log.d("KillPlayer", "killPlayer");
-		 //Level.asfd();
-	}
-	// END KillPlayer Testing Code
 }

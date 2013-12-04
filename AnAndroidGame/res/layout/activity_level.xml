@@ -67,11 +67,4 @@
 
         </LinearLayout>
     </RelativeLayout>   
-	    <Button
-	        android:id="@+id/buttonDie"
-	        android:layout_width="0dp"
-	        android:layout_height="0dp"
-	        android:background="@color/transparent"
-	        android:onClick="loadDefeatMenu"
-	        android:text="@string/Empty" />
 </FrameLayout>

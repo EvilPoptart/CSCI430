@@ -44,16 +44,18 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int hud_9=0x7f020011;
         public static final int hud_coins=0x7f020012;
         public static final int ic_launcher=0x7f020013;
-        public static final int lock_blue=0x7f020014;
-        public static final int p1_spritesheet=0x7f020015;
-        public static final int p1_spritesheet_oneline=0x7f020016;
-        public static final int p1_spritesheet_testing=0x7f020017;
-        public static final int p3_jump=0x7f020018;
-        public static final int player_standing=0x7f020019;
+        public static final int levelscreenbg=0x7f020014;
+        public static final int lock_blue=0x7f020015;
+        public static final int p1_spritesheet=0x7f020016;
+        public static final int p1_spritesheet_oneline=0x7f020017;
+        public static final int p1_spritesheet_testing=0x7f020018;
+        public static final int p3_jump=0x7f020019;
+        public static final int player_standing=0x7f02001a;
+        public static final int spikes=0x7f02001b;
+        public static final int titlescreenbg=0x7f02001c;
     }
     public static final class id {
         public static final int anotherCanvas=0x7f080005;
-        public static final int buttonDie=0x7f08000a;
         public static final int buttonJump1=0x7f080006;
         public static final int buttonJump2=0x7f080008;
         public static final int buttonLeft=0x7f080007;
@@ -61,11 +63,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int fullscreen_content=0x7f080000;
         public static final int fullscreen_content_controls=0x7f080001;
         public static final int layoutContainer=0x7f080004;
-        public static final int levelMenu=0x7f08000c;
+        public static final int levelMenu=0x7f08000b;
         public static final int level_1=0x7f080002;
         public static final int level_2=0x7f080003;
-        public static final int settingsMenu=0x7f08000d;
-        public static final int tutorial=0x7f08000b;
+        public static final int settingsMenu=0x7f08000c;
+        public static final int tutorial=0x7f08000a;
     }
     public static final class layout {
         public static final int activity_defeat_menu=0x7f030000;
